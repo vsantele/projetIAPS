@@ -16,6 +16,7 @@
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_files)).
 :- use_module(library(http/websocket)).
+:- include('bot.pl').
 
 % http_handler docs: http://www.swi-prolog.org/pldoc/man?predicate=http_handler/3
 % =http_handler(+Path, :Closure, +Options)=
@@ -37,6 +38,9 @@
 %   client at a time since echo will block the thread)
 :- http_handler(root(echo),
                 http_upgrade_to_websocket(echo, []),
+                [spawn([])]).
+:- http_handler(root(bot),
+                http_upgrade_to_websocket(bot, []),
                 [spawn([])]).
 
 start_server :-
@@ -73,3 +77,13 @@ echo(WebSocket) :-
 get_response(Message, Response) :-
   get_time(Time),
   Response = _{message:Message.message, time: Time}.
+
+bot(WebSocket) :-
+  ws_receive(WebSocket, Message, [format(json)]),
+    ( Message.opcode == close
+    -> true
+    ; bot_response(Message.data.message, Response),
+      write("Response: "), writeln(Response),
+      ws_send(WebSocket, json(Response)),
+      bot(WebSocket)
+).
