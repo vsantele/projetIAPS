@@ -1,10 +1,22 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import useWebSocket, { ReadyState } from "react-use-websocket"
+import "./App.css"
+import reactLogo from "./assets/react.svg"
+import viteLogo from "/vite.svg"
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { sendMessage, lastMessage, readyState } = useWebSocket(import.meta.env.VITE_API_HOST + "/echo")
+
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: "Connecting",
+    [ReadyState.OPEN]: "Open",
+    [ReadyState.CLOSING]: "Closing",
+    [ReadyState.CLOSED]: "Closed",
+    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  }[readyState]
+
+  const handleClick = () => {
+    sendMessage(JSON.stringify({message: "ping"}))
+  }
 
   return (
     <div className="App">
@@ -18,16 +30,12 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+        {readyState && <p>readyState: {connectionStatus}</p>}
+        <button onClick={handleClick} disabled={readyState !== ReadyState.OPEN}>
+          Send Message
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        <div>{lastMessage && <p>lastMessage: {lastMessage.data}</p>}</div>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </div>
   )
 }
