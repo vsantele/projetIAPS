@@ -1,21 +1,33 @@
-import useWebSocket, { ReadyState } from "react-use-websocket"
-import "./App.css"
-import reactLogo from "./assets/react.svg"
-import viteLogo from "/vite.svg"
+import useWebSocket, { ReadyState } from 'react-use-websocket'
+import './App.css'
+import reactLogo from './assets/react.svg'
+import BotResponse from './models/BotResponse'
+import viteLogo from '/vite.svg'
 
 function App() {
-  const { sendMessage, lastMessage, readyState } = useWebSocket(import.meta.env.VITE_API_HOST + "/echo")
+  const { sendMessage, lastMessage, readyState } = useWebSocket(
+    import.meta.env.VITE_API_HOST + '/bot',
+    {
+      retryOnError: true,
+      reconnectInterval: 1000,
+    }
+  )
 
   const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+    [ReadyState.CONNECTING]: 'Connecting',
+    [ReadyState.OPEN]: 'Open',
+    [ReadyState.CLOSING]: 'Closing',
+    [ReadyState.CLOSED]: 'Closed',
+    [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
   }[readyState]
 
   const handleClick = () => {
-    sendMessage(JSON.stringify({message: "ping"}))
+    sendMessage(JSON.stringify({ message: 'ping'.split(' ') }))
+  }
+
+  const parsedMessage = (res: string) => {
+    const data: BotResponse = JSON.parse(res)
+    return data.message.map(m => m.join(' ')).join('\n')
   }
 
   return (
@@ -34,7 +46,7 @@ function App() {
         <button onClick={handleClick} disabled={readyState !== ReadyState.OPEN}>
           Send Message
         </button>
-        <div>{lastMessage && <p>lastMessage: {lastMessage.data}</p>}</div>
+        <div>{lastMessage && <p>lastMessage: {parsedMessage(lastMessage.data)}</p>}</div>
       </div>
     </div>
   )
