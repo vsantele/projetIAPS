@@ -1,4 +1,4 @@
-# Projet Ccours Intelligence Artificielle et Programmation Symbolique
+# Projet Cours Intelligence Artificielle et Programmation Symbolique
 
 ## Description
 
