@@ -49,8 +49,11 @@ function App() {
 
     const chatMessage : ChatMessage = {message: userMessage, author : MessageAuthor.USER, timestamp : new Date()};
     setMessages([...messages, chatMessage]);
+
+    setUserMessage("");
   }
 
+  // Bot response
   useEffect(() => {
     if (lastMessage !== null) {
       const stringResponse = parsedMessage(lastMessage.data);
