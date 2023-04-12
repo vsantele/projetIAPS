@@ -29,6 +29,7 @@ Ce projet a pour but de mettre en place un bot pour expliquer les règles du jeu
 - Configurer les variables d'environnement
 
   ```bash
+  # in the front folder
   cp .env.example .env
   ```
 
