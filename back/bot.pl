@@ -1,5 +1,5 @@
 :- use_module(library(lists)).
-:- debug.
+%:- debug.
 /* --------------------------------------------------------------------- */
 /*                                                                       */
 /*        PRODUIRE_REPONSE(L_Mots,L_Lignes_reponse) :                    */
@@ -381,6 +381,7 @@ fin(L) :- member(fin,L).
 /*                                                                       */
 /* --------------------------------------------------------------------- */
 
+tdf :- tourdefrance.
 tourdefrance :-
 
    nl, nl, nl,
@@ -395,8 +396,10 @@ tourdefrance :-
       ecrire_reponse(L_ligne_reponse),
    fin(L_Mots), !.
 
-bot_response(L_Mot, Response) :-
-   produire_reponse(L_Mot, L_ligne_reponse),
+bot_response(AsciiInput, Response) :-
+   clean_string(AsciiInput, CleanString),
+   extract_atomics(CleanString, L_Mots),
+   produire_reponse(L_Mots, L_ligne_reponse),
    Response = _{message:L_ligne_reponse}.
 /* --------------------------------------------------------------------- */
 /*                                                                       */

@@ -8,6 +8,16 @@ import ChatMessageComponent from "./components/ChatMessageComponent";
 import React, {useEffect, useState} from "react";
 import {MessageAuthor} from "./models/MessageAuthor";
 
+function getAsciiValues(text: String){
+  const asciiCodes = [];
+
+  for (let i = 0; i < text.length; i++) {
+    asciiCodes.push(text.charCodeAt(i));
+  }
+
+  return asciiCodes;
+}
+
 function App() {
   const { sendMessage, lastMessage, readyState } = useWebSocket(
     import.meta.env.VITE_API_HOST + '/bot',
@@ -42,7 +52,7 @@ function App() {
       return;
     }
 
-    sendMessage(JSON.stringify({ message: userMessage.replaceAll(/[^a-zA-Z ]/g, "").trim().toLowerCase().split(' ')}));
+    sendMessage(JSON.stringify({ message: getAsciiValues(userMessage.toLowerCase())}));
 
     const chatMessage : ChatMessage = {message: userMessage, author : MessageAuthor.USER, timestamp : new Date()};
     setMessages([...messages, chatMessage]);
