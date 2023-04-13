@@ -83,7 +83,7 @@ bot(WebSocket) :-
     ( Message.opcode == close
     -> true
     ; bot_response(Message.data.message, Response),
-      write("Response: "), writeln(Response),
+      nl, write("Response: "), writeln(Response),
       ws_send(WebSocket, json(Response)),
       bot(WebSocket)
 ).
