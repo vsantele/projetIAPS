@@ -31,8 +31,9 @@ function App() {
   }
 
   // Discussion messages
-
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    {message : "Bonjour, je suis le bot du Tour, BDT, pour les intimes, conseiller sur le Tour de France. En quoi puis-je vous etre utile ?", author: MessageAuthor.BOT, timestamp : new Date()}
+  ]);
 
   // User message
   let [userMessage, setUserMessage] = useState<String>("");
