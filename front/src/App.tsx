@@ -1,8 +1,5 @@
-import {
-  Button,
-  Grid, TextField
-} from '@mui/material'
-import useWebSocket, { ReadyState } from 'react-use-websocket'
+import {Button, Grid, TextField} from '@mui/material'
+import useWebSocket, {ReadyState} from 'react-use-websocket'
 import './App.css'
 import mapImage from './assets/map.png'
 import BotResponse from './models/BotResponse'
@@ -10,7 +7,6 @@ import ChatMessage from './models/ChatMessage'
 import ChatMessageComponent from "./components/ChatMessageComponent";
 import React, {useEffect, useState} from "react";
 import {MessageAuthor} from "./models/MessageAuthor";
-
 
 function App() {
   const { sendMessage, lastMessage, readyState } = useWebSocket(
@@ -67,10 +63,10 @@ function App() {
     <Grid container spacing={5} sx={{px:0, py:0}}>
       <Grid item xs={12} textAlign={"center"}>
         <h1>Tour de France</h1>
-        <small>{readyState && <p>Connexion avec le bot : {connectionStatus}</p>}</small>
+        <small>{readyState ? <p>Connexion avec le bot : {connectionStatus}</p> : <p>Serveur du bot introuvable</p>}</small>
       </Grid>
 
-      <Grid container xs={12} justifyContent="center">
+      <Grid container justifyContent="center">
         <Grid item xs={5}>
           <img src={mapImage} id="map-image" alt="Plateau de jeu tour de france" />
         </Grid>
@@ -80,7 +76,7 @@ function App() {
             <h2 className="text-center">Discussion avec le bot du tour ...</h2>
           </Grid>
 
-          <Grid item direction="column" spacing={0} height="42vh" >
+          <Grid container direction="column" spacing={0} height="42vh" >
             <div style={{overflowY: "scroll", height: "100%"}}>
               {
                 messages.map((chatMessage, iChatMessage) => {
