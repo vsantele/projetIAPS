@@ -1,4 +1,4 @@
-import {Button, Grid, TextField} from '@mui/material'
+import {Button, Container, Grid, TextField} from '@mui/material'
 import useWebSocket, {ReadyState} from 'react-use-websocket'
 import './App.css'
 import mapImage from './assets/map.png'
@@ -61,44 +61,44 @@ function App() {
   }, [lastMessage]);
 
   return (
-    <Grid container spacing={5} sx={{px:0, py:0}}>
-      <Grid item xs={12} textAlign={"center"}>
-        <h1>Tour de France</h1>
-        <small>{readyState ? <p>Connexion avec le bot : {connectionStatus}</p> : <p>Serveur du bot introuvable</p>}</small>
-      </Grid>
-
-      <Grid container justifyContent="center">
-        <Grid item xs={5}>
-          <img src={mapImage} id="map-image" alt="Plateau de jeu tour de france" />
+      <Container maxWidth={false}>
+        <Grid item xs={12} textAlign={"center"}>
+          <h1>Tour de France</h1>
+          <small>{readyState ? <p>Connexion avec le bot : {connectionStatus}</p> : <p>Serveur du bot introuvable</p>}</small>
         </Grid>
 
-        <Grid item xs={5} id="chat-bot-card" sx={{px:0}}>
-          <Grid item xs={12}>
-            <h2 className="text-center">Discussion avec le bot du tour ...</h2>
+        <Grid container justifyContent="center">
+          <Grid container xs={5}>
+            <img src={mapImage} id="map-image" alt="Plateau de jeu tour de france" />
           </Grid>
 
-          <Grid container direction="column" spacing={0} height="42vh" >
-            <div style={{overflowY: "scroll", height: "100%"}}>
-              {
-                messages.map((chatMessage, iChatMessage) => {
-                  return <ChatMessageComponent {...chatMessage} key={iChatMessage}/>
-                })
-              }
-            </div>
-          </Grid>
-
-          <Grid container spacing={2} alignItems="center" sx={{px:3, py:1}}>
-            <Grid item xs={10}>
-              <TextField label="Entrer votre message ..." variant="filled" fullWidth
-                         value={userMessage} onChange={(e) => setUserMessage(e.target.value ?? "")}/>
+          <Grid container xs={5} id="chat-bot-card" sx={{px:0}}>
+            <Grid item xs={12}>
+              <h2 className="text-center">Discussion avec le bot du tour ...</h2>
             </Grid>
-            <Grid item xs={2}>
-              <Button variant="contained" onClick={sendMessageClick} disabled={readyState !== ReadyState.OPEN || userMessage == ""} fullWidth>Envoyer</Button>
+
+            <Grid container direction="column" spacing={0} height="42vh" >
+              <div style={{overflowY: "scroll", height: "100%"}}>
+                {
+                  messages.map((chatMessage, iChatMessage) => {
+                    return <ChatMessageComponent {...chatMessage} key={iChatMessage}/>
+                  })
+                }
+              </div>
+            </Grid>
+
+            <Grid container spacing={2} alignItems="center" sx={{px:3, py:1}}>
+              <Grid item xs={10}>
+                <TextField label="Entrer votre message ..." variant="filled" fullWidth
+                           value={userMessage} onChange={(e) => setUserMessage(e.target.value ?? "")}/>
+              </Grid>
+              <Grid item xs={2}>
+                <Button variant="contained" onClick={sendMessageClick} disabled={readyState !== ReadyState.OPEN || userMessage == ""} fullWidth>Envoyer</Button>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
-    </Grid>
+      </Container>
 
 
 
