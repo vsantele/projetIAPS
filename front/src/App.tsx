@@ -42,7 +42,7 @@ function App() {
       return;
     }
 
-    sendMessage(JSON.stringify({ message: userMessage.split(' ') }));
+    sendMessage(JSON.stringify({ message: userMessage.replaceAll(/[^a-zA-Z ]/g, "").trim().toLowerCase().split(' ')}));
 
     const chatMessage : ChatMessage = {message: userMessage, author : MessageAuthor.USER, timestamp : new Date()};
     setMessages([...messages, chatMessage]);
