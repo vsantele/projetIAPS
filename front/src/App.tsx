@@ -108,8 +108,10 @@ function App() {
 
           <Grid container direction="column" spacing={0} height="42vh">
             <div style={{ overflowY: 'scroll', height: '100%' }}>
-              {messages.map((chatMessage, iChatMessage) => {
-                return <ChatMessageComponent {...chatMessage} key={iChatMessage} />
+              {messages.map(chatMessage => {
+                return (
+                  <ChatMessageComponent {...chatMessage} key={chatMessage.timestamp.toString()} />
+                )
               })}
             </div>
           </Grid>
