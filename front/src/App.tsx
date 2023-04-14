@@ -1,12 +1,12 @@
-import { Button, Container, Grid, TextField } from '@mui/material'
+import { Container, Grid } from '@mui/material'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
 import './App.css'
 import mapImage from './assets/map.png'
 import BotResponse from './models/BotResponse'
 import ChatMessage from './models/ChatMessage'
-import ChatMessageComponent from './components/ChatMessageComponent'
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useRef} from 'react'
 import { MessageAuthor } from './models/MessageAuthor'
+import Chat from "./components/Chat";
 
 function getAsciiValues(text: String) {
   const asciiCodes = []
@@ -19,6 +19,9 @@ function getAsciiValues(text: String) {
 }
 
 function App() {
+  const chatBotRef = useRef();
+  const gameBotRef = useRef();
+
   const { sendMessage, lastMessage, readyState } = useWebSocket(
     import.meta.env.VITE_API_HOST + '/bot',
     {
@@ -41,32 +44,21 @@ function App() {
   }
 
   // Discussion messages
-  const [messages, setMessages] = useState<ChatMessage[]>([
+  const defaultChatMessages : ChatMessage[] = [
     {
       message:
         'Bonjour, je suis le bot du Tour, BDT, pour les intimes, conseiller sur le Tour de France. En quoi puis-je vous etre utile ?',
       author: MessageAuthor.BOT,
       timestamp: new Date(),
     },
-  ])
+  ]
 
-  // User message
-  let [userMessage, setUserMessage] = useState<string>('')
-  const sendMessageClick = () => {
-    if (userMessage == undefined) {
-      return
-    }
+  const onSendChatBotMessage = (message: ChatMessage) => {
+    sendMessage(JSON.stringify({ message: getAsciiValues(message.message.toLowerCase()) }))
+  }
 
-    sendMessage(JSON.stringify({ message: getAsciiValues(userMessage.toLowerCase()) }))
-
-    const chatMessage: ChatMessage = {
-      message: userMessage,
-      author: MessageAuthor.USER,
-      timestamp: new Date(),
-    }
-    setMessages([...messages, chatMessage])
-
-    setUserMessage('')
+  const onSendGameBotMessage = (message: ChatMessage) => {
+    alert("ToDo : send game bot message (" + message.message + ")")
   }
 
   // Bot response
@@ -79,7 +71,8 @@ function App() {
         author: MessageAuthor.BOT,
         timestamp: new Date(),
       }
-      setMessages([...messages, chatMessage])
+
+      chatBotRef.current.onReceiveMessage(chatMessage);
     }
   }, [lastMessage])
 
@@ -97,59 +90,27 @@ function App() {
       </Grid>
 
       <Grid container justifyContent="center">
-        <Grid container xs={5}>
+        <Grid container xs={5} justifyContent="center" alignItems="center">
           <img src={mapImage} id="map-image" alt="Plateau de jeu tour de france" />
         </Grid>
 
-        <Grid container xs={5} id="chat-bot-card" sx={{ px: 0 }}>
-          <Grid item xs={12}>
-            <h2 className="text-center">Discussion avec le bot du tour ...</h2>
-          </Grid>
+        <Grid container xs={5}>
+          <Chat ref={chatBotRef} height="40vh" onSendMessage={onSendChatBotMessage}
+                title="Discussion avec le bot du tour" submitDisabled={readyState !== ReadyState.OPEN}
+                defaultMessages={defaultChatMessages}/>
+        </Grid>
+      </Grid>
 
-          <Grid container direction="column" spacing={0} height="42vh">
-            <div style={{ overflowY: 'scroll', height: '100%' }}>
-              {messages.map(chatMessage => {
-                return (
-                  <ChatMessageComponent {...chatMessage} key={chatMessage.timestamp.toString()} />
-                )
-              })}
-            </div>
-          </Grid>
+      <Grid container justifyContent="center" sx={{mt:5}}>
+        <Grid container xs={5} justifyContent="center" alignItems="center">
+          <p>ToDo : Add teams table</p>
+        </Grid>
 
-          <Grid container spacing={2} alignItems="center" sx={{ px: 3, py: 1 }}>
-            <Grid item xs={10}>
-              <TextField
-                label="Entrer votre message ..."
-                variant="filled"
-                fullWidth
-                value={userMessage}
-                onChange={e => setUserMessage(e.target.value ?? '')}
-              />
-            </Grid>
-            <Grid item xs={2}>
-              <Button
-                variant="contained"
-                onClick={sendMessageClick}
-                disabled={readyState !== ReadyState.OPEN || userMessage == ''}
-                fullWidth>
-                Envoyer
-              </Button>
-            </Grid>
-          </Grid>
+        <Grid container xs={5}>
+          <Chat ref={gameBotRef} height="24vh" onSendMessage={onSendGameBotMessage} title="Bot de jeu" placeholder="Entrer une instruction de jeu"/>
         </Grid>
       </Grid>
     </Container>
-
-    /*    <div className="App">
-      <h1>Vite + React</h1>
-      <div className="card">
-        {readyState && <p>readyState: {connectionStatus}</p>}
-        <button onClick={handleClick} disabled={readyState !== ReadyState.OPEN}>
-          Send Message
-        </button>
-        <div>{lastMessage && <p>lastMessage: {parsedMessage(lastMessage.data)}</p>}</div>
-      </div>
-    </div>*/
   )
 }
 
