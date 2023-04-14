@@ -1,10 +1,10 @@
-import {Grid} from "@mui/material";
-import ChatMessage from "../models/ChatMessage";
-import React from "react";
-import {MessageAuthor} from "../models/MessageAuthor";
+import { Grid } from '@mui/material'
+import ChatMessage from '../models/ChatMessage'
+import React from 'react'
+import { MessageAuthor } from '../models/MessageAuthor'
 
 function ChatMessageComponent(props: ChatMessage) {
-  if(props.author == MessageAuthor.USER){
+  if (props.author == MessageAuthor.USER) {
     return (
       <Grid className="chat-message" container alignItems="center">
         <Grid item xs={11}>
@@ -29,4 +29,4 @@ function ChatMessageComponent(props: ChatMessage) {
   )
 }
 
-export default ChatMessageComponent;
+export default ChatMessageComponent

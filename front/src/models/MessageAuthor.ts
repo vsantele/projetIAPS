@@ -1,3 +1,4 @@
 export enum MessageAuthor {
-  BOT, USER
+  BOT,
+  USER,
 }

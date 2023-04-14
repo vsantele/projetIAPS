@@ -1,21 +1,21 @@
-import {Button, Container, Grid, TextField} from '@mui/material'
-import useWebSocket, {ReadyState} from 'react-use-websocket'
+import { Button, Container, Grid, TextField } from '@mui/material'
+import useWebSocket, { ReadyState } from 'react-use-websocket'
 import './App.css'
 import mapImage from './assets/map.png'
 import BotResponse from './models/BotResponse'
 import ChatMessage from './models/ChatMessage'
-import ChatMessageComponent from "./components/ChatMessageComponent";
-import React, {useEffect, useState} from "react";
-import {MessageAuthor} from "./models/MessageAuthor";
+import ChatMessageComponent from './components/ChatMessageComponent'
+import React, { useEffect, useState } from 'react'
+import { MessageAuthor } from './models/MessageAuthor'
 
-function getAsciiValues(text: String){
-  const asciiCodes = [];
+function getAsciiValues(text: String) {
+  const asciiCodes = []
 
   for (let i = 0; i < text.length; i++) {
-    asciiCodes.push(text.charCodeAt(i));
+    asciiCodes.push(text.charCodeAt(i))
   }
 
-  return asciiCodes;
+  return asciiCodes
 }
 
 function App() {
@@ -42,78 +42,103 @@ function App() {
 
   // Discussion messages
   const [messages, setMessages] = useState<ChatMessage[]>([
-    {message : "Bonjour, je suis le bot du Tour, BDT, pour les intimes, conseiller sur le Tour de France. En quoi puis-je vous etre utile ?", author: MessageAuthor.BOT, timestamp : new Date()}
-  ]);
+    {
+      message:
+        'Bonjour, je suis le bot du Tour, BDT, pour les intimes, conseiller sur le Tour de France. En quoi puis-je vous etre utile ?',
+      author: MessageAuthor.BOT,
+      timestamp: new Date(),
+    },
+  ])
 
   // User message
-  let [userMessage, setUserMessage] = useState<String>("");
+  let [userMessage, setUserMessage] = useState<String>('')
   const sendMessageClick = () => {
-    if(userMessage == undefined){
-      return;
+    if (userMessage == undefined) {
+      return
     }
 
-    sendMessage(JSON.stringify({ message: getAsciiValues(userMessage.toLowerCase())}));
+    sendMessage(JSON.stringify({ message: getAsciiValues(userMessage.toLowerCase()) }))
 
-    const chatMessage : ChatMessage = {message: userMessage, author : MessageAuthor.USER, timestamp : new Date()};
-    setMessages([...messages, chatMessage]);
+    const chatMessage: ChatMessage = {
+      message: userMessage,
+      author: MessageAuthor.USER,
+      timestamp: new Date(),
+    }
+    setMessages([...messages, chatMessage])
 
-    setUserMessage("");
+    setUserMessage('')
   }
 
   // Bot response
   useEffect(() => {
     if (lastMessage !== null) {
-      const stringResponse = parsedMessage(lastMessage.data);
+      const stringResponse = parsedMessage(lastMessage.data)
 
-      const chatMessage : ChatMessage = {message: stringResponse, author : MessageAuthor.BOT, timestamp : new Date()};
-      setMessages([...messages, chatMessage]);
+      const chatMessage: ChatMessage = {
+        message: stringResponse,
+        author: MessageAuthor.BOT,
+        timestamp: new Date(),
+      }
+      setMessages([...messages, chatMessage])
     }
-  }, [lastMessage]);
+  }, [lastMessage])
 
   return (
-      <Container maxWidth={false}>
-        <Grid item xs={12} textAlign={"center"}>
-          <h1>Tour de France</h1>
-          <small>{readyState ? <p>Connexion avec le bot : {connectionStatus}</p> : <p>Serveur du bot introuvable</p>}</small>
+    <Container maxWidth={false}>
+      <Grid item xs={12} textAlign={'center'}>
+        <h1>Tour de France</h1>
+        <small>
+          {readyState ? (
+            <p>Connexion avec le bot : {connectionStatus}</p>
+          ) : (
+            <p>Serveur du bot introuvable</p>
+          )}
+        </small>
+      </Grid>
+
+      <Grid container justifyContent="center">
+        <Grid container xs={5}>
+          <img src={mapImage} id="map-image" alt="Plateau de jeu tour de france" />
         </Grid>
 
-        <Grid container justifyContent="center">
-          <Grid container xs={5}>
-            <img src={mapImage} id="map-image" alt="Plateau de jeu tour de france" />
+        <Grid container xs={5} id="chat-bot-card" sx={{ px: 0 }}>
+          <Grid item xs={12}>
+            <h2 className="text-center">Discussion avec le bot du tour ...</h2>
           </Grid>
 
-          <Grid container xs={5} id="chat-bot-card" sx={{px:0}}>
-            <Grid item xs={12}>
-              <h2 className="text-center">Discussion avec le bot du tour ...</h2>
-            </Grid>
+          <Grid container direction="column" spacing={0} height="42vh">
+            <div style={{ overflowY: 'scroll', height: '100%' }}>
+              {messages.map((chatMessage, iChatMessage) => {
+                return <ChatMessageComponent {...chatMessage} key={iChatMessage} />
+              })}
+            </div>
+          </Grid>
 
-            <Grid container direction="column" spacing={0} height="42vh" >
-              <div style={{overflowY: "scroll", height: "100%"}}>
-                {
-                  messages.map((chatMessage, iChatMessage) => {
-                    return <ChatMessageComponent {...chatMessage} key={iChatMessage}/>
-                  })
-                }
-              </div>
+          <Grid container spacing={2} alignItems="center" sx={{ px: 3, py: 1 }}>
+            <Grid item xs={10}>
+              <TextField
+                label="Entrer votre message ..."
+                variant="filled"
+                fullWidth
+                value={userMessage}
+                onChange={e => setUserMessage(e.target.value ?? '')}
+              />
             </Grid>
-
-            <Grid container spacing={2} alignItems="center" sx={{px:3, py:1}}>
-              <Grid item xs={10}>
-                <TextField label="Entrer votre message ..." variant="filled" fullWidth
-                           value={userMessage} onChange={(e) => setUserMessage(e.target.value ?? "")}/>
-              </Grid>
-              <Grid item xs={2}>
-                <Button variant="contained" onClick={sendMessageClick} disabled={readyState !== ReadyState.OPEN || userMessage == ""} fullWidth>Envoyer</Button>
-              </Grid>
+            <Grid item xs={2}>
+              <Button
+                variant="contained"
+                onClick={sendMessageClick}
+                disabled={readyState !== ReadyState.OPEN || userMessage == ''}
+                fullWidth>
+                Envoyer
+              </Button>
             </Grid>
           </Grid>
         </Grid>
-      </Container>
+      </Grid>
+    </Container>
 
-
-
-
-/*    <div className="App">
+    /*    <div className="App">
       <h1>Vite + React</h1>
       <div className="card">
         {readyState && <p>readyState: {connectionStatus}</p>}
