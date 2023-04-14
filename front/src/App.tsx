@@ -51,7 +51,7 @@ function App() {
   ])
 
   // User message
-  let [userMessage, setUserMessage] = useState<String>('')
+  let [userMessage, setUserMessage] = useState<string>('')
   const sendMessageClick = () => {
     if (userMessage == undefined) {
       return
