@@ -1,4 +1,4 @@
-import { Container, Grid } from '@mui/material'
+import { Box, Container, Grid } from '@mui/material'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
 import './App.css'
 import mapImage from './assets/map.png'
@@ -105,24 +105,22 @@ function App() {
   }, [lastMessage])
 
   return (
-    <Container maxWidth={false}>
-      <Grid item xs={12} textAlign={'center'}>
-        <h1>Tour de France</h1>
-        <small>
-          {readyState ? (
-            <p>Connexion avec le bot : {connectionStatus}</p>
-          ) : (
-            <p>Serveur du bot introuvable</p>
-          )}
-        </small>
-      </Grid>
-
-      <Grid container justifyContent="center">
-        <Grid container xs={5} justifyContent="center" alignItems="center">
+    <Container maxWidth="xl">
+      <Grid container justifyContent="center" alignContent="center" spacing={1}>
+        <Grid item xs={12} textAlign={'center'}>
+          <h1>Tour de France</h1>
+          <small>
+            {readyState ? (
+              <p>Connexion avec le bot : {connectionStatus}</p>
+            ) : (
+              <p>Serveur du bot introuvable</p>
+            )}
+          </small>
+        </Grid>
+        <Grid item xs={12} md={6} xl={8} textAlign="center">
           <img src={mapImage} id="map-image" alt="Plateau de jeu tour de france" />
         </Grid>
-
-        <Grid container xs={5}>
+        <Grid item xs={12} md={6} xl={4}>
           <Chat
             height="40vh"
             onSendMessage={handleSendChatBotMessage}
@@ -131,22 +129,20 @@ function App() {
             messages={botMessages}
           />
         </Grid>
-      </Grid>
-
-      <Grid container justifyContent="center" sx={{ mt: 5 }}>
-        <Grid container xs={5} justifyContent="center" alignItems="center">
-          <DataGrid
-            columns={teamsGridColumns}
-            rows={teams}
-            rowSelection={false}
-            disableRowSelectionOnClick
-            hideFooter={true}
-            hideFooterPagination={true}
-            hideFooterSelectedRowCount={true}
-          />
+        <Grid item xs={12} md={6} xl={8}>
+          <Box sx={{ height: '20rem' }}>
+            <DataGrid
+              columns={teamsGridColumns}
+              rows={teams}
+              rowSelection={false}
+              disableRowSelectionOnClick
+              hideFooter={true}
+              hideFooterPagination={true}
+              hideFooterSelectedRowCount={true}
+            />
+          </Box>
         </Grid>
-
-        <Grid container xs={5}>
+        <Grid item xs={12} md={6} xl={4}>
           <Chat
             height="24vh"
             onSendMessage={onSendGameBotMessage}
