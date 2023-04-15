@@ -45,7 +45,7 @@ produire_reponse(_,[L1]) :-
 
 /* Réponses en cas d'échecs */
 reponseEchec([je, le ,ne, sais, pas]).
-reponseEchec([les, etudiants, vont, m, aider]).
+reponseEchec([les, etudiants, vont, m, '\'', aider]).
 reponseEchec([je, ne, suis, encore, qu,un, prototype]).
 reponseEchec(['vous le verrez']).
 
