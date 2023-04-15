@@ -1,6 +1,5 @@
 import { Grid } from '@mui/material'
 import ChatMessage from '../models/ChatMessage'
-import React from 'react'
 import { MessageAuthor } from '../models/MessageAuthor'
 
 function ChatMessageComponent(props: ChatMessage) {

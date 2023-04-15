@@ -4,32 +4,37 @@ import './App.css'
 import mapImage from './assets/map.png'
 import BotResponse from './models/BotResponse'
 import ChatMessage from './models/ChatMessage'
-import React, {useEffect, useRef} from 'react'
+import { useEffect, useState } from 'react'
 import { MessageAuthor } from './models/MessageAuthor'
-import Chat from "./components/Chat";
-import {DataGrid, GridColDef, GridRenderCellParams} from "@mui/x-data-grid";
+import Chat from './components/Chat'
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
 
 enum Team {
-  ITALY, NETHERLANDS, BELGIUM, GERMANY
+  ITALY,
+  NETHERLANDS,
+  BELGIUM,
+  GERMANY,
 }
 
 const teams = [
-  {id: Team.ITALY, name: "Italie", cards: [1, 2, 4, 8, 12]},
-  {id: Team.NETHERLANDS, name: "Pays-Bas", cards: [5, 7, 10, 11, 12]},
-  {id: Team.BELGIUM, name: "Belgique", cards: [3, 5, 7, 9, 12]},
-  {id: Team.GERMANY, name: "Allemange", cards: [1, 6, 7, 8, 10]},
-];
+  { id: Team.ITALY, name: 'Italie', cards: [1, 2, 4, 8, 12] },
+  { id: Team.NETHERLANDS, name: 'Pays-Bas', cards: [5, 7, 10, 11, 12] },
+  { id: Team.BELGIUM, name: 'Belgique', cards: [3, 5, 7, 9, 12] },
+  { id: Team.GERMANY, name: 'Allemange', cards: [1, 6, 7, 8, 10] },
+]
 
 const teamsGridColumns: GridColDef[] = [
-  {headerName: "Équipe", field: "name", resizable: false, flex: 1},
+  { headerName: 'Équipe', field: 'name', resizable: false, flex: 1 },
   {
-    headerName: "Cartes", field: "cards", resizable: false, flex: 3, renderCell: (params : GridRenderCellParams<number[]>) => (
-        <p>{params.value.join(" - ")}</p>
-    ),
+    headerName: 'Cartes',
+    field: 'cards',
+    resizable: false,
+    flex: 3,
+    renderCell: (params: GridRenderCellParams<number[]>) => <p>{params.value.join(' - ')}</p>,
   },
-];
+]
 
-function getAsciiValues(text: String) {
+function getAsciiValues(text: string) {
   const asciiCodes = []
 
   for (let i = 0; i < text.length; i++) {
@@ -40,9 +45,6 @@ function getAsciiValues(text: String) {
 }
 
 function App() {
-  const chatBotRef = useRef();
-  const gameBotRef = useRef();
-
   const { sendMessage, lastMessage, readyState } = useWebSocket(
     import.meta.env.VITE_API_HOST + '/bot',
     {
@@ -50,6 +52,17 @@ function App() {
       reconnectInterval: 1000,
     }
   )
+
+  // Discussion messages
+  const defaultChatMessages: ChatMessage[] = [
+    {
+      message:
+        'Bonjour, je suis le bot du Tour, BDT, pour les intimes, conseiller sur le Tour de France. En quoi puis-je vous etre utile ?',
+      author: MessageAuthor.BOT,
+      timestamp: new Date(),
+    },
+  ]
+  const [botMessages, setBotMessages] = useState<ChatMessage[]>(defaultChatMessages)
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'en cours de connexion ...',
@@ -64,22 +77,16 @@ function App() {
     return data.message.map(m => m.join(' ')).join('\n')
   }
 
-  // Discussion messages
-  const defaultChatMessages : ChatMessage[] = [
-    {
-      message:
-        'Bonjour, je suis le bot du Tour, BDT, pour les intimes, conseiller sur le Tour de France. En quoi puis-je vous etre utile ?',
-      author: MessageAuthor.BOT,
-      timestamp: new Date(),
-    },
-  ]
-
-  const onSendChatBotMessage = (message: ChatMessage) => {
-    sendMessage(JSON.stringify({ message: getAsciiValues(message.message.toLowerCase()) }))
+  const handleSendChatBotMessage = (message: string) => {
+    setBotMessages(messages => [
+      ...messages,
+      { message, author: MessageAuthor.USER, timestamp: new Date() },
+    ])
+    sendMessage(JSON.stringify({ message: getAsciiValues(message.toLowerCase()) }))
   }
 
-  const onSendGameBotMessage = (message: ChatMessage) => {
-    alert("ToDo : send game bot message (" + message.message + ")")
+  const onSendGameBotMessage = (message: string) => {
+    alert('ToDo : send game bot message (' + message + ')')
   }
 
   // Bot response
@@ -93,7 +100,7 @@ function App() {
         timestamp: new Date(),
       }
 
-      chatBotRef.current.onReceiveMessage(chatMessage);
+      setBotMessages(messages => [...messages, chatMessage])
     }
   }, [lastMessage])
 
@@ -116,19 +123,37 @@ function App() {
         </Grid>
 
         <Grid container xs={5}>
-          <Chat ref={chatBotRef} height="40vh" onSendMessage={onSendChatBotMessage}
-                title="Discussion avec le bot du tour" submitDisabled={readyState !== ReadyState.OPEN}
-                defaultMessages={defaultChatMessages}/>
+          <Chat
+            height="40vh"
+            onSendMessage={handleSendChatBotMessage}
+            title="Discussion avec le bot du tour"
+            submitDisabled={readyState !== ReadyState.OPEN}
+            messages={botMessages}
+          />
         </Grid>
       </Grid>
 
-      <Grid container justifyContent="center" sx={{mt:5}}>
+      <Grid container justifyContent="center" sx={{ mt: 5 }}>
         <Grid container xs={5} justifyContent="center" alignItems="center">
-          <DataGrid columns={teamsGridColumns} rows={teams} rowSelection={false} disableRowSelectionOnClick hideFooter={true} hideFooterPagination={true} hideFooterSelectedRowCount={true}/>
+          <DataGrid
+            columns={teamsGridColumns}
+            rows={teams}
+            rowSelection={false}
+            disableRowSelectionOnClick
+            hideFooter={true}
+            hideFooterPagination={true}
+            hideFooterSelectedRowCount={true}
+          />
         </Grid>
 
         <Grid container xs={5}>
-          <Chat ref={gameBotRef} height="24vh" onSendMessage={onSendGameBotMessage} title="Bot de jeu" placeholder="Entrer une instruction de jeu"/>
+          <Chat
+            height="24vh"
+            onSendMessage={onSendGameBotMessage}
+            title="Bot de jeu"
+            placeholder="Entrer une instruction de jeu"
+            messages={[]}
+          />
         </Grid>
       </Grid>
     </Container>
