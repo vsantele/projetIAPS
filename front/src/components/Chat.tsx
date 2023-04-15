@@ -21,7 +21,7 @@ const Chat = ({
   messages,
 }: ChatProps) => {
   // User message
-  let [userMessage, setUserMessage] = useState<string>('')
+  const [userMessage, setUserMessage] = useState<string>('')
 
   const sendMessageClick = () => {
     onSendMessage(userMessage)
