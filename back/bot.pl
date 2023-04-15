@@ -33,6 +33,8 @@ produire_reponse(L,Rep) :-
 %   write(L),
    mclef(M,_), member(M,L),
    clause(regle_rep(M,_,Pattern,Rep),Body),
+   nl, write("Pattern : "), write(Pattern),
+   nl, write("L : "), write(L),
    match_pattern(Pattern,L),
    call(Body), !.
 
@@ -41,44 +43,28 @@ produire_reponse(_,[L1]) :-
    random_member(Choix, L),
    L1 = Choix.
 
-
-   /*L1 = [je, ne, sais, pas, '.'],
-   L2 = [les, etudiants, vont, m, '\'', aider, '.' ],
-   L3 = ['vous le verrez !'].*/
-
-/*
-détermine les réponses en cas d'échecs
-*/
+/* Réponses en cas d'échecs */
 reponseEchec([je, le ,ne, sais, pas]).
 reponseEchec([les, etudiants, vont, m, aider]).
 reponseEchec([je, ne, suis, encore, qu,un, prototype]).
 reponseEchec(['vous le verrez']).
 
 
-match_pattern(Pattern,Lmots) :-
-   sublist(Pattern,Lmots).
+match_pattern(Pattern,Lmots) :- sublist(Pattern, Lmots).
 
-match_pattern(LPatterns,Lmots) :-
-   match_pattern_dist([100|LPatterns],Lmots).
+match_pattern(LPatterns,Lmots) :- match_pattern_dist([100|LPatterns],Lmots).
 
 match_pattern_dist([],_).
-match_pattern_dist([N,Pattern|Lpatterns],Lmots) :-
-   within_dist(N,Pattern,Lmots,Lmots_rem),
-   match_pattern_dist(Lpatterns,Lmots_rem).
+match_pattern_dist([N,Pattern|Lpatterns],Lmots) :- within_dist(N,Pattern,Lmots,Lmots_rem), match_pattern_dist(Lpatterns,Lmots_rem).
 
-within_dist(_,Pattern,Lmots,Lmots_rem) :-
-   prefixrem(Pattern,Lmots,Lmots_rem).
-within_dist(N,Pattern,[_|Lmots],Lmots_rem) :-
-   N > 1, Naux is N-1,
-  within_dist(Naux,Pattern,Lmots,Lmots_rem).
+within_dist(_,Pattern,Lmots,Lmots_rem) :- prefixrem(Pattern,Lmots,Lmots_rem).
+within_dist(N,Pattern,[_|Lmots],Lmots_rem) :- N > 1, Naux is N-1, within_dist(Naux,Pattern,Lmots,Lmots_rem).
 
 
-sublist(SL,L) :-
-   prefix(SL,L), !.
+sublist(SL,L) :- prefix(SL,L), !.
 sublist(SL,[_|T]) :- sublist(SL,T).
 
-sublistrem(SL,L,Lr) :-
-   prefixrem(SL,L,Lr), !.
+sublistrem(SL,L,Lr) :- prefixrem(SL,L,Lr), !.
 sublistrem(SL,[_|T],Lr) :- sublistrem(SL,T,Lr).
 
 prefixrem([],L,L).
@@ -92,10 +78,17 @@ nb_equipes(4).
 
 % ----------------------------------------------------------------%
 
+similarity(Q, A, S) :- isub(Q, A, S, [normalize(true), zero_to_one(true)]).
+
 mclef(commence,10).
 mclef(equipe,5).
 mclef(deplacer,20).
 mclef(depasser,15).
+
+mclefnew([Word|_], Keyword) :- keywordWithSimi(Word, Keyword), !.
+mclefnew([_|LWords], Keyword) :- mclefnew(LWords, Keyword).
+
+keywordWithSimi(Word, Keyword) :- mclef(Keyword, _), similarity(Word, Keyword, Simi), Simi >= 0.85.
 
 % ----------------------------------------------------------------%
 
@@ -409,6 +402,9 @@ bot_response(AsciiInput, Response) :-
 
 % :- tourdefrance.
 
+test(L_ligne_reponse) :- produire_reponse([qui, commence, le, jeu, ?], L_ligne_reponse).
+
+test_pattern() :- match_pattern([qui, commence, la, partie, ?], [qui, commencent, la, partie, ?]).
 
 
 
