@@ -78,3 +78,7 @@ Ce projet a pour but de mettre en place un bot pour expliquer les règles du jeu
   ```prolog
   ?- start_server.
   ```
+
+- Accéder au site
+
+  <http://localhost:3000>
