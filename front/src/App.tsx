@@ -46,7 +46,7 @@ function getAsciiValues(text: string) {
 
 function App() {
   const { sendMessage, lastMessage, readyState } = useWebSocket(
-    import.meta.env.VITE_API_HOST + '/bot',
+    (import.meta.env.VITE_API_HOST ?? '') + '/bot',
     {
       retryOnError: true,
       reconnectInterval: 1000,

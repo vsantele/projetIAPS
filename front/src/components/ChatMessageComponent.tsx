@@ -1,30 +1,40 @@
-import { Grid } from '@mui/material'
+import { Avatar, Stack } from '@mui/material'
 import ChatMessage from '../models/ChatMessage'
 import { MessageAuthor } from '../models/MessageAuthor'
+import RobotIcon from '@mui/icons-material/Smarttoy'
+import UserIcon from '@mui/icons-material/Person'
+import orange from '@mui/material/colors/orange'
+import grey from '@mui/material/colors/grey'
 
-function ChatMessageComponent(props: ChatMessage) {
-  if (props.author == MessageAuthor.USER) {
-    return (
-      <Grid className="chat-message" container alignItems="center">
-        <Grid item xs={11}>
-          <p className="text-right">{props.message}</p>
-        </Grid>
-        <Grid align="center" item xs={1}>
-          <span className="circle">H</span>
-        </Grid>
-      </Grid>
-    )
-  }
-
+function ChatMessageComponent({ message, author }: ChatMessage) {
+  const currentUser = author == MessageAuthor.USER
   return (
-    <Grid className="chat-message" container alignItems="center">
-      <Grid align="center" item xs={1}>
-        <span className="circle">B</span>
-      </Grid>
-      <Grid item xs={11} alignItems="center">
-        <p>{props.message}</p>
-      </Grid>
-    </Grid>
+    <Stack direction="row" justifyContent={currentUser ? 'flex-end' : 'unset'} sx={{ mb: 3 }}>
+      {!currentUser && (
+        <Avatar sx={{ width: 32, height: 32, mr: 2, bgcolor: orange[500] }}>
+          <RobotIcon />
+        </Avatar>
+      )}
+      <Stack
+        sx={{
+          p: 1.5,
+          minWidth: 48,
+          borderRadius: 1,
+          overflow: 'hidden',
+          typography: 'body2',
+          bgcolor: orange[500],
+          ...(currentUser && {
+            bgcolor: grey[100],
+          }),
+        }}>
+        {message}
+      </Stack>
+      {currentUser && (
+        <Avatar sx={{ width: 32, height: 32, ml: 2 }}>
+          <UserIcon />
+        </Avatar>
+      )}
+    </Stack>
   )
 }
 
