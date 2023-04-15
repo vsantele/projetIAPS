@@ -37,7 +37,7 @@ const Chat = ({
       <Grid container direction="column" spacing={0} height={height}>
         <Grid item style={{ overflowY: 'scroll', height: '100%' }}>
           {messages.map(chatMessage => {
-            return <ChatMessageComponent {...chatMessage} key={chatMessage.timestamp.toString()} />
+            return <ChatMessageComponent {...chatMessage} key={chatMessage.timestamp.getTime()} />
           })}
         </Grid>
       </Grid>
