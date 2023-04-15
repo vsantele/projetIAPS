@@ -34,12 +34,10 @@ const Chat = ({
         <h2 className="text-center">{title}</h2>
       </Grid>
 
-      <Grid container direction="column" spacing={0} height={height}>
-        <Grid item style={{ overflowY: 'scroll', height: '100%' }}>
-          {messages.map(chatMessage => {
-            return <ChatMessageComponent {...chatMessage} key={chatMessage.timestamp.getTime()} />
-          })}
-        </Grid>
+      <Grid item style={{ overflowY: 'scroll' }} height={height}>
+        {messages.map(chatMessage => {
+          return <ChatMessageComponent {...chatMessage} key={chatMessage.timestamp.getTime()} />
+        })}
       </Grid>
 
       <Grid container spacing={2} alignItems="center" sx={{ px: 3, my: 0 }}>
