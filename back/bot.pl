@@ -33,8 +33,8 @@ produire_reponse(L,Rep) :-
 %   write(L),
    mclef(M,_), member(M,L),
    clause(regle_rep(M,_,Pattern,Rep),Body),
-   nl, write("Pattern : "), write(Pattern),
-   nl, write("L : "), write(L),
+   nl, write('Pattern : '), write(Pattern),
+   nl, write('L : '), write(L),
    match_pattern(Pattern,L),
    call(Body), !.
 
@@ -94,14 +94,14 @@ keywordWithSimi(Word, Keyword) :- mclef(Keyword, _), similarity(Word, Keyword, S
 
 regle_rep(commence,1,
   [ qui, commence, le, jeu ],
-  [ [ "c'est", au, joueur, ayant, la, plus, haute, carte, secondes, de ],
-    [ "commencer." ] ] ).
+  [ [ 'c\'est', au, joueur, ayant, la, plus, haute, carte, secondes, de ],
+    [ 'commencer.' ] ] ).
 
 % ----------------------------------------------------------------%
 
 regle_rep(equipe,5,
   [ [ combien ], 3, [ coureurs], 5, [ equipe ] ],
-  [ [ chaque, equipe, compte, X, "coureurs." ] ]) :-
+  [ [ chaque, equipe, compte, X, 'coureurs.' ] ]) :-
 
      nb_coureurs(X).
 %-------------------------------------------------------------------%
@@ -112,7 +112,7 @@ regle_rep(deplacer,20,
 %--------------------------------------------------------------------%
 regle_rep(depasser,20,
     [[puis, je, depasser, au, dessus, d, un, groupe, de, coureurs]],
-    [["oui, il est permis de depasser par le bas-cote de la routepour autant que le coureur arrive sur une case non occupee. si ce n’est pas le cas, le coureur chute et entraine dans sa chute le groupe de coureurs qu’il voulait depasser."]]
+    [['oui, il est permis de depasser par le bas-cote de la routepour autant que le coureur arrive sur une case non occupee. si ce n’est pas le cas, le coureur chute et entraine dans sa chute le groupe de coureurs qu’il voulait depasser.']]
 ).
 
 
