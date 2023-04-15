@@ -129,6 +129,8 @@ function App() {
             title="Discussion avec le bot du tour"
             submitDisabled={readyState !== ReadyState.OPEN}
             messages={botMessages}
+            label="Message"
+            placeholder="Qui commence le jeu?"
           />
         </Grid>
         <Grid item xs={12} md={4} xl={6}>
