@@ -29,7 +29,7 @@ const teamsGridColumns: GridColDef[] = [
     headerName: 'Cartes',
     field: 'cards',
     resizable: false,
-    flex: 3,
+    flex: 1,
     renderCell: (params: GridRenderCellParams<number[]>) => <p>{params.value.join(' - ')}</p>,
   },
 ]
@@ -63,6 +63,8 @@ function App() {
     },
   ]
   const [botMessages, setBotMessages] = useState<ChatMessage[]>(defaultChatMessages)
+  const [currentTeam, setCurrentTeam] = useState<Team>(Team.BELGIUM)
+  const [currentMove, setCurrentMove] = useState<string>('2-avance-5')
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'en cours de connexion ...',
@@ -129,7 +131,7 @@ function App() {
             messages={botMessages}
           />
         </Grid>
-        <Grid item xs={12} md={6} xl={8}>
+        <Grid item xs={12} md={4} xl={6}>
           <Box sx={{ height: '20rem' }}>
             <DataGrid
               columns={teamsGridColumns}
@@ -141,6 +143,10 @@ function App() {
               hideFooterSelectedRowCount={true}
             />
           </Box>
+        </Grid>
+        <Grid item xs={12} md={2} xl={2}>
+          A l&apos;équipe {teams.find(t => t.id === currentTeam)?.name ?? 'Inconnue'} :{' '}
+          {currentMove}
         </Grid>
         <Grid item xs={12} md={6} xl={4}>
           <Chat
