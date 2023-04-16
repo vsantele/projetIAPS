@@ -62,7 +62,15 @@ function App() {
       timestamp: new Date(),
     },
   ]
+  const defaultInstructions: ChatMessage[] = [
+    {
+      message: "A l'équipe Belgique 2-avance-5",
+      author: MessageAuthor.BOT,
+      timestamp: new Date(),
+    },
+  ]
   const [botMessages, setBotMessages] = useState<ChatMessage[]>(defaultChatMessages)
+  const [instructions, setInstruction] = useState<ChatMessage[]>(defaultInstructions)
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'en cours de connexion ...',
@@ -150,7 +158,9 @@ function App() {
             onSendMessage={onSendGameBotMessage}
             title="Bot de jeu"
             placeholder="Entrer une instruction de jeu"
-            messages={[]}
+            label="Instruction de jeu"
+            messages={instructions}
+            submitDisabled
           />
         </Grid>
       </Grid>
