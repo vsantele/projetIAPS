@@ -84,6 +84,8 @@ mclef(commence,10).
 mclef(equipe,5).
 mclef(deplacer,20).
 mclef(depasser,15).
+mclef(ordre,10).
+mclef(combien,10).
 
 mclefnew([Word|_], Keyword) :- keywordWithSimi(Word, Keyword), !.
 mclefnew([_|LWords], Keyword) :- mclefnew(LWords, Keyword).
@@ -114,7 +116,14 @@ regle_rep(depasser,20,
     [[puis, je, depasser, au, dessus, d, un, groupe, de, coureurs]],
     [['oui, il est permis de depasser par le bas-cote de la routepour autant que le coureur arrive sur une case non occupee. si ce n’est pas le cas, le coureur chute et entraine dans sa chute le groupe de coureurs qu’il voulait depasser.']]
 ).
-
+%--------------------------------------------------------------------%
+regle_rep(ordre,10,
+   [[dans, quel, ordre, jouent, les, equipes]],
+   [['l\'ordre est le suivant: Italie, Hollande, Belgique, Allemagne']]).
+%--------------------------------------------------------------------%
+regle_rep(combien,10,
+   [[combien,de,cartes,dois,je,tirer]],
+   [['5']]).
 
 /* --------------------------------------------------------------------- */
 /*                                                                       */
