@@ -2,7 +2,7 @@
 
 ## Description
 
-Ce projet a pour but de mettre en place un bot pour expliquer les règles du jeu du tour de france ainsi qu'une IA pour jouer au jeu.
+Ce projet a pour but de mettre en place un bot pour expliquer les règles du jeu du tour de France ainsi qu'une IA pour jouer au jeu.
 
 ## Installation
 
@@ -33,11 +33,11 @@ Ce projet a pour but de mettre en place un bot pour expliquer les règles du jeu
   cp .env.example .env
   ```
 
-  Modifier le fichier `.env` pour configurer les variables d'environnement
+  Modifier le fichier `.env` pour configurer les variables d'environnement, la variable par défaut est correct si vous ne touchez pas au serveur prolog.
 
 ## Développement
 
-- Lancer le serveur
+- Lancer le serveur front
 
   ```bash
   cd front
@@ -59,7 +59,7 @@ Ce projet a pour but de mettre en place un bot pour expliquer les règles du jeu
 
 ## Déploiement
 
-- build le front
+- Build le front
 
   ```bash
   cd front
