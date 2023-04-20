@@ -29,8 +29,7 @@ Ce projet a pour but de mettre en place un bot pour expliquer les règles du jeu
 - Configurer les variables d'environnement
 
   ```bash
-  # in the front folder
-  cp .env.example .env
+  cp front/.env.example front/.env
   ```
 
   Modifier le fichier `.env` pour configurer les variables d'environnement, la variable par défaut est correct si vous ne touchez pas au serveur prolog.

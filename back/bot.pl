@@ -1,4 +1,6 @@
 :- use_module(library(lists)).
+:- include('gameRules.pl').
+
 %:- debug.
 /* --------------------------------------------------------------------- */
 /*                                                                       */
@@ -27,28 +29,27 @@
 /*                      !!!    A MODIFIER   !!!                          */
 
 produire_reponse([fin],[L1]) :-
-   L1 = [merci, de, m, '\'', avoir, consulte], !.
+    L1 = [merci, de, m, '\'', avoir, consulte], !.
 
 produire_reponse(L,Rep) :-
-%   write(L),
-   mclef(M,_), member(M,L),
-   clause(regle_rep(M,_,Pattern,Rep),Body),
-   nl, write('Pattern : '), write(Pattern),
-   nl, write('L : '), write(L),
-   match_pattern(Pattern,L),
-   call(Body), !.
+    % write(L),
+    mclef(M,_), member(M,L),
+    clause(regle_rep(M,_,Pattern,Rep),Body),
+    nl, write('Pattern : '), write(Pattern),
+    nl, write('L : '), write(L),
+    match_pattern(Pattern,L),
+    call(Body), !.
 
 produire_reponse(_,[L1]) :-
-   findall(X,reponseEchec(X),L),
-   random_member(Choix, L),
-   L1 = Choix.
+    findall(X,reponseEchec(X),L),
+    random_member(Choix, L),
+    L1 = Choix.
 
 /* Réponses en cas d'échecs */
 reponseEchec([je, le ,ne, sais, pas]).
-reponseEchec([les, etudiants, vont, m, '\'', aider]).
+reponseEchec([les, etudiants, vont, 'm\'aider']).
 reponseEchec([je, ne, suis, encore, qu,un, prototype]).
 reponseEchec(['vous le verrez']).
-
 
 match_pattern(Pattern,Lmots) :- sublist(Pattern, Lmots).
 
@@ -60,7 +61,6 @@ match_pattern_dist([N,Pattern|Lpatterns],Lmots) :- within_dist(N,Pattern,Lmots,L
 within_dist(_,Pattern,Lmots,Lmots_rem) :- prefixrem(Pattern,Lmots,Lmots_rem).
 within_dist(N,Pattern,[_|Lmots],Lmots_rem) :- N > 1, Naux is N-1, within_dist(Naux,Pattern,Lmots,Lmots_rem).
 
-
 sublist(SL,L) :- prefix(SL,L), !.
 sublist(SL,[_|T]) :- sublist(SL,T).
 
@@ -70,60 +70,14 @@ sublistrem(SL,[_|T],Lr) :- sublistrem(SL,T,Lr).
 prefixrem([],L,L).
 prefixrem([H|T],[H|L],Lr) :- prefixrem(T,L,Lr).
 
-
-% ----------------------------------------------------------------%
-
-nb_coureurs(3).
-nb_equipes(4).
-
 % ----------------------------------------------------------------%
 
 similarity(Q, A, S) :- isub(Q, A, S, [normalize(true), zero_to_one(true)]).
-
-mclef(commence,10).
-mclef(equipe,5).
-mclef(deplacer,20).
-mclef(depasser,15).
-mclef(ordre,10).
-mclef(combien,10).
 
 mclefnew([Word|_], Keyword) :- keywordWithSimi(Word, Keyword), !.
 mclefnew([_|LWords], Keyword) :- mclefnew(LWords, Keyword).
 
 keywordWithSimi(Word, Keyword) :- mclef(Keyword, _), similarity(Word, Keyword, Simi), Simi >= 0.85.
-
-% ----------------------------------------------------------------%
-
-regle_rep(commence,1,
-  [ qui, commence, le, jeu ],
-  [ [ 'c\'est', au, joueur, ayant, la, plus, haute, carte, secondes, de ],
-    [ 'commencer.' ] ] ).
-
-% ----------------------------------------------------------------%
-
-regle_rep(equipe,5,
-  [ [ combien ], 3, [ coureurs], 5, [ equipe ] ],
-  [ [ chaque, equipe, compte, X, 'coureurs.' ] ]) :-
-
-     nb_coureurs(X).
-%-------------------------------------------------------------------%
-regle_rep(deplacer,20,
-    [[puis, je, deplacer, un,coureur, sur, une, case, occupe, par, un, autre, coureur]],
-    [[non]]
-).
-%--------------------------------------------------------------------%
-regle_rep(depasser,20,
-    [[puis, je, depasser, au, dessus, d, un, groupe, de, coureurs]],
-    [['oui, il est permis de depasser par le bas-cote de la routepour autant que le coureur arrive sur une case non occupee. si ce n’est pas le cas, le coureur chute et entraine dans sa chute le groupe de coureurs qu’il voulait depasser.']]
-).
-%--------------------------------------------------------------------%
-regle_rep(ordre,10,
-   [[dans, quel, ordre, jouent, les, equipes]],
-   [['l\'ordre est le suivant: Italie, Hollande, Belgique, Allemagne']]).
-%--------------------------------------------------------------------%
-regle_rep(combien,10,
-   [[combien,de,cartes,dois,je,tirer]],
-   [['5']]).
 
 /* --------------------------------------------------------------------- */
 /*                                                                       */
