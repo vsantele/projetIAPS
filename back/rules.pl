@@ -54,3 +54,9 @@ sprint(1, 280, [1,1], [0,0]).
 sprint(2, 360, [4,3], [1,1]).
 sprint(3, 760,[ 4,2], [0,0]).
 
+% equipe(nom, ordre, isHuman, [positionJ1, PositionJ2, PositionJ3]).
+equipe(italie, 1,0, [[0,0],[0,0],[0,0]]).
+equipe(hollande, 2,1, [[0,0],[0,0],[0,0]]).
+equipe(belgique, 3,0, [[0,0],[0,0],[0,0]]).
+equipe(allemagne, 4,1, [[0,0],[0,0],[0,0]]).
+
