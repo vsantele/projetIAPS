@@ -1,5 +1,5 @@
 :- use_module(library(lists)).
-:- include('constants.pl').
+:- use_module('constants.pl').
 :- include('questions.pl').
 
 %:- debug.
