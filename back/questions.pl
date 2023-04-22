@@ -1,4 +1,4 @@
-use_module('constants.pl').
+:- use_module('constants.pl').
 % MOT CLES
 % -------------- %
 mclef(commence, 1).
