@@ -1,5 +1,6 @@
 :- use_module(library(lists)).
-:- include('gameRules.pl').
+:- include('constants.pl').
+:- include('questions.pl').
 
 %:- debug.
 /* --------------------------------------------------------------------- */
