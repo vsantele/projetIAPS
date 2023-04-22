@@ -1,92 +1,91 @@
-import React, {useEffect, useRef, useState} from 'react'
-import {Button, Grid, TextField} from '@mui/material'
+import React, { useEffect, useRef, useState } from 'react'
+import { Button, Grid, TextField } from '@mui/material'
 import ChatMessageComponent from './ChatMessageComponent'
 import ChatMessage from '../models/ChatMessage'
 import SendIcon from '@mui/icons-material/Send'
 
 interface ChatProps {
-    onSendMessage(message: string): void
-    submitDisabled?: boolean
-    title: string
-    placeholder?: string
-    label?: string
-    height?: string
-    messages: ChatMessage[]
+  onSendMessage(message: string): void
+  submitDisabled?: boolean
+  title: string
+  placeholder?: string
+  label?: string
+  height?: string
+  messages: ChatMessage[]
 }
 
-const Chat = (
-    {
-        onSendMessage,
-        submitDisabled = false,
-        title,
-        placeholder,
-        label,
-        height = '100%',
-        messages,
-    }: ChatProps) => {
-    // User message
-    const [userMessage, setUserMessage] = useState<string>('')
+const Chat = ({
+  onSendMessage,
+  submitDisabled = false,
+  title,
+  placeholder,
+  label,
+  height = '100%',
+  messages,
+}: ChatProps) => {
+  // User message
+  const [userMessage, setUserMessage] = useState<string>('')
 
-    const messagesEndRef = useRef<HTMLDivElement>(null)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
 
-    useEffect(() => {
-        if (messagesEndRef.current) {
-            messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
-        }
-    }, [messages]);
-
-    const handleSend = (e: React.KeyboardEvent<HTMLDivElement>) => {
-        if (e.key === 'Enter' && userMessage !== '') {
-            sendMessage()
-        }
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight
     }
+  }, [messages])
 
-    const sendMessage = () => {
-        onSendMessage(userMessage)
-        setUserMessage('')
-        if (messagesEndRef.current) {
-            messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
-        }
+  const handleSend = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' && userMessage !== '') {
+      sendMessage()
     }
+  }
 
-    return (
-        <Grid container>
-            <Grid item xs={12} sx={{m: 0, p: 0}}>
-                <h2 className="text-center">{title}</h2>
-            </Grid>
+  const sendMessage = () => {
+    onSendMessage(userMessage)
+    setUserMessage('')
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight
+    }
+  }
 
-            <Grid item style={{overflowY: 'scroll'}} height={height} ref={messagesEndRef}>
-                {messages.map(chatMessage => {
-                    return <ChatMessageComponent {...chatMessage} key={chatMessage.timestamp.getTime()}/>
-                })}
-            </Grid>
+  return (
+    <Grid container>
+      <Grid item xs={12} sx={{ m: 0, p: 0 }}>
+        <h2 className="text-center">{title}</h2>
+      </Grid>
 
-            <Grid container spacing={2} alignItems="center" sx={{px: 3, my: 0}}>
-                <Grid item xs={10} sx={{m: 0, p: 0}}>
-                    <TextField
-                        size="small"
-                        label={label ?? 'Message'}
-                        placeholder={placeholder ?? ''}
-                        variant="filled"
-                        fullWidth
-                        value={userMessage}
-                        onKeyUp={handleSend}
-                        onChange={e => setUserMessage(e.target.value ?? '')}
-                        disabled={submitDisabled}
-                    />
-                </Grid>
-                <Grid item xs={2}>
-                    <Button
-                        variant="contained"
-                        onClick={sendMessage}
-                        disabled={submitDisabled || userMessage === ''}
-                        endIcon={<SendIcon/>}>
-                        Envoyer
-                    </Button>
-                </Grid>
-            </Grid>
+      <Grid item style={{ overflowY: 'scroll' }} height={height} ref={messagesEndRef}>
+        {messages.map(chatMessage => {
+          return <ChatMessageComponent {...chatMessage} key={chatMessage.timestamp.getTime()} />
+        })}
+      </Grid>
+
+      <Grid container spacing={2} alignItems="center" sx={{ px: 3, my: 0 }}>
+        <Grid item xs={10} sx={{ m: 0, p: 0 }}>
+          <TextField
+            size="small"
+            label={label ?? 'Message'}
+            placeholder={placeholder ?? ''}
+            variant="filled"
+            fullWidth
+            value={userMessage}
+            onKeyUp={handleSend}
+            onChange={e => setUserMessage(e.target.value ?? '')}
+            disabled={submitDisabled}
+          />
         </Grid>
-    )
+        <Grid item xs={2}>
+          <Button
+            variant="contained"
+            onClick={sendMessage}
+            disabled={submitDisabled || userMessage === ''}
+            endIcon={<SendIcon />}>
+            Envoyer
+          </Button>
+        </Grid>
+      </Grid>
+    </Grid>
+  )
 }
 
 export default Chat
