@@ -90,7 +90,7 @@ mclef(equipe,100).
 regle_rep(commence, 1,
     [[comment, commence, t, on, le, jeu]],
     [[pour, commencer, le, 'jeu,', chaque, joueur, doit, tirer, X, carte, 'seconde.', 'Celui', qui, tire, la, plus,
-    grande, carte, commence, le, 'jeu.']]) :- carteSecondePlusBasse(X).
+    grande, carte, commence, le, 'jeu.']]) :- nb_cartesSecondeCommence(X).
 
 regle_rep(commence, 2,
     [[qui, commence, le, jeu]],
@@ -156,19 +156,19 @@ regle_rep(seconde, 4,
 
 regle_rep(seconde, 5,
     [[combien, de, cartes, seconde, differentes, y, a, t, il, dans, le, jeu]],
-    [[il, y, a, X, cartes, seconde, differentes, dans, le, 'jeu.']]) :- carteSecondePlusHaute(X).
+    [[il, y, a, X, cartes, seconde, differentes, dans, le, 'jeu.']]) :- val_max_carte(X).
 
 regle_rep(seconde, 6,
     [[combien, de, fois, une, carte, seconde, est, presente, dans, le, jeu]],
-    [[chaque, carte, seconde, est, presente, X, fois, dans, le, 'jeu.']]) :- nb_cartesSecondeRecurrence(X).
+    [[chaque, carte, seconde, est, presente, X, fois, dans, le, 'jeu.']]) :- nb_repetition_cartes(X).
 
 regle_rep(seconde, 7,
     [[quel, est, la, carte, seconde, la, plus, basse, du, jeu]],
-    [[la, carte, seconde, X, est, la, plus, basse, du, 'jeu.']]) :- carteSecondePlusBasse(X).
+    [[la, carte, seconde, X, est, la, plus, basse, du, 'jeu.']]) :- val_min_carte(X).
 
 regle_rep(seconde, 8,
     [[quel, est, la, carte, seconde, la, plus, haute, du, jeu]],
-    [[la, carte, seconde, X, est, la, plus, haute, du, 'jeu.']]) :- carteSecondePlusHaute(X).
+    [[la, carte, seconde, X, est, la, plus, haute, du, 'jeu.']]) :- val_max_carte(X).
 
 regle_rep(seconde, 9,
     [[a, quoi, servent, les, cartes, seconde]],
