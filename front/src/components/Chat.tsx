@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Button, Grid, TextField } from '@mui/material'
+import { Button, Grid, IconButton, TextField } from '@mui/material'
 import ChatMessageComponent from './ChatMessageComponent'
 import ChatMessage from '../models/ChatMessage'
 import SendIcon from '@mui/icons-material/Send'
@@ -54,14 +54,18 @@ const Chat = ({
         <h2 className="text-center">{title}</h2>
       </Grid>
 
-      <Grid item style={{ overflowY: 'scroll' }} height={height} ref={messagesEndRef}>
+      <Grid
+        item
+        style={{ overflowY: 'scroll', width: '100%' }}
+        height={height}
+        ref={messagesEndRef}>
         {messages.map(chatMessage => {
           return <ChatMessageComponent {...chatMessage} key={chatMessage.timestamp.getTime()} />
         })}
       </Grid>
 
       <Grid container spacing={2} alignItems="center" sx={{ px: 3, my: 0 }}>
-        <Grid item xs={10} sx={{ m: 0, p: 0 }}>
+        <Grid item xs={11} sx={{ m: 0, p: 0 }}>
           <TextField
             size="small"
             label={label ?? 'Message'}
@@ -74,14 +78,17 @@ const Chat = ({
             disabled={submitDisabled}
           />
         </Grid>
-        <Grid item xs={2}>
-          <Button
+        <Grid item xs={1}>
+          {/* <Button
             variant="contained"
             onClick={sendMessage}
             disabled={submitDisabled || userMessage === ''}
             endIcon={<SendIcon />}>
             Envoyer
-          </Button>
+          </Button> */}
+          <IconButton onClick={sendMessage} disabled={submitDisabled || userMessage === ''}>
+            <SendIcon />
+          </IconButton>
         </Grid>
       </Grid>
     </Grid>
