@@ -239,7 +239,7 @@ regle_rep(case, 1,
     sur, les, coureurs, a, cote, de, 'lui.']]).
 % ---------------------------------------------------------------- %
 regle_rep(chance, 1,
-    [[que, fait, une, case, chance]],
+    [[que, fait],1,[ case, chance]],
     [[elle, octroie, un, tirage, aleatoire, supplementaire, entre, '-3', et, 3, secondes, pour, le, coureur, qui,
     's\'arrete', 'dessus.']]).
 
