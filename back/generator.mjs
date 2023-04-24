@@ -50,8 +50,8 @@ function generator() {
       x++
     }
     x++
-    result += `=== Line ${long}, ${larg}, ${tree}}\n`
   }
+
   result += writePredicat("chemin", 8, 1, 9, 1)
   result += writePredicat("chemin", 8, 2, 9, 1)
   result += writePredicat("chemin", 8, 2, 9, 2)
@@ -172,4 +172,4 @@ function writePredicat(name, x1, y1, x2, y2, letter1 = 0, letter2 = 0) {
   return `${name}(${x1 * 10 + letter1}, ${y1}, ${x2 * 10 + letter2}, ${y2}).\n`
 }
 
-console.log(generator())
+await fs.writeFile(new URL("board.pl", import.meta.url), generator())
