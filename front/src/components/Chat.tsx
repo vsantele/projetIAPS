@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Button, Grid, IconButton, TextField } from '@mui/material'
+import { Grid, IconButton, TextField } from '@mui/material'
 import ChatMessageComponent from './ChatMessageComponent'
 import ChatMessage from '../models/ChatMessage'
 import SendIcon from '@mui/icons-material/Send'
@@ -79,13 +79,6 @@ const Chat = ({
           />
         </Grid>
         <Grid item xs={1}>
-          {/* <Button
-            variant="contained"
-            onClick={sendMessage}
-            disabled={submitDisabled || userMessage === ''}
-            endIcon={<SendIcon />}>
-            Envoyer
-          </Button> */}
           <IconButton onClick={sendMessage} disabled={submitDisabled || userMessage === ''}>
             <SendIcon />
           </IconButton>
