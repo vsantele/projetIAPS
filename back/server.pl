@@ -87,3 +87,5 @@ bot(WebSocket) :-
       ws_send(WebSocket, json(Response)),
       bot(WebSocket)
 ).
+
+:- start_server.
