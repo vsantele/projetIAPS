@@ -163,10 +163,10 @@ function generator() {
   result += writePredicat("voisin", 95, 1, 95, 2)
   result += writePredicat("voisin", 95, 2, 95, 3)
 
+  result += "voisin(X1,Y1,X2,Y2) :- voisin(X2,Y2,X1,Y1).\n"
+  result += "voisin(X1,Y1,X2,Y2) :- chemin(X1,Y1,X2,Y2).\n"
   return result
 }
-// voisin(X1, Y1, X2, Y2) :- voisin(X2, Y2, X1, Y1).
-// voisin(X1, Y1, X2, Y2) :- chemin(X2, Y2, X1, Y1).
 
 function writePredicat(name, x1, y1, x2, y2, letter1 = 0, letter2 = 0) {
   return `${name}(${x1 * 10 + letter1}, ${y1}, ${x2 * 10 + letter2}, ${y2}).\n`

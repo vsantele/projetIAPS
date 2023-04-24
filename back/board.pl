@@ -489,3 +489,5 @@ chemin(940, 2, 950, 2).
 chemin(940, 2, 950, 3).
 voisin(950, 1, 950, 2).
 voisin(950, 2, 950, 3).
+voisin(X1,Y1,X2,Y2) :- voisin(X2,Y2,X1,Y1).
+voisin(X1,Y1,X2,Y2) :- chemin(X1,Y1,X2,Y2).
