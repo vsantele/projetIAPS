@@ -1,6 +1,6 @@
 :- use_module(library(random)).
 :- use_module('constants.pl').
-
+:- use_module('board.pl').
 % Tire un nombre entre val_chance_min et val_chance_max.
 valeurCarteChance(Val) :- val_chance_min(Min), val_chance_max(Max), random_between(Min, Max, Val).
 
