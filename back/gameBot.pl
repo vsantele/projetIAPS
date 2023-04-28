@@ -33,3 +33,36 @@ tirerCartes(CartesDisponibles, NbCartes, Cartes) :-
       length(Cartes, NbCartes),
       append(Cartes, _, Perm)
     ).
+
+findCountry(italie, Players, [Players, _,_,_]).
+findCountry(hollande, Players, [_, Players,_,_]).
+findCountry(belgique, Players, [_, _,Players,_]).
+findCountry(allemagne, Players, [_, _,_,Players]).
+
+% Sur base d'une liste de joueurs [[p1x, p1y], [p2x, p2y], ...], renvoie l'index du dernier joueur sur le plateau pouvant bouger.
+findLatestPlayer(Players, LatestPlayerI, Board) :-
+    findall(Player, nth0(PlayerI, Players, Player), PlayersList),
+    latestPlayer(LatestPlayerI,LatestPlayer, -1,[1000,1000], PlayerI, Player, Board).
+
+% Retourne le joueurs le plus en retard sur le plateau pouvant bouger et ses coordonnées.
+latestPlayer(Player2I,[P2x, P2y], Player1I,[P1x, P1y], Player2I, [P2x,P2y], Board) :-
+    P1x > P2x, canMove([P2x,P2y], Board).
+latestPlayer(Player1I,[P1x, P1y], Player1I,[P1x, P1y], Player2I, [P2x,P2y], Board) :-
+    P1x < P2x, canMove([P1x,P1y], Board).
+latestPlayer(Player1I,[P1x, P1y], Player1I,[P1x, P1y], Player2I, [P2x,P2y], Board).
+
+% Sur base de coordonnées, vérifie s'il peut avancer sans risque.
+% TODO: Peut-être vérifier en cas de dépassement?
+canMove([Px, Py], Board) :-
+    chemin(Px, Py, Tx, Ty),
+    not(hasPlayer(Tx, Ty, Board)).
+
+% Vérifie s'il y a un joueur sur les coordonnées entrées.
+hasPlayer(Px, Py, [Country|Board]) :-
+    nth0(_, Country, [Px, Py]).
+
+hasPlayer(Px, Py, [Country]) :-
+    nth0(_, Country, [Px, Py]).
+
+hasPlayer(Px, Py, []) :-
+    false.
