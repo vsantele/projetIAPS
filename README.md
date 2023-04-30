@@ -67,4 +67,5 @@ Ce projet a pour but de mettre en place un bot pour expliquer les règles du jeu
   ```
 
 - Accéder au site
+
   Website : <http://localhost:5173> | Bot : <http://localhost:3000>
