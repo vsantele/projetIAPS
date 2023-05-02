@@ -40,9 +40,20 @@ findCountry(belgique, Players, [_, _,Players,_]).
 findCountry(allemagne, Players, [_, _,_,Players]).
 
 % Sur base d'une liste de joueurs [[p1x, p1y], [p2x, p2y], ...], renvoie l'index du dernier joueur sur le plateau pouvant bouger.
+% https://stackoverflow.com/questions/32918211/find-the-max-element-and-its-index-in-a-list-prolog
 findLatestPlayer(Players, LatestPlayerI, Board) :-
-    findall(Player, nth0(PlayerI, Players, Player), PlayersList),
-    latestPlayer(LatestPlayerI,LatestPlayer, -1,[1000,1000], PlayerI, Player, Board).
+    latestPlayer(Players, LPlayer, Board),
+    nth1(LPI,LPlayer, Players ).
+
+latestPlayer([HPlayer|LPlayers], LPlayer, Board) :-
+    latestPlayer(LPlayers, HPlayer, LPlayer, Board).
+
+% https://stackoverflow.com/a/19810489/10171758
+latestPlayer([], Player,Player,_Board).
+latestPlayer([[P1x,P1y] | LPlayer], [LPx, LPy], LP, Board) :-
+    P1x < LPx -> latestPlayer(Lplayer, [P1x,P1y], LP, Board)
+    ; latestPlayer(Lplayer, [LPx, LPy], LP, Board).
+
 
 % Retourne le joueurs le plus en retard sur le plateau pouvant bouger et ses coordonnées.
 latestPlayer(Player2I,[P2x, P2y], _Player1I,[P1x, _P1y], Player2I, [P2x,P2y], Board) :-
