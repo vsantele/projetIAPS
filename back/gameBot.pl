@@ -45,11 +45,11 @@ findLatestPlayer(Players, LatestPlayerI, Board) :-
     latestPlayer(LatestPlayerI,LatestPlayer, -1,[1000,1000], PlayerI, Player, Board).
 
 % Retourne le joueurs le plus en retard sur le plateau pouvant bouger et ses coordonnées.
-latestPlayer(Player2I,[P2x, P2y], Player1I,[P1x, P1y], Player2I, [P2x,P2y], Board) :-
+latestPlayer(Player2I,[P2x, P2y], _Player1I,[P1x, _P1y], Player2I, [P2x,P2y], Board) :-
     P1x > P2x, canMove([P2x,P2y], Board).
-latestPlayer(Player1I,[P1x, P1y], Player1I,[P1x, P1y], Player2I, [P2x,P2y], Board) :-
+latestPlayer(Player1I,[P1x, P1y], Player1I,[P1x, P1y], _Player2I, [P2x,_P2y], Board) :-
     P1x < P2x, canMove([P1x,P1y], Board).
-latestPlayer(Player1I,[P1x, P1y], Player1I,[P1x, P1y], Player2I, [P2x,P2y], Board).
+latestPlayer(Player1I,[P1x, P1y], Player1I,[P1x, P1y], _Player2I, [_P2x,_P2y], _Board).
 
 % Sur base de coordonnées, vérifie s'il peut avancer sans risque.
 % TODO: Peut-être vérifier en cas de dépassement?
