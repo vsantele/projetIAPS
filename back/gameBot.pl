@@ -58,11 +58,8 @@ canMove([Px, Py], Board) :-
     not(hasPlayer(Tx, Ty, Board)).
 
 % Vérifie s'il y a un joueur sur les coordonnées entrées.
-hasPlayer(Px, Py, [Country|Board]) :-
-    nth0(_, Country, [Px, Py]).
-
-hasPlayer(Px, Py, [Country]) :-
-    nth0(_, Country, [Px, Py]).
-
-hasPlayer(Px, Py, []) :-
-    false.
+hasPlayer(Px, Py, [Country|LCountry]) :-
+    hasPlayer(Px,Py, LCountry);
+    member([Px, Py], Country).
+hasPlayer(Px, Py, [Country|[]]) :-
+    member([Px, Py], Country).
