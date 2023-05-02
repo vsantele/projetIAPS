@@ -1,6 +1,10 @@
 :- use_module(library(random)).
 :- use_module('constants.pl').
 :- use_module('board.pl').
+
+% EXemples de plateau de jeu
+board([[[10, 1], [10, 2], [10, 3], [20, 1]],[[20, 2], [20, 3], [30, 1], [30, 2]],[[30, 3], [40, 1], [40, 2], [40, 3]],[[50, 1], [50, 2], [50, 3], [60, 1]]])
+
 % Tire un nombre entre val_chance_min et val_chance_max.
 valeurCarteChance(Val) :- val_chance_min(Min), val_chance_max(Max), random_between(Min, Max, Val).
 
