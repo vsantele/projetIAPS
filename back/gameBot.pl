@@ -3,7 +3,7 @@
 :- use_module('board.pl').
 
 % EXemples de plateau de jeu
-board([[[10, 1], [10, 2], [10, 3], [20, 1]],[[20, 2], [20, 3], [30, 1], [30, 2]],[[30, 3], [40, 1], [40, 2], [40, 3]],[[50, 1], [50, 2], [50, 3], [60, 1]]])
+board([[[10, 1], [10, 2], [10, 3], [20, 1]],[[20, 2], [20, 3], [30, 1], [30, 2]],[[30, 3], [40, 1], [40, 2], [40, 3]],[[50, 1], [50, 2], [50, 3], [60, 1]]]).
 
 % Tire un nombre entre val_chance_min et val_chance_max.
 valeurCarteChance(Val) :- val_chance_min(Min), val_chance_max(Max), random_between(Min, Max, Val).
@@ -47,7 +47,8 @@ findCountry(allemagne, Players, [_, _,_,Players]).
 % https://stackoverflow.com/questions/32918211/find-the-max-element-and-its-index-in-a-list-prolog
 findLatestPlayer(Players, LatestPlayerI, Board) :-
     latestPlayer(Players, LPlayer, Board),
-    nth1(LPI,LPlayer, Players ).
+    canMove(LPlayer, Board),
+    nth1(LatestPlayerI, Players, LPlayer ).
 
 latestPlayer([HPlayer|LPlayers], LPlayer, Board) :-
     latestPlayer(LPlayers, HPlayer, LPlayer, Board).
@@ -55,8 +56,8 @@ latestPlayer([HPlayer|LPlayers], LPlayer, Board) :-
 % https://stackoverflow.com/a/19810489/10171758
 latestPlayer([], Player,Player,_Board).
 latestPlayer([[P1x,P1y] | LPlayer], [LPx, LPy], LP, Board) :-
-    P1x < LPx -> latestPlayer(Lplayer, [P1x,P1y], LP, Board)
-    ; latestPlayer(Lplayer, [LPx, LPy], LP, Board).
+    P1x < LPx, canMove([P1x,P1y],Board ) -> latestPlayer(LPlayer, [P1x,P1y], LP, Board)
+    ; latestPlayer(LPlayer, [LPx, LPy], LP, Board).
 
 
 % Retourne le joueurs le plus en retard sur le plateau pouvant bouger et ses coordonnées.
