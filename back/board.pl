@@ -1,4 +1,4 @@
-:- module(board, [chemin/4,voisin/4 ]).
+:- module(board, [chemin/4,voisin/4, caseChance/1 ]).
 % chemin(X1, Y1, X2, Y2) où X est le numéro de la case * 10 + (A=1,B=2,C=3) et Y la position par rapport à la case numéro. Exemple: 10, 1, 20, 1 signifie que la case 1 à la position 1 est reliée à la case 2 position 2.
 
 :- discontiguous chemin/4, voisin/4.
@@ -504,3 +504,25 @@ voisin(X1,Y1,X2,Y2) :- chemin(X1,Y1,X2,Y2).
 chemin(0,0,10,1).
 chemin(0,0,10,2).
 chemin(0,0,10,3).
+
+
+caseChance([91, 1]).
+caseChance([101, 1]).
+caseChance([110, 1]).
+caseChance([120, 1]).
+caseChance([150, 2]).
+caseChance([160, 2]).
+caseChance([190, 3]).
+caseChance([210, 3]).
+caseChance([240, 1]).
+caseChance([261, 1]).
+caseChance([280, 1]).
+caseChance([300, 1]).
+caseChance([320, 1]).
+caseChance([340, 1]).
+caseChance([480, 2]).
+caseChance([570, 2]).
+caseChance([660, 1]).
+caseChance([660, 2]).
+caseChance([740, 1]).
+caseChance([903, 3]).
