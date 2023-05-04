@@ -4,9 +4,11 @@
 
 % EXemples de plateau de jeu
 board([[[10, 1], [10, 2], [10, 3], [20, 1]],[[20, 2], [20, 3], [30, 1], [30, 2]],[[30, 3], [40, 1], [40, 2], [40, 3]],[[50, 1], [50, 2], [50, 3], [60, 1]]]).
+emptyBoard([[[0,0],[0,0],[0,0],[0,0]],[[0,0],[0,0],[0,0]],[[0,0],[0,0],[0,0]],[[0,0],[0,0],[0,0],[0,0]]]).
 
 % Tire un nombre entre val_chance_min et val_chance_max.
-valeurCarteChance(Val) :- val_chance_min(Min), val_chance_max(Max), random_between(Min, Max, Val).
+valeurCarteChance(Val) :- val_chance_min(Min), val_chance_max(Max), random_between(Min, Max, Val), writeln(Val)
+.
 
 % Génère une liste de nombres compris entre 2 bornes
 elementsEntreBornes(X, X, [X]).
@@ -103,6 +105,11 @@ move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], Board) :-
     NbSecondes > 0,
     canMove([Px, Py], [Tx, Ty], Board),
     NbSecondes1 is NbSecondes - 1,
+    move([Tx,Ty], NbSecondes1, SecondesRestantes,[Fx, Fy], Board).
+move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], Board) :-
+    NbSecondes < 0,
+    canMove([Tx, Ty], [Px, Py],  Board),
+    NbSecondes1 is NbSecondes + 1,
     move([Tx,Ty], NbSecondes1, SecondesRestantes,[Fx, Fy], Board).
 move([Px,Py], 0, 0,[Px,Py], _Board).
 move([Px,Py], NbSecondes, NbSecondes,[Px,Py], Board) :- not(canMove([Px,Py], _, Board)).
