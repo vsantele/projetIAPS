@@ -7,8 +7,7 @@ board([[[10, 1], [10, 2], [10, 3], [20, 1]],[[20, 2], [20, 3], [30, 1], [30, 2]]
 emptyBoard([[[0,0],[0,0],[0,0],[0,0]],[[0,0],[0,0],[0,0]],[[0,0],[0,0],[0,0]],[[0,0],[0,0],[0,0],[0,0]]]).
 
 % Tire un nombre entre val_chance_min et val_chance_max.
-valeurCarteChance(Val) :- val_chance_min(Min), val_chance_max(Max), random_between(Min, Max, Val), writeln(Val)
-.
+valeurCarteChance(Val) :- val_chance_min(Min), val_chance_max(Max), random_between(Min, Max, Val), writeln(Val).
 
 % Génère une liste de nombres compris entre 2 bornes
 elementsEntreBornes(X, X, [X]).
@@ -51,20 +50,16 @@ slice(L, From, To, R):-
 % Récupére les joueurs d'un pays
 % findCountry(country, PlayersOfCountry, ListOfAllCountry)
 % findCountry(in, out, in)
-findCountry(italie, Players, [Players, _,_,_]).
-findCountry(hollande, Players, [_, Players,_,_]).
-findCountry(belgique, Players, [_, _,Players,_]).
-findCountry(allemagne, Players, [_, _,_,Players]).
+findCountry(Country, Players, Countries) :- countryIndex(Country, Index), nth1(Index, Countries, Players).
+
 countryIndex(italie, 1).
 countryIndex(hollande, 2).
 countryIndex(belgique, 3).
 countryIndex(allemagne, 4).
 
 % Ordre des pays
-nextCountry(italie, hollande).
-nextCountry(hollande, belgique).
-nextCountry(belgique, allemagne).
-nextCountry(allemagne, italie).
+nextCountry(Country, NextCountry) :- countryIndex(Country, Index), NewIndex is Index + 1, aggregate_all(count, countryIndex(_, _), Count), NewIndex =< Count, countryIndex(NextCountry, Index), !.
+nextCountry(Country, NextCountry) :- countryIndex(Country, _), countryIndex(NextCountry, 1), !.
 
 
 % Sur base d'une liste de joueurs [[p1x, p1y], [p2x, p2y], ...], renvoie l'index du dernier joueur sur le plateau pouvant bouger.
