@@ -120,8 +120,10 @@ move([Px,Py], NbSecondes, NbSecondes,[Px,Py], Board) :- not(canMove([Px,Py], _, 
 
 movePlayer([Px, Py], IPlayer,Country, NbSecondes, Board, NewBoard) :-
     move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], Board),
+    (caseChance([Fx,Fy]) -> valeurCarteChance(Val), move([Fx,Fy], Val, _, [Tx, Ty], Board)
+    ; move([Fx,Fy], 0, 0, [Tx, Ty], Board)),
     findCountry(Country, Players, Board),
-    replace([Fx, Fy], IPlayer, Players, NewPlayers),
+    replace([Tx, Ty], IPlayer, Players, NewPlayers),
     countryIndex(Country,ICountry),
     replace(NewPlayers, ICountry, Board, NewBoard).
 
