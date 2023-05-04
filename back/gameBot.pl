@@ -4,7 +4,10 @@
 
 % EXemples de plateau de jeu
 board([[[10, 1], [10, 2], [10, 3], [20, 1]],[[20, 2], [20, 3], [30, 1], [30, 2]],[[30, 3], [40, 1], [40, 2], [40, 3]],[[50, 1], [50, 2], [50, 3], [60, 1]]]).
-emptyBoard([[[0,0],[0,0],[0,0],[0,0]],[[0,0],[0,0],[0,0]],[[0,0],[0,0],[0,0]],[[0,0],[0,0],[0,0],[0,0]]]).
+
+% Plateau de jeu où tous les joueurs sont en [0, 0]
+emptyBoard(Board) :- nb_coureurs(NbCoureurs), length(Team, NbCoureurs), maplist(=([0, 0]), Team), countryCount(Count), length(Board, Count), maplist(=(Team), Board).
+
 
 % Tire un nombre entre val_chance_min et val_chance_max.
 valeurCarteChance(Val) :- val_chance_min(Min), val_chance_max(Max), random_between(Min, Max, Val), writeln(Val).
@@ -57,8 +60,11 @@ countryIndex(hollande, 2).
 countryIndex(belgique, 3).
 countryIndex(allemagne, 4).
 
+% Compte de nombre de pays qui participe à la course
+countryCount(Count) :- aggregate_all(count, countryIndex(_, _), Count).
+
 % Ordre des pays
-nextCountry(Country, NextCountry) :- countryIndex(Country, Index), NewIndex is Index + 1, aggregate_all(count, countryIndex(_, _), Count), NewIndex =< Count, countryIndex(NextCountry, Index), !.
+nextCountry(Country, NextCountry) :- countryIndex(Country, Index), NewIndex is Index + 1, countryCount(Count), NewIndex =< Count, countryIndex(NextCountry, Index), !.
 nextCountry(Country, NextCountry) :- countryIndex(Country, _), countryIndex(NextCountry, 1), !.
 
 
