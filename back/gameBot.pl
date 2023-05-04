@@ -27,28 +27,46 @@ cartesDisponibles(Cartes) :- val_min_carte(Min), val_max_carte(Max), nb_repetiti
     concatenerListes(Temp, Cartes), !.
 
 % Tire NbCartes au hasard - ne retire pas les cartes de la liste intiale
-% Thanks ChatGPT :)
-tirerCartes(CartesDisponibles, NbCartes, Cartes) :-
+tirerCartes(CartesDisponibles, NbCartes, CartesDisponibles, []) :-
     length(CartesDisponibles, Len),
-    ( NbCartes > Len ->
-        Cartes = CartesDisponibles
-    ; findall(Elem, nth0(_, CartesDisponibles, Elem), Elems),
-      random_permutation(Elems, Perm),
-      length(Cartes, NbCartes),
-      append(Cartes, _, Perm)
-    ).
+    NbCartes > Len.
+tirerCartes(CartesDisponibles, NbCartes, Cartes, NewCartesDisponibles) :-
+    length(CartesDisponibles, Len),
+    random_permutation(CartesDisponibles, Permutation),
+    NbCartes1 is NbCartes + 1,
+    Len1 is Len + 1,
+    slice(Permutation, 0, NbCartes1, Cartes),
+    slice(Permutation, NbCartes, Len1, NewCartesDisponibles).
 
+% ?- slice([a,b,c,d,e], 1, 4, R).
+% R = [b, c].
+slice(L, From, To, R):-
+  length(LFrom, From),
+  length([_|LTo], To),
+  append(LTo, _, L),
+  append(LFrom, R, LTo).
+
+% Récupére les joueurs d'un pays
+% findCountry(country, PlayersOfCountry, ListOfAllCountry)
+% findCountry(in, out, in)
 findCountry(italie, Players, [Players, _,_,_]).
 findCountry(hollande, Players, [_, Players,_,_]).
 findCountry(belgique, Players, [_, _,Players,_]).
 findCountry(allemagne, Players, [_, _,_,Players]).
+
+% Ordre des pays
+nextCountry(italie, hollande).
+nextCountry(hollande, belgique).
+nextCountry(belgique, allemagne).
+nextCountry(allemagne, italie).
+
 
 % Sur base d'une liste de joueurs [[p1x, p1y], [p2x, p2y], ...], renvoie l'index du dernier joueur sur le plateau pouvant bouger.
 % https://stackoverflow.com/questions/32918211/find-the-max-element-and-its-index-in-a-list-prolog
 findLatestPlayer(Players, LatestPlayerI, Board) :-
     latestPlayer(Players, LPlayer, Board),
     canMove(LPlayer, Board),
-    nth1(LatestPlayerI, Players, LPlayer ).
+    nth1(LatestPlayerI, Players, LPlayer).
 
 latestPlayer([HPlayer|LPlayers], LPlayer, Board) :-
     latestPlayer(LPlayers, HPlayer, LPlayer, Board).
@@ -62,20 +80,21 @@ latestPlayer([[P1x,P1y] | LPlayer], [LPx, LPy], LP, Board) :-
 
 % Retourne le joueurs le plus en retard sur le plateau pouvant bouger et ses coordonnées.
 latestPlayer(Player2I,[P2x, P2y], _Player1I,[P1x, _P1y], Player2I, [P2x,P2y], Board) :-
-    P1x > P2x, canMove([P2x,P2y], Board).
+    P1x > P2x, canMove([P2x,P2y],_Dest, Board).
 latestPlayer(Player1I,[P1x, P1y], Player1I,[P1x, P1y], _Player2I, [P2x,_P2y], Board) :-
-    P1x < P2x, canMove([P1x,P1y], Board).
+    P1x < P2x, canMove([P1x,P1y],_Dest, Board).
 latestPlayer(Player1I,[P1x, P1y], Player1I,[P1x, P1y], _Player2I, [_P2x,_P2y], _Board).
 
 % Sur base de coordonnées, vérifie s'il peut avancer sans risque.
 % TODO: Peut-être vérifier en cas de dépassement?
-canMove([Px, Py], Board) :-
+canMove([Px, Py],[Tx,Ty], Board) :-
     chemin(Px, Py, Tx, Ty),
-    not(hasPlayer(Tx, Ty, Board)).
+    not(hasPlayer([Tx, Ty], Board)).
 
 % Vérifie s'il y a un joueur sur les coordonnées entrées.
-hasPlayer(Px, Py, [Country|LCountry]) :-
-    hasPlayer(Px,Py, LCountry);
+hasPlayer([Px, Py], [Country|LCountry]) :-
+    hasPlayer([Px, Py], LCountry);
     member([Px, Py], Country).
-hasPlayer(Px, Py, [Country]) :-
+hasPlayer([Px, Py], [Country]) :-
     member([Px, Py], Country).
+

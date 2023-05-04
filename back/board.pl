@@ -398,10 +398,13 @@ chemin(920, 1, 930, 1).
 chemin(920, 3, 930, 3).
 chemin(930, 1, 940, 1).
 chemin(930, 3, 940, 3).
-chemin(80, 1, 90, 1).
-chemin(80, 2, 90, 1).
-chemin(80, 2, 90, 2).
-chemin(80, 3, 90, 2).
+
+% CUSTOM
+chemin(80, 1, 91, 1).
+chemin(80, 1, 93, 2).
+chemin(80, 2, 91, 1).
+chemin(80, 2, 93, 2).
+chemin(80, 3, 93, 2).
 voisin(80, 1, 80, 2).
 voisin(80, 2, 80, 3).
 voisin(91, 1, 92, 2).
@@ -410,6 +413,7 @@ chemin(93, 2, 92, 2).
 chemin(91, 1, 101, 1).
 chemin(91, 1, 103, 2).
 chemin(92, 2, 103, 2).
+chemin(92, 2, 101, 1).
 voisin(101, 1, 102, 2).
 voisin(101, 1, 103, 2).
 chemin(103, 2, 102, 2).
@@ -496,3 +500,7 @@ voisin(950, 1, 950, 2).
 voisin(950, 2, 950, 3).
 voisin(X1,Y1,X2,Y2) :- voisin(X2,Y2,X1,Y1).
 voisin(X1,Y1,X2,Y2) :- chemin(X1,Y1,X2,Y2).
+
+chemin(0,0,10,1).
+chemin(0,0,10,2).
+chemin(0,0,10,3).
