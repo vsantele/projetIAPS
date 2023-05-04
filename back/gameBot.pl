@@ -98,3 +98,11 @@ hasPlayer([Px, Py], [Country|LCountry]) :-
 hasPlayer([Px, Py], [Country]) :-
     member([Px, Py], Country).
 
+
+move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], Board) :-
+    NbSecondes > 0,
+    canMove([Px, Py], [Tx, Ty], Board),
+    NbSecondes1 is NbSecondes - 1,
+    move([Tx,Ty], NbSecondes1, SecondesRestantes,[Fx, Fy], Board).
+move([Px,Py], 0, 0,[Px,Py], _Board).
+move([Px,Py], NbSecondes, NbSecondes,[Px,Py], Board) :- not(canMove([Px,Py], _, Board)).
