@@ -77,5 +77,5 @@ canMove([Px, Py], Board) :-
 hasPlayer(Px, Py, [Country|LCountry]) :-
     hasPlayer(Px,Py, LCountry);
     member([Px, Py], Country).
-hasPlayer(Px, Py, [Country|[]]) :-
+hasPlayer(Px, Py, [Country]) :-
     member([Px, Py], Country).
