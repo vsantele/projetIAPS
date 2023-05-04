@@ -55,6 +55,10 @@ findCountry(italie, Players, [Players, _,_,_]).
 findCountry(hollande, Players, [_, Players,_,_]).
 findCountry(belgique, Players, [_, _,Players,_]).
 findCountry(allemagne, Players, [_, _,_,Players]).
+countryIndex(italie, 1).
+countryIndex(hollande, 2).
+countryIndex(belgique, 3).
+countryIndex(allemagne, 4).
 
 % Ordre des pays
 nextCountry(italie, hollande).
@@ -113,3 +117,18 @@ move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], Board) :-
     move([Tx,Ty], NbSecondes1, SecondesRestantes,[Fx, Fy], Board).
 move([Px,Py], 0, 0,[Px,Py], _Board).
 move([Px,Py], NbSecondes, NbSecondes,[Px,Py], Board) :- not(canMove([Px,Py], _, Board)).
+
+movePlayer([Px, Py], IPlayer,Country, NbSecondes, Board, NewBoard) :-
+    move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], Board),
+    findCountry(Country, Players, Board),
+    replace([Fx, Fy], IPlayer, Players, NewPlayers),
+    countryIndex(Country,ICountry),
+    replace(NewPlayers, ICountry, Board, NewBoard).
+
+
+% Remplace le IElem dans List par Elem et le renvoit dans NewList
+replace(Elem, IElem, List, NewList) :-
+    nth1(IElem, List, _, Temp), % Enlève le IElem élément de List qui produit Temp
+    nth1(IElem, NewList, Elem, Temp). % "Génére" un tableau NewList de (Temp elements + 1) éléments où Elem sera à la position IElem
+
+
