@@ -181,7 +181,6 @@ chemin(340, 1, 350, 2).
 voisin(340, 1, 340, 2).
 chemin(340, 2, 350, 2).
 chemin(340, 2, 350, 1).
-chemin(340, 4, 350, 4).
 chemin(360, 1, 370, 1).
 chemin(360, 1, 370, 2).
 voisin(360, 1, 360, 2).
@@ -437,6 +436,12 @@ voisin(220, 1, 220, 2).
 voisin(220, 2, 220, 3).
 voisin(250, 1, 250, 2).
 voisin(250, 2, 250, 3).
+chemin(250, 1, 261, 1).
+chemin(250, 1, 262, 2).
+chemin(250, 2, 261, 1).
+chemin(250, 2, 262, 2).
+chemin(250, 4, 264, 4).
+chemin(264, 4, 263, 4).
 chemin(261, 1, 271, 1).
 chemin(261, 1, 272, 2).
 chemin(262, 2, 271, 1).
@@ -444,8 +449,11 @@ chemin(262, 2, 272, 2).
 chemin(263, 4, 262, 4).
 chemin(263, 4, 262, 4).
 chemin(262, 4, 273, 4).
-chemin(273, 4, 272, 4).
 chemin(273, 4, 280, 4).
+chemin(271, 1, 280, 1).
+chemin(271, 1, 280, 2).
+chemin(272, 2, 280, 1).
+chemin(272, 2, 280, 2).
 voisin(261, 1, 262, 2).
 voisin(261, 1, 263, 2).
 voisin(271, 1, 272, 2).
@@ -474,16 +482,28 @@ chemin(631, 1, 641, 1).
 chemin(631, 1, 643, 2).
 chemin(632, 2, 641, 1).
 chemin(632, 2, 643, 2).
+chemin(633, 2, 632, 2).
 voisin(641, 1, 642, 2).
 voisin(641, 1, 643, 2).
+chemin(643, 2, 643, 2).
+chemin(643, 2, 642, 2).
+chemin(642, 2, 650, 2).
+chemin(642, 2, 650, 1).
 chemin(641, 1, 650, 1).
 chemin(641, 1, 650, 2).
 voisin(720, 1, 720, 2).
+chemin(720, 1, 730, 1).
+chemin(720, 2, 730, 1).
 chemin(750, 1, 760, 1).
 chemin(750, 1, 760, 2).
 voisin(830, 1, 830, 2).
 chemin(830, 1, 840, 1).
 chemin(830, 1, 840, 3).
+chemin(830, 2, 840, 1).
+chemin(830, 2, 840, 3).
+chemin(870, 1, 880, 1).
+chemin(870, 3, 880, 3).
+chemin(880, 1, 891, 1).
 chemin(880, 3, 893, 3).
 chemin(891, 1, 901, 1).
 chemin(893, 3, 892, 3).
@@ -494,8 +514,8 @@ chemin(902, 3, 910, 3).
 chemin(901, 1, 910, 1).
 chemin(940, 1, 950, 1).
 chemin(940, 1, 950, 2).
-chemin(940, 2, 950, 2).
-chemin(940, 2, 950, 3).
+chemin(940, 3, 950, 2).
+chemin(940, 3, 950, 3).
 voisin(950, 1, 950, 2).
 voisin(950, 2, 950, 3).
 voisin(X1,Y1,X2,Y2) :- voisin(X2,Y2,X1,Y1).
@@ -504,6 +524,11 @@ voisin(X1,Y1,X2,Y2) :- chemin(X1,Y1,X2,Y2).
 chemin(0,0,10,1).
 chemin(0,0,10,2).
 chemin(0,0,10,3).
+chemin(950,1, Fin,0) :- caseFin(Fin).
+chemin(950,2, Fin,0) :- caseFin(Fin).
+chemin(950,3, Fin,0) :- caseFin(Fin).
+
+caseFin(1000).
 
 
 caseChance([91, 1]).
