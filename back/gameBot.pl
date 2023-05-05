@@ -10,7 +10,7 @@ emptyBoard(Board) :- nb_coureurs(NbCoureurs), length(Team, NbCoureurs), maplist(
 
 
 % Tire un nombre entre val_chance_min et val_chance_max.
-valeurCarteChance(Val) :- val_chance_min(Min), val_chance_max(Max), random_between(Min, Max, Val), writeln(Val).
+valeurCarteChance(Val) :- val_chance_min(Min), val_chance_max(Max), random_between(Min, Max, Val).
 
 % Génère une liste de nombres compris entre 2 bornes
 elementsEntreBornes(X, X, [X]).
@@ -64,7 +64,7 @@ countryIndex(allemagne, 4).
 countryCount(Count) :- aggregate_all(count, countryIndex(_, _), Count).
 
 % Ordre des pays
-nextCountry(Country, NextCountry) :- countryIndex(Country, Index), NewIndex is Index + 1, countryCount(Count), NewIndex =< Count, countryIndex(NextCountry, Index), !.
+nextCountry(Country, NextCountry) :- countryIndex(Country, Index), NewIndex is Index + 1, countryCount(Count), NewIndex =< Count, countryIndex(NextCountry, NewIndex), !.
 nextCountry(Country, NextCountry) :- countryIndex(Country, _), countryIndex(NextCountry, 1), !.
 
 
@@ -72,7 +72,7 @@ nextCountry(Country, NextCountry) :- countryIndex(Country, _), countryIndex(Next
 % https://stackoverflow.com/questions/32918211/find-the-max-element-and-its-index-in-a-list-prolog
 findLatestPlayer(Players, LatestPlayerI, Board) :-
     latestPlayer(Players, LPlayer, Board),
-    canMove(LPlayer, Board),
+    canMove(LPlayer,_DestCoord, Board),
     nth1(LatestPlayerI, Players, LPlayer).
 
 latestPlayer([HPlayer|LPlayers], LPlayer, Board) :-
@@ -81,7 +81,7 @@ latestPlayer([HPlayer|LPlayers], LPlayer, Board) :-
 % https://stackoverflow.com/a/19810489/10171758
 latestPlayer([], Player,Player,_Board).
 latestPlayer([[P1x,P1y] | LPlayer], [LPx, LPy], LP, Board) :-
-    P1x < LPx, canMove([P1x,P1y],Board ) -> latestPlayer(LPlayer, [P1x,P1y], LP, Board)
+    P1x < LPx, canMove([P1x,P1y],_Dest, Board ) -> latestPlayer(LPlayer, [P1x,P1y], LP, Board)
     ; latestPlayer(LPlayer, [LPx, LPy], LP, Board).
 
 
@@ -113,6 +113,7 @@ move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], Board) :-
     move([Tx,Ty], NbSecondes1, SecondesRestantes,[Fx, Fy], Board).
 move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], Board) :-
     NbSecondes < 0,
+    write("neg: "), writeln(NbSecondes),
     canMove([Tx, Ty], [Px, Py],  Board),
     NbSecondes1 is NbSecondes + 1,
     move([Tx,Ty], NbSecondes1, SecondesRestantes,[Fx, Fy], Board).
@@ -121,7 +122,7 @@ move([Px,Py], NbSecondes, NbSecondes,[Px,Py], Board) :- not(canMove([Px,Py], _, 
 
 movePlayer([Px, Py], IPlayer,Country, NbSecondes, Board, NewBoard) :-
     move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], Board),
-    (caseChance([Fx,Fy]) -> valeurCarteChance(Val), move([Fx,Fy], Val, _, [Tx, Ty], Board)
+    (caseChance([Fx,Fy]) -> valeurCarteChance(Val), move([Fx,Fy], Val, _, [Tx, Ty], Board), write("chance "), writeln(Val)
     ; move([Fx,Fy], 0, 0, [Tx, Ty], Board)),
     findCountry(Country, Players, Board),
     replace([Tx, Ty], IPlayer, Players, NewPlayers),
@@ -134,4 +135,12 @@ replace(Elem, IElem, List, NewList) :-
     nth1(IElem, List, _, Temp), % Enlève le IElem élément de List qui produit Temp
     nth1(IElem, NewList, Elem, Temp). % "Génére" un tableau NewList de (Temp elements + 1) éléments où Elem sera à la position IElem
 
-
+gameLoop(Board,Country, BoardOut) :-
+    countryIndex(Country, ICountry),
+    findCountry(Country, Players, Board),
+    (findLatestPlayer(Players, LatestPlayerI, Board) ->nth1(LatestPlayerI, Players, [Px, Py]),
+    movePlayer([Px, Py], LatestPlayerI, Country, 1, Board, NewBoard)
+    ; NewBoard = Board ),
+    nextCountry(Country, NextCountry),
+    writeln(NewBoard),
+    gameLoop(NewBoard, NextCountry, BoardOut).
