@@ -90,7 +90,19 @@ function App() {
       ...messages,
       { message, author: MessageAuthor.USER, timestamp: new Date() },
     ])
+    message = cleanMessageCharacters(message)
     sendMessage(JSON.stringify({ message: getAsciiValues(message.toLowerCase()) }))
+  }
+
+  const cleanMessageCharacters = (message: string) => {
+    message = message.replace(/á|à|â|ä/g, 'a')
+    message = message.replace(/é|è|ê|ë/g, 'e')
+    message = message.replace(/í|ì|î|ï/g, 'i')
+    message = message.replace(/ó|ò|ô|ö/g, 'o')
+    message = message.replace(/ú|ù|û|ü/g, 'u')
+    message = message.replace(/'|-|_/g, ' ')
+    message = message.replace(/ç/g, 'c')
+    return message
   }
 
   const onSendGameBotMessage = (message: string) => {
