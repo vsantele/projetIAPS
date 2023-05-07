@@ -1,0 +1,2047 @@
+[
+  {
+    "mapXRatio": 30.374149122668477,
+    "mapYRatio": 43.35251867002806,
+    "playerXPosition": 10,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 33.00219530299919,
+    "mapYRatio": 43.200304428483086,
+    "playerXPosition": 10,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 35.63024148332991,
+    "mapYRatio": 43.04809018693811,
+    "playerXPosition": 10,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 30.374149122668477,
+    "mapYRatio": 39.699376872948676,
+    "playerXPosition": 20,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 32.9011166037557,
+    "mapYRatio": 39.24273414831375,
+    "playerXPosition": 20,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 35.32700538559944,
+    "mapYRatio": 39.090519906768776,
+    "playerXPosition": 20,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 29.868755626451033,
+    "mapYRatio": 35.13294962659944,
+    "playerXPosition": 30,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 32.29464440829477,
+    "mapYRatio": 34.21966417732959,
+    "playerXPosition": 30,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 34.922690588625485,
+    "mapYRatio": 33.30637872805974,
+    "playerXPosition": 30,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 29.2622834309901,
+    "mapYRatio": 30.5665223802502,
+    "playerXPosition": 40,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 31.38493611510337,
+    "mapYRatio": 29.50102268943538,
+    "playerXPosition": 40,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 34.012982295434085,
+    "mapYRatio": 27.674451790895688,
+    "playerXPosition": 40,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 28.150417739311717,
+    "mapYRatio": 26.913380583170817,
+    "playerXPosition": 50,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 30.374149122668477,
+    "mapYRatio": 24.78238120154117,
+    "playerXPosition": 50,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 33.00219530299919,
+    "mapYRatio": 22.651381819911524,
+    "playerXPosition": 50,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 26.83639464914636,
+    "mapYRatio": 23.4124530276364,
+    "playerXPosition": 60,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 28.75688993477265,
+    "mapYRatio": 20.21595395519193,
+    "playerXPosition": 60,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 30.879542618885925,
+    "mapYRatio": 17.323883365837418,
+    "playerXPosition": 60,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 25.522371558981,
+    "mapYRatio": 19.911525472101985,
+    "playerXPosition": 70,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 27.139630746876826,
+    "mapYRatio": 16.562812158112543,
+    "playerXPosition": 70,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 29.161204731746608,
+    "mapYRatio": 12.909670361033154,
+    "playerXPosition": 70,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 23.09648277713726,
+    "mapYRatio": 17.17166912429244,
+    "playerXPosition": 80,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 24.51158456654611,
+    "mapYRatio": 13.975170051847977,
+    "playerXPosition": 80,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 25.82560765671147,
+    "mapYRatio": 9.560957047043713,
+    "playerXPosition": 80,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 11.573511063379502,
+    "mapYRatio": 17.932740332017314,
+    "playerXPosition": 110,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 10.057330574727166,
+    "mapYRatio": 14.4318127764829,
+    "playerXPosition": 110,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 9.551937078509722,
+    "mapYRatio": 20.977025162916803,
+    "playerXPosition": 120,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 6.822812198935516,
+    "mapYRatio": 18.846025781287164,
+    "playerXPosition": 120,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 8.440071386831342,
+    "mapYRatio": 24.325738476906245,
+    "playerXPosition": 130,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 5.710946507257135,
+    "mapYRatio": 22.955810303001474,
+    "playerXPosition": 130,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 7.833599191370406,
+    "mapYRatio": 28.587737240165534,
+    "playerXPosition": 140,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 5.306631710283178,
+    "mapYRatio": 28.13109451553061,
+    "playerXPosition": 140,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 8.440071386831342,
+    "mapYRatio": 31.479807829520052,
+    "playerXPosition": 150,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 5.710946507257135,
+    "mapYRatio": 32.3930932787899,
+    "playerXPosition": 150,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 8.844386183805298,
+    "mapYRatio": 34.82852114350949,
+    "playerXPosition": 160,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 6.620654800448536,
+    "mapYRatio": 37.41616324977406,
+    "playerXPosition": 160,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 10.360566672457635,
+    "mapYRatio": 38.63387718213385,
+    "playerXPosition": 170,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 8.33899268758785,
+    "mapYRatio": 41.069305046853444,
+    "playerXPosition": 170,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 12.281061958083928,
+    "mapYRatio": 41.52594777148837,
+    "playerXPosition": 180,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 10.461645371701122,
+    "mapYRatio": 44.26580411929791,
+    "playerXPosition": 180,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 16.627446025553958,
+    "mapYRatio": 43.200304428483086,
+    "playerXPosition": 190,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 14.4037146421972,
+    "mapYRatio": 45.483518051657704,
+    "playerXPosition": 190,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 12.07890455959695,
+    "mapYRatio": 47.614517433287354,
+    "playerXPosition": 190,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 18.143626514206296,
+    "mapYRatio": 47.46230319174238,
+    "playerXPosition": 200,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 15.818816431606045,
+    "mapYRatio": 50.049945298006946,
+    "playerXPosition": 200,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 13.494006349005797,
+    "mapYRatio": 51.724301955001664,
+    "playerXPosition": 200,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 19.457649604371653,
+    "mapYRatio": 52.18094467963659,
+    "playerXPosition": 210,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 16.52636732631047,
+    "mapYRatio": 53.855301336631314,
+    "playerXPosition": 210,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 14.10047854446673,
+    "mapYRatio": 55.073015268991114,
+    "playerXPosition": 210,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 20.367357897563057,
+    "mapYRatio": 56.442943442895874,
+    "playerXPosition": 220,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 17.73931171723234,
+    "mapYRatio": 58.1173000998906,
+    "playerXPosition": 220,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 13.291848950518817,
+    "mapYRatio": 60.552727964610185,
+    "playerXPosition": 220,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 20.771672694537013,
+    "mapYRatio": 61.00937068924511,
+    "playerXPosition": 230,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 18.85117740891072,
+    "mapYRatio": 62.37929886314988,
+    "playerXPosition": 230,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 16.627446025553958,
+    "mapYRatio": 63.59701279550968,
+    "playerXPosition": 230,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 13.898321145979754,
+    "mapYRatio": 64.6625124863245,
+    "playerXPosition": 230,
+    "playerZPosition": 4
+  },
+  {
+    "mapXRatio": 21.984617085458883,
+    "mapYRatio": 65.2713694525044,
+    "playerXPosition": 240,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 19.65980700285863,
+    "mapYRatio": 66.03244066022927,
+    "playerXPosition": 240,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 17.63823301798885,
+    "mapYRatio": 67.85901155876897,
+    "playerXPosition": 240,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 14.909108138414645,
+    "mapYRatio": 69.22893973267374,
+    "playerXPosition": 240,
+    "playerZPosition": 4
+  },
+  {
+    "mapXRatio": 22.692167980163305,
+    "mapYRatio": 68.77229700803882,
+    "playerXPosition": 250,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 20.569515296050035,
+    "mapYRatio": 69.83779669885364,
+    "playerXPosition": 250,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 18.547941311180253,
+    "mapYRatio": 71.66436759739334,
+    "playerXPosition": 250,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 16.324209927823492,
+    "mapYRatio": 73.643152737478,
+    "playerXPosition": 250,
+    "playerZPosition": 4
+  },
+  {
+    "mapXRatio": 28.352575137798695,
+    "mapYRatio": 75.62193787756267,
+    "playerXPosition": 280,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 28.453653837042186,
+    "mapYRatio": 78.81843695000713,
+    "playerXPosition": 280,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 28.251496438555208,
+    "mapYRatio": 82.47157874708653,
+    "playerXPosition": 280,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 28.150417739311717,
+    "mapYRatio": 87.34243447652571,
+    "playerXPosition": 280,
+    "playerZPosition": 4
+  },
+  {
+    "mapXRatio": 30.879542618885925,
+    "mapYRatio": 74.70865242829282,
+    "playerXPosition": 290,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 31.38493611510337,
+    "mapYRatio": 78.36179422537222,
+    "playerXPosition": 290,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 31.890329611320816,
+    "mapYRatio": 81.71050753936166,
+    "playerXPosition": 290,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 32.09248700980779,
+    "mapYRatio": 85.21143509489607,
+    "playerXPosition": 290,
+    "playerZPosition": 4
+  },
+  {
+    "mapXRatio": 33.9119035961906,
+    "mapYRatio": 73.643152737478,
+    "playerXPosition": 300,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 34.11406099467757,
+    "mapYRatio": 76.83965180992247,
+    "playerXPosition": 300,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 34.51837579165153,
+    "mapYRatio": 80.64500784854684,
+    "playerXPosition": 300,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 34.72053319013851,
+    "mapYRatio": 84.90700661180611,
+    "playerXPosition": 300,
+    "playerZPosition": 4
+  },
+  {
+    "mapXRatio": 36.84318587425178,
+    "mapYRatio": 72.72986728820815,
+    "playerXPosition": 310,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 37.045343272738755,
+    "mapYRatio": 75.92636636065262,
+    "playerXPosition": 310,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 37.24750067122574,
+    "mapYRatio": 80.34057936545688,
+    "playerXPosition": 310,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 37.348579370469224,
+    "mapYRatio": 84.14593540408124,
+    "playerXPosition": 310,
+    "playerZPosition": 4
+  },
+  {
+    "mapXRatio": 39.57231075382598,
+    "mapYRatio": 72.57765304666319,
+    "playerXPosition": 320,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 39.673389453069476,
+    "mapYRatio": 76.53522332683251,
+    "playerXPosition": 320,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 39.87554685155645,
+    "mapYRatio": 80.03615088236693,
+    "playerXPosition": 320,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 39.976625550799945,
+    "mapYRatio": 83.84150692099129,
+    "playerXPosition": 320,
+    "playerZPosition": 4
+  },
+  {
+    "mapXRatio": 43.1100652273481,
+    "mapYRatio": 72.72986728820815,
+    "playerXPosition": 330,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 43.1100652273481,
+    "mapYRatio": 76.53522332683251,
+    "playerXPosition": 330,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 42.90790782886113,
+    "mapYRatio": 79.73172239927699,
+    "playerXPosition": 330,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 42.80682912961764,
+    "mapYRatio": 83.38486419635636,
+    "playerXPosition": 330,
+    "playerZPosition": 4
+  },
+  {
+    "mapXRatio": 45.940268806165804,
+    "mapYRatio": 72.72986728820815,
+    "playerXPosition": 340,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 46.04134750540929,
+    "mapYRatio": 76.38300908528754,
+    "playerXPosition": 340,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 45.333796610704866,
+    "mapYRatio": 80.03615088236693,
+    "playerXPosition": 340,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 44.82840311448742,
+    "mapYRatio": 83.84150692099129,
+    "playerXPosition": 340,
+    "playerZPosition": 4
+  },
+  {
+    "mapXRatio": 49.174787181957456,
+    "mapYRatio": 74.40422394520287,
+    "playerXPosition": 350,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 48.66939368574001,
+    "mapYRatio": 77.90515150073729,
+    "playerXPosition": 350,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 48.46723628725303,
+    "mapYRatio": 81.71050753936166,
+    "playerXPosition": 350,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 48.062921490279074,
+    "mapYRatio": 85.05922085335109,
+    "playerXPosition": 350,
+    "playerZPosition": 4
+  },
+  {
+    "mapXRatio": 52.20714815926213,
+    "mapYRatio": 79.12286543309709,
+    "playerXPosition": 360,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 51.49959726455771,
+    "mapYRatio": 82.92822147172146,
+    "playerXPosition": 360,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 55.13843043732331,
+    "mapYRatio": 80.18836512391191,
+    "playerXPosition": 370,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 54.2287221441319,
+    "mapYRatio": 83.68929267944632,
+    "playerXPosition": 370,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 57.261083121436585,
+    "mapYRatio": 80.64500784854684,
+    "playerXPosition": 380,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 57.16000442219309,
+    "mapYRatio": 84.45036388717119,
+    "playerXPosition": 380,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 60.09128670025427,
+    "mapYRatio": 80.49279360700186,
+    "playerXPosition": 390,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 60.89991629420219,
+    "mapYRatio": 83.68929267944632,
+    "playerXPosition": 390,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 62.82041157982848,
+    "mapYRatio": 78.05736574228226,
+    "playerXPosition": 400,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 64.94306426394175,
+    "mapYRatio": 80.79722209009181,
+    "playerXPosition": 400,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 64.53874946696779,
+    "mapYRatio": 74.25200970365789,
+    "playerXPosition": 410,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 66.76248085032455,
+    "mapYRatio": 76.99186605146744,
+    "playerXPosition": 410,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 65.54953645940269,
+    "mapYRatio": 70.5988679065785,
+    "playerXPosition": 420,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 67.87434654200294,
+    "mapYRatio": 71.8165818389383,
+    "playerXPosition": 420,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 65.75169385788968,
+    "mapYRatio": 66.64129762640917,
+    "playerXPosition": 430,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 68.37974003822038,
+    "mapYRatio": 66.18465490177424,
+    "playerXPosition": 430,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 65.14522166242872,
+    "mapYRatio": 62.683727346239834,
+    "playerXPosition": 440,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 67.16679564729851,
+    "mapYRatio": 61.46601341388004,
+    "playerXPosition": 440,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 64.03335597075035,
+    "mapYRatio": 59.335014032250385,
+    "playerXPosition": 450,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 66.15600865486361,
+    "mapYRatio": 56.747371925985824,
+    "playerXPosition": 450,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 62.416096782854524,
+    "mapYRatio": 55.073015268991114,
+    "playerXPosition": 460,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 64.33659206848081,
+    "mapYRatio": 52.333158921181564,
+    "playerXPosition": 460,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 59.78805060252381,
+    "mapYRatio": 50.65880226418684,
+    "playerXPosition": 470,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 61.809624587393586,
+    "mapYRatio": 48.223374399467254,
+    "playerXPosition": 470,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 58.170791414627985,
+    "mapYRatio": 45.78794653474766,
+    "playerXPosition": 480,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 60.09128670025427,
+    "mapYRatio": 44.418018360842886,
+    "playerXPosition": 480,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 58.170791414627985,
+    "mapYRatio": 39.699376872948676,
+    "playerXPosition": 490,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 60.596680196471716,
+    "mapYRatio": 39.699376872948676,
+    "playerXPosition": 490,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 59.383735805549854,
+    "mapYRatio": 33.30637872805974,
+    "playerXPosition": 500,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 61.91070328663708,
+    "mapYRatio": 35.285163868144416,
+    "playerXPosition": 500,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 62.31501808361104,
+    "mapYRatio": 28.739951481710506,
+    "playerXPosition": 510,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 63.83119857226337,
+    "mapYRatio": 31.936450554154973,
+    "playerXPosition": 510,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 65.95385125637665,
+    "mapYRatio": 26.304523616990917,
+    "playerXPosition": 520,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 66.45924475259409,
+    "mapYRatio": 30.10987965561528,
+    "playerXPosition": 520,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 70.40131402309017,
+    "mapYRatio": 26.000095133900963,
+    "playerXPosition": 530,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 69.69376312838574,
+    "mapYRatio": 30.718736621795177,
+    "playerXPosition": 530,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 74.54554069207322,
+    "mapYRatio": 29.653236930980352,
+    "playerXPosition": 540,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 72.42288800795995,
+    "mapYRatio": 32.3930932787899,
+    "playerXPosition": 540,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 76.4660359776995,
+    "mapYRatio": 35.43737810968939,
+    "playerXPosition": 550,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 73.63583239888182,
+    "mapYRatio": 36.80730628359416,
+    "playerXPosition": 550,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 77.17358687240393,
+    "mapYRatio": 41.069305046853444,
+    "playerXPosition": 560,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 74.44446199282973,
+    "mapYRatio": 42.13480473766827,
+    "playerXPosition": 560,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 77.88113776710836,
+    "mapYRatio": 45.635732293202686,
+    "playerXPosition": 570,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 75.05093418829067,
+    "mapYRatio": 47.005660467107454,
+    "playerXPosition": 570,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 78.28545256408232,
+    "mapYRatio": 49.89773105646197,
+    "playerXPosition": 580,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 75.6574063837516,
+    "mapYRatio": 51.267659230366746,
+    "playerXPosition": 580,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 78.89192475954326,
+    "mapYRatio": 54.15972981972126,
+    "playerXPosition": 590,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 76.26387857921253,
+    "mapYRatio": 55.83408647671598,
+    "playerXPosition": 590,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 79.90271175197815,
+    "mapYRatio": 58.878371307615474,
+    "playerXPosition": 600,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 77.5779016693779,
+    "mapYRatio": 60.552727964610185,
+    "playerXPosition": 600,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 81.62104963911746,
+    "mapYRatio": 62.37929886314988,
+    "playerXPosition": 610,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 79.29623955651721,
+    "mapYRatio": 65.72801217713933,
+    "playerXPosition": 610,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 82.93507272928281,
+    "mapYRatio": 65.8802264186843,
+    "playerXPosition": 620,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 81.62104963911746,
+    "mapYRatio": 69.3811539742187,
+    "playerXPosition": 620,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 89.60626687935309,
+    "mapYRatio": 62.37929886314988,
+    "playerXPosition": 650,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 92.43647045817079,
+    "mapYRatio": 64.0536555201446,
+    "playerXPosition": 650,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 89.50518818010961,
+    "mapYRatio": 58.878371307615474,
+    "playerXPosition": 660,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 92.43647045817079,
+    "mapYRatio": 58.42172858298055,
+    "playerXPosition": 660,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 88.79763728540519,
+    "mapYRatio": 54.76858678590115,
+    "playerXPosition": 670,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 91.52676216497939,
+    "mapYRatio": 52.94201588736146,
+    "playerXPosition": 670,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 87.6857715937268,
+    "mapYRatio": 50.354373781096896,
+    "playerXPosition": 680,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 89.80842427784007,
+    "mapYRatio": 48.37558864101222,
+    "playerXPosition": 680,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 86.16959110507446,
+    "mapYRatio": 45.17908956856776,
+    "playerXPosition": 690,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 88.99979468389216,
+    "mapYRatio": 43.809161394662986,
+    "playerXPosition": 690,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 86.16959110507446,
+    "mapYRatio": 39.090519906768776,
+    "playerXPosition": 700,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 88.89871598464867,
+    "mapYRatio": 38.786091423678826,
+    "playerXPosition": 700,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 86.8771419997789,
+    "mapYRatio": 33.458592969604716,
+    "playerXPosition": 710,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 89.60626687935309,
+    "mapYRatio": 33.458592969604716,
+    "playerXPosition": 710,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 87.7868502929703,
+    "mapYRatio": 27.978880273985634,
+    "playerXPosition": 720,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 90.21273907481402,
+    "mapYRatio": 29.50102268943538,
+    "playerXPosition": 720,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 88.99979468389216,
+    "mapYRatio": 23.10802454454645,
+    "playerXPosition": 730,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 88.99979468389216,
+    "mapYRatio": 16.562812158112543,
+    "playerXPosition": 740,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 87.07929939826586,
+    "mapYRatio": 12.300813394853256,
+    "playerXPosition": 750,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 84.35017451869167,
+    "mapYRatio": 11.996384911763307,
+    "playerXPosition": 760,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 84.65341061642214,
+    "mapYRatio": 7.42995766541407,
+    "playerXPosition": 760,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 82.02536443609141,
+    "mapYRatio": 11.235313704038434,
+    "playerXPosition": 770,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 81.82320703760443,
+    "mapYRatio": 7.2777434238690955,
+    "playerXPosition": 770,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 79.19516085727372,
+    "mapYRatio": 12.45302763639823,
+    "playerXPosition": 780,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 78.99300345878673,
+    "mapYRatio": 8.647671597773867,
+    "playerXPosition": 780,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 76.6681933761865,
+    "mapYRatio": 13.366313085668077,
+    "playerXPosition": 790,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 76.16279987996904,
+    "mapYRatio": 10.169814013223611,
+    "playerXPosition": 790,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 74.04014719585578,
+    "mapYRatio": 15.192883984207771,
+    "playerXPosition": 800,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 72.92828150417739,
+    "mapYRatio": 11.38752794558341,
+    "playerXPosition": 800,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 70.70455012082063,
+    "mapYRatio": 16.258383675022596,
+    "playerXPosition": 810,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 70.0980779253597,
+    "mapYRatio": 11.844170670218332,
+    "playerXPosition": 810,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 67.47003174502898,
+    "mapYRatio": 16.562812158112543,
+    "playerXPosition": 820,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 67.47003174502898,
+    "mapYRatio": 11.996384911763307,
+    "playerXPosition": 820,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 65.14522166242872,
+    "mapYRatio": 16.258383675022596,
+    "playerXPosition": 830,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 65.34737906091571,
+    "mapYRatio": 12.45302763639823,
+    "playerXPosition": 830,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 62.618254181341506,
+    "mapYRatio": 16.867240641202493,
+    "playerXPosition": 840,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 62.82041157982848,
+    "mapYRatio": 13.366313085668077,
+    "playerXPosition": 840,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 63.325805076045924,
+    "mapYRatio": 9.40874280549874,
+    "playerXPosition": 840,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 60.09128670025427,
+    "mapYRatio": 16.410597916567568,
+    "playerXPosition": 850,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 60.495601497228236,
+    "mapYRatio": 12.300813394853256,
+    "playerXPosition": 850,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 61.00099499344568,
+    "mapYRatio": 8.495457356228892,
+    "playerXPosition": 850,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 58.37294881311497,
+    "mapYRatio": 15.649526708842695,
+    "playerXPosition": 860,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 58.474027512358454,
+    "mapYRatio": 11.539742187128384,
+    "playerXPosition": 860,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 58.777263610088916,
+    "mapYRatio": 7.734386148504019,
+    "playerXPosition": 860,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 56.452453527488665,
+    "mapYRatio": 14.4318127764829,
+    "playerXPosition": 870,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 55.94706003127122,
+    "mapYRatio": 10.626456737858536,
+    "playerXPosition": 870,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 55.94706003127122,
+    "mapYRatio": 7.42995766541407,
+    "playerXPosition": 870,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 54.02656474564493,
+    "mapYRatio": 14.73624125957285,
+    "playerXPosition": 880,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 53.52117124942748,
+    "mapYRatio": 10.626456737858536,
+    "playerXPosition": 880,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 53.420092550183995,
+    "mapYRatio": 6.516672216144223,
+    "playerXPosition": 880,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 50.69096767060979,
+    "mapYRatio": 20.368168196736907,
+    "playerXPosition": 910,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 48.56831498649652,
+    "mapYRatio": 20.672596679826857,
+    "playerXPosition": 910,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 46.04134750540929,
+    "mapYRatio": 19.911525472101985,
+    "playerXPosition": 910,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 51.297439866070725,
+    "mapYRatio": 23.56466726918137,
+    "playerXPosition": 920,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 48.87155108422698,
+    "mapYRatio": 23.86909575227132,
+    "playerXPosition": 920,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 46.64781970087022,
+    "mapYRatio": 24.17352423536127,
+    "playerXPosition": 920,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 51.39851856531421,
+    "mapYRatio": 27.826666032440663,
+    "playerXPosition": 930,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 49.174787181957456,
+    "mapYRatio": 27.674451790895688,
+    "playerXPosition": 930,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 46.849977099357204,
+    "mapYRatio": 27.370023307805734,
+    "playerXPosition": 930,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 51.80283336228817,
+    "mapYRatio": 31.479807829520052,
+    "playerXPosition": 940,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 49.37694458044443,
+    "mapYRatio": 31.023165104885127,
+    "playerXPosition": 940,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 47.55752799406163,
+    "mapYRatio": 30.718736621795177,
+    "playerXPosition": 940,
+    "playerZPosition": 3
+  },
+  {
+    "mapXRatio": 52.10606946001863,
+    "mapYRatio": 34.98073538505446,
+    "playerXPosition": 950,
+    "playerZPosition": 1
+  },
+  {
+    "mapXRatio": 49.37694458044443,
+    "mapYRatio": 34.371878418874566,
+    "playerXPosition": 950,
+    "playerZPosition": 2
+  },
+  {
+    "mapXRatio": 47.052134497844186,
+    "mapYRatio": 33.15416448651477,
+    "playerXPosition": 950,
+    "playerZPosition": 3
+  },
+
+  {
+    "mapXRatio": 28.85796863401614,
+    "mapYRatio": 43.809161394662986,
+    "playerXPosition": 0,
+    "playerZPosition": 10
+  },
+  {
+    "mapXRatio": 28.554732536285677,
+    "mapYRatio": 39.24273414831375,
+    "playerXPosition": 0,
+    "playerZPosition": 20
+  },
+  {
+    "mapXRatio": 28.251496438555208,
+    "mapYRatio": 35.285163868144416,
+    "playerXPosition": 0,
+    "playerZPosition": 30
+  },
+  {
+    "mapXRatio": 27.645024243094273,
+    "mapYRatio": 30.718736621795177,
+    "playerXPosition": 0,
+    "playerZPosition": 40
+  },
+  {
+    "mapXRatio": 26.53315855141589,
+    "mapYRatio": 27.826666032440663,
+    "playerXPosition": 0,
+    "playerZPosition": 50
+  },
+  {
+    "mapXRatio": 25.42129285973751,
+    "mapYRatio": 24.630166959996195,
+    "playerXPosition": 0,
+    "playerZPosition": 60
+  },
+  {
+    "mapXRatio": 24.006191070328665,
+    "mapYRatio": 22.042524853731628,
+    "playerXPosition": 0,
+    "playerZPosition": 70
+  },
+  {
+    "mapXRatio": 22.28785318318935,
+    "mapYRatio": 20.063739713646957,
+    "playerXPosition": 0,
+    "playerZPosition": 80
+  },
+  {
+    "mapXRatio": 13.291848950518817,
+    "mapYRatio": 20.52038243828188,
+    "playerXPosition": 0,
+    "playerZPosition": 90
+  },
+  {
+    "mapXRatio": 11.87674716110997,
+    "mapYRatio": 22.651381819911524,
+    "playerXPosition": 0,
+    "playerZPosition": 100
+  },
+  {
+    "mapXRatio": 10.764881469431591,
+    "mapYRatio": 25.39123816772107,
+    "playerXPosition": 0,
+    "playerZPosition": 110
+  },
+  {
+    "mapXRatio": 10.461645371701122,
+    "mapYRatio": 28.13109451553061,
+    "playerXPosition": 0,
+    "playerZPosition": 120
+  },
+  {
+    "mapXRatio": 10.96703886791857,
+    "mapYRatio": 30.718736621795177,
+    "playerXPosition": 0,
+    "playerZPosition": 130
+  },
+  {
+    "mapXRatio": 11.270274965649035,
+    "mapYRatio": 33.458592969604716,
+    "playerXPosition": 0,
+    "playerZPosition": 140
+  },
+  {
+    "mapXRatio": 12.382140657327415,
+    "mapYRatio": 36.35066355895923,
+    "playerXPosition": 0,
+    "playerZPosition": 150
+  },
+  {
+    "mapXRatio": 13.999399845223243,
+    "mapYRatio": 39.394948389858726,
+    "playerXPosition": 0,
+    "playerZPosition": 160
+  },
+  {
+    "mapXRatio": 19.154413506641184,
+    "mapYRatio": 40.1560195975836,
+    "playerXPosition": 0,
+    "playerZPosition": 170
+  },
+  {
+    "mapXRatio": 20.8727513937805,
+    "mapYRatio": 45.94016077629263,
+    "playerXPosition": 0,
+    "playerZPosition": 180
+  },
+  {
+    "mapXRatio": 22.08569578470237,
+    "mapYRatio": 50.50658802264187,
+    "playerXPosition": 0,
+    "playerZPosition": 190
+  },
+  {
+    "mapXRatio": 22.692167980163305,
+    "mapYRatio": 54.92080102744613,
+    "playerXPosition": 0,
+    "playerZPosition": 200
+  },
+  {
+    "mapXRatio": 23.60187627335471,
+    "mapYRatio": 58.878371307615474,
+    "playerXPosition": 0,
+    "playerZPosition": 210
+  },
+  {
+    "mapXRatio": 24.20834846881564,
+    "mapYRatio": 63.59701279550968,
+    "playerXPosition": 0,
+    "playerZPosition": 220
+  },
+  {
+    "mapXRatio": 24.915899363520065,
+    "mapYRatio": 67.70679731722399,
+    "playerXPosition": 0,
+    "playerZPosition": 230
+  },
+  {
+    "mapXRatio": 28.150417739311717,
+    "mapYRatio": 70.75108214812347,
+    "playerXPosition": 0,
+    "playerZPosition": 240
+  },
+  {
+    "mapXRatio": 30.778463919642434,
+    "mapYRatio": 69.9900109403986,
+    "playerXPosition": 0,
+    "playerZPosition": 250
+  },
+  {
+    "mapXRatio": 33.30543140072966,
+    "mapYRatio": 69.53336821576369,
+    "playerXPosition": 0,
+    "playerZPosition": 260
+  },
+  {
+    "mapXRatio": 36.74210717500829,
+    "mapYRatio": 68.16344004185892,
+    "playerXPosition": 0,
+    "playerZPosition": 270
+  },
+  {
+    "mapXRatio": 39.4712320545825,
+    "mapYRatio": 68.01122580031395,
+    "playerXPosition": 0,
+    "playerZPosition": 280
+  },
+  {
+    "mapXRatio": 43.008986528104614,
+    "mapYRatio": 68.46786852494886,
+    "playerXPosition": 0,
+    "playerZPosition": 290
+  },
+  {
+    "mapXRatio": 45.940268806165804,
+    "mapYRatio": 68.31565428340389,
+    "playerXPosition": 0,
+    "playerZPosition": 300
+  },
+  {
+    "mapXRatio": 49.174787181957456,
+    "mapYRatio": 68.77229700803882,
+    "playerXPosition": 0,
+    "playerZPosition": 310
+  },
+  {
+    "mapXRatio": 52.81362035472306,
+    "mapYRatio": 74.40422394520287,
+    "playerXPosition": 0,
+    "playerZPosition": 320
+  },
+  {
+    "mapXRatio": 54.93627303883633,
+    "mapYRatio": 74.8608666698378,
+    "playerXPosition": 0,
+    "playerZPosition": 330
+  },
+  {
+    "mapXRatio": 57.261083121436585,
+    "mapYRatio": 75.46972363601769,
+    "playerXPosition": 0,
+    "playerZPosition": 340
+  },
+  {
+    "mapXRatio": 59.383735805549854,
+    "mapYRatio": 74.70865242829282,
+    "playerXPosition": 0,
+    "playerZPosition": 350
+  },
+  {
+    "mapXRatio": 61.10207369268916,
+    "mapYRatio": 73.79536697902297,
+    "playerXPosition": 0,
+    "playerZPosition": 360
+  },
+  {
+    "mapXRatio": 62.416096782854524,
+    "mapYRatio": 71.8165818389383,
+    "playerXPosition": 0,
+    "playerZPosition": 370
+  },
+  {
+    "mapXRatio": 63.325805076045924,
+    "mapYRatio": 68.77229700803882,
+    "playerXPosition": 0,
+    "playerZPosition": 380
+  },
+  {
+    "mapXRatio": 63.62904117377639,
+    "mapYRatio": 65.57579793559435,
+    "playerXPosition": 0,
+    "playerZPosition": 390
+  },
+  {
+    "mapXRatio": 63.224726376802444,
+    "mapYRatio": 62.988155829329784,
+    "playerXPosition": 0,
+    "playerZPosition": 400
+  },
+  {
+    "mapXRatio": 62.51717548209802,
+    "mapYRatio": 60.09608523997526,
+    "playerXPosition": 0,
+    "playerZPosition": 410
+  },
+  {
+    "mapXRatio": 61.10207369268916,
+    "mapYRatio": 57.05180040907577,
+    "playerXPosition": 0,
+    "playerZPosition": 420
+  },
+  {
+    "mapXRatio": 58.27187011387147,
+    "mapYRatio": 51.419873471911714,
+    "playerXPosition": 0,
+    "playerZPosition": 430
+  },
+  {
+    "mapXRatio": 56.1492174297582,
+    "mapYRatio": 45.331303810112736,
+    "playerXPosition": 0,
+    "playerZPosition": 440
+  },
+  {
+    "mapXRatio": 55.744902632784246,
+    "mapYRatio": 38.32944869904391,
+    "playerXPosition": 0,
+    "playerZPosition": 450
+  },
+  {
+    "mapXRatio": 57.56431921916705,
+    "mapYRatio": 32.54530752033487,
+    "playerXPosition": 0,
+    "playerZPosition": 460
+  },
+  {
+    "mapXRatio": 61.10207369268916,
+    "mapYRatio": 26.456737858535888,
+    "playerXPosition": 0,
+    "playerZPosition": 470
+  },
+  {
+    "mapXRatio": 65.4484577601592,
+    "mapYRatio": 22.8035960614565,
+    "playerXPosition": 0,
+    "playerZPosition": 480
+  },
+  {
+    "mapXRatio": 71.31102231628157,
+    "mapYRatio": 22.651381819911524,
+    "playerXPosition": 0,
+    "playerZPosition": 490
+  },
+  {
+    "mapXRatio": 75.96064248148207,
+    "mapYRatio": 27.217809066260763,
+    "playerXPosition": 0,
+    "playerZPosition": 500
+  },
+  {
+    "mapXRatio": 78.79084606029976,
+    "mapYRatio": 34.067449935784616,
+    "playerXPosition": 0,
+    "playerZPosition": 510
+  },
+  {
+    "mapXRatio": 79.3973182557607,
+    "mapYRatio": 40.003805356038626,
+    "playerXPosition": 0,
+    "playerZPosition": 520
+  },
+  {
+    "mapXRatio": 79.90271175197815,
+    "mapYRatio": 44.722446843932836,
+    "playerXPosition": 0,
+    "playerZPosition": 530
+  },
+  {
+    "mapXRatio": 80.91349874441303,
+    "mapYRatio": 49.1366598487371,
+    "playerXPosition": 0,
+    "playerZPosition": 540
+  },
+  {
+    "mapXRatio": 81.11565614290001,
+    "mapYRatio": 53.09423012890644,
+    "playerXPosition": 0,
+    "playerZPosition": 550
+  },
+  {
+    "mapXRatio": 81.92428573684792,
+    "mapYRatio": 57.05180040907577,
+    "playerXPosition": 0,
+    "playerZPosition": 560
+  },
+  {
+    "mapXRatio": 82.73291533079585,
+    "mapYRatio": 60.24829948152024,
+    "playerXPosition": 0,
+    "playerZPosition": 570
+  },
+  {
+    "mapXRatio": 84.14801712020468,
+    "mapYRatio": 62.074870380059934,
+    "playerXPosition": 0,
+    "playerZPosition": 580
+  },
+  {
+    "mapXRatio": 87.7868502929703,
+    "mapYRatio": 61.16158493079009,
+    "playerXPosition": 0,
+    "playerZPosition": 590
+  },
+  {
+    "mapXRatio": 87.7868502929703,
+    "mapYRatio": 58.72615706607049,
+    "playerXPosition": 0,
+    "playerZPosition": 600
+  },
+  {
+    "mapXRatio": 87.07929939826586,
+    "mapYRatio": 55.83408647671598,
+    "playerXPosition": 0,
+    "playerZPosition": 610
+  },
+  {
+    "mapXRatio": 86.06851240583097,
+    "mapYRatio": 52.18094467963659,
+    "playerXPosition": 0,
+    "playerZPosition": 620
+  },
+  {
+    "mapXRatio": 83.94585972171771,
+    "mapYRatio": 46.54901774247253,
+    "playerXPosition": 0,
+    "playerZPosition": 630
+  },
+  {
+    "mapXRatio": 83.84478102247421,
+    "mapYRatio": 39.394948389858726,
+    "playerXPosition": 0,
+    "playerZPosition": 640
+  },
+  {
+    "mapXRatio": 84.65341061642214,
+    "mapYRatio": 32.24087903724492,
+    "playerXPosition": 0,
+    "playerZPosition": 650
+  },
+  {
+    "mapXRatio": 86.16959110507446,
+    "mapYRatio": 26.608952100080863,
+    "playerXPosition": 0,
+    "playerZPosition": 660
+  },
+  {
+    "mapXRatio": 87.18037809750936,
+    "mapYRatio": 22.194739095276603,
+    "playerXPosition": 0,
+    "playerZPosition": 670
+  },
+  {
+    "mapXRatio": 87.07929939826586,
+    "mapYRatio": 17.932740332017314,
+    "playerXPosition": 0,
+    "playerZPosition": 680
+  },
+  {
+    "mapXRatio": 85.46204021037003,
+    "mapYRatio": 15.345098225752746,
+    "playerXPosition": 0,
+    "playerZPosition": 690
+  },
+  {
+    "mapXRatio": 83.84478102247421,
+    "mapYRatio": 14.73624125957285,
+    "playerXPosition": 0,
+    "playerZPosition": 700
+  },
+  {
+    "mapXRatio": 82.22752183457838,
+    "mapYRatio": 15.192883984207771,
+    "playerXPosition": 0,
+    "playerZPosition": 710
+  },
+  {
+    "mapXRatio": 80.20594784970861,
+    "mapYRatio": 16.258383675022596,
+    "playerXPosition": 0,
+    "playerZPosition": 720
+  },
+  {
+    "mapXRatio": 77.78005906786487,
+    "mapYRatio": 17.932740332017314,
+    "playerXPosition": 0,
+    "playerZPosition": 730
+  },
+  {
+    "mapXRatio": 75.15201288753416,
+    "mapYRatio": 19.607096989012035,
+    "playerXPosition": 0,
+    "playerZPosition": 740
+  },
+  {
+    "mapXRatio": 71.31102231628157,
+    "mapYRatio": 19.45488274746706,
+    "playerXPosition": 0,
+    "playerZPosition": 750
+  },
+  {
+    "mapXRatio": 67.97542524124643,
+    "mapYRatio": 19.45488274746706,
+    "playerXPosition": 0,
+    "playerZPosition": 760
+  },
+  {
+    "mapXRatio": 64.84198556469826,
+    "mapYRatio": 19.15045426437711,
+    "playerXPosition": 0,
+    "playerZPosition": 770
+  },
+  {
+    "mapXRatio": 62.416096782854524,
+    "mapYRatio": 20.063739713646957,
+    "playerXPosition": 0,
+    "playerZPosition": 780
+  },
+  {
+    "mapXRatio": 59.99020800101079,
+    "mapYRatio": 19.607096989012035,
+    "playerXPosition": 0,
+    "playerZPosition": 790
+  },
+  {
+    "mapXRatio": 58.27187011387147,
+    "mapYRatio": 18.38938305665224,
+    "playerXPosition": 0,
+    "playerZPosition": 800
+  },
+  {
+    "mapXRatio": 56.452453527488665,
+    "mapYRatio": 17.47609760738239,
+    "playerXPosition": 0,
+    "playerZPosition": 810
+  },
+  {
+    "mapXRatio": 54.329800843375395,
+    "mapYRatio": 16.867240641202493,
+    "playerXPosition": 0,
+    "playerZPosition": 820
+  },
+  {
+    "mapXRatio": 52.81362035472306,
+    "mapYRatio": 20.21595395519193,
+    "playerXPosition": 0,
+    "playerZPosition": 830
+  },
+  {
+    "mapXRatio": 53.01577775321004,
+    "mapYRatio": 23.56466726918137,
+    "playerXPosition": 0,
+    "playerZPosition": 840
+  },
+  {
+    "mapXRatio": 53.92548604640144,
+    "mapYRatio": 27.065594824715788,
+    "playerXPosition": 0,
+    "playerZPosition": 850
+  },
+  {
+    "mapXRatio": 54.12764344488842,
+    "mapYRatio": 30.718736621795177,
+    "playerXPosition": 0,
+    "playerZPosition": 860
+  },
+  {
+    "mapXRatio": 53.72332864791446,
+    "mapYRatio": 35.285163868144416,
+    "playerXPosition": 0,
+    "playerZPosition": 870
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+  {
+    "mapXRatio": 18.85117740891072,
+    "mapYRatio": 19.15045426437711,
+    "playerXPosition": 0,
+    "playerZPosition": 90
+  },
+  {
+    "mapXRatio": 19.760885702102122,
+    "mapYRatio": 15.801740950387671,
+    "playerXPosition": 1,
+    "playerZPosition": 91
+  },
+  {
+    "mapXRatio": 18.64902001042374,
+    "mapYRatio": 11.235313704038434,
+    "playerXPosition": 2,
+    "playerZPosition": 92
+  },
+  {
+    "mapXRatio": 21.681380987728414,
+    "mapYRatio": 11.996384911763307,
+    "playerXPosition": 2,
+    "playerZPosition": 93
+  },
+
+  {
+    "mapXRatio": 15.919895130849534,
+    "mapYRatio": 19.15045426437711,
+    "playerXPosition": 0,
+    "playerZPosition": 100
+  },
+  {
+    "mapXRatio": 15.111265536901621,
+    "mapYRatio": 15.497312467297721,
+    "playerXPosition": 1,
+    "playerZPosition": 101
+  },
+  {
+    "mapXRatio": 13.08969155203184,
+    "mapYRatio": 11.691956428673357,
+    "playerXPosition": 2,
+    "playerZPosition": 102
+  },
+  {
+    "mapXRatio": 15.818816431606045,
+    "mapYRatio": 10.626456737858536,
+    "playerXPosition": 2,
+    "playerZPosition": 103
+  },
+
+
+  {
+    "mapXRatio": 25.21913546125053,
+    "mapYRatio": 70.29443942348857,
+    "playerXPosition": 0,
+    "playerZPosition": 260
+  },
+  {
+    "mapXRatio": 24.006191070328665,
+    "mapYRatio": 72.88208152975312,
+    "playerXPosition": 1,
+    "playerZPosition": 261
+  },
+  {
+    "mapXRatio": 22.18677448394586,
+    "mapYRatio": 74.70865242829282,
+    "playerXPosition": 2,
+    "playerZPosition": 262
+  },
+  {
+    "mapXRatio": 19.760885702102122,
+    "mapYRatio": 81.71050753936166,
+    "playerXPosition": 4,
+    "playerZPosition": 264
+  },
+  {
+    "mapXRatio": 18.042547814962806,
+    "mapYRatio": 77.90515150073729,
+    "playerXPosition": 4,
+    "playerZPosition": 264
+  },
+
+
+  {
+    "mapXRatio": 26.735315949902873,
+    "mapYRatio": 71.51215335584835,
+    "playerXPosition": 0,
+    "playerZPosition": 270
+  },
+  {
+    "mapXRatio": 25.724528957467978,
+    "mapYRatio": 75.16529515292774,
+    "playerXPosition": 1,
+    "playerZPosition": 271
+  },
+  {
+    "mapXRatio": 24.915899363520065,
+    "mapYRatio": 78.51400846691719,
+    "playerXPosition": 2,
+    "playerZPosition": 272
+  },
+  {
+    "mapXRatio": 24.612663265789596,
+    "mapYRatio": 86.58136326880084,
+    "playerXPosition": 4,
+    "playerZPosition": 273
+  },
+  {
+    "mapXRatio": 21.782459686971904,
+    "mapYRatio": 85.21143509489607,
+    "playerXPosition": 4,
+    "playerZPosition": 274
+  },
+
+
+
+  {
+    "mapXRatio": 85.36096151112656,
+    "mapYRatio": 63.44479855396471,
+    "playerXPosition": 0,
+    "playerZPosition": 630
+  },
+  {
+    "mapXRatio": 85.66419760885702,
+    "mapYRatio": 66.4890833848642,
+    "playerXPosition": 1,
+    "playerZPosition": 631
+  },
+  {
+    "mapXRatio": 86.37174850356143,
+    "mapYRatio": 71.05551063121344,
+    "playerXPosition": 2,
+    "playerZPosition": 632
+  },
+  {
+    "mapXRatio": 84.85556801490911,
+    "mapYRatio": 70.90329638966845,
+    "playerXPosition": 2,
+    "playerZPosition": 633
+  },
+
+
+  {
+    "mapXRatio": 87.07929939826586,
+    "mapYRatio": 63.44479855396471,
+    "playerXPosition": 0,
+    "playerZPosition": 640
+  },
+  {
+    "mapXRatio": 87.7868502929703,
+    "mapYRatio": 65.11915521095942,
+    "playerXPosition": 1,
+    "playerZPosition": 641
+  },
+  {
+    "mapXRatio": 90.81921127027496,
+    "mapYRatio": 67.85901155876897,
+    "playerXPosition": 2,
+    "playerZPosition": 642
+  },
+  {
+    "mapXRatio": 88.69655858616169,
+    "mapYRatio": 69.3811539742187,
+    "playerXPosition": 2,
+    "playerZPosition": 643
+  },
+
+
+  {
+    "mapXRatio": 53.21793515169701,
+    "mapYRatio": 17.628311848927368,
+    "playerXPosition": 0,
+    "playerZPosition": 890
+  },
+  {
+    "mapXRatio": 52.20714815926213,
+    "mapYRatio": 15.497312467297721,
+    "playerXPosition": 1,
+    "playerZPosition": 891
+  },
+  {
+    "mapXRatio": 48.66939368574001,
+    "mapYRatio": 8.647671597773867,
+    "playerXPosition": 3,
+    "playerZPosition": 892
+  },
+  {
+    "mapXRatio": 50.89312506909677,
+    "mapYRatio": 7.734386148504019,
+    "playerXPosition": 3,
+    "playerZPosition": 893
+  },
+
+
+  {
+    "mapXRatio": 52.611462956236075,
+    "mapYRatio": 18.237168815107264,
+    "playerXPosition": 0,
+    "playerZPosition": 900
+  },
+  {
+    "mapXRatio": 50.58988897136631,
+    "mapYRatio": 17.17166912429244,
+    "playerXPosition": 1,
+    "playerZPosition": 901
+  },
+  {
+    "mapXRatio": 46.64781970087022,
+    "mapYRatio": 16.106169433477618,
+    "playerXPosition": 3,
+    "playerZPosition": 902
+  },
+  {
+    "mapXRatio": 46.546741001626735,
+    "mapYRatio": 11.235313704038434,
+    "playerXPosition": 3,
+    "playerZPosition": 903
+  }
+
+
+]
