@@ -53,4 +53,4 @@ jobs:
           action: "close"
           app_location: "/front"
           output_location: "./dist"
-          app_build_command: npm run build -- --outDir ./dist
+          app_build_command: VITE_API_HOST = ${{env.VITE_API_HOST}} npm run build -- --outDir ./dist
