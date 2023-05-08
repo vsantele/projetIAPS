@@ -10,6 +10,8 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches:
       - feat/deploy
+  # Allow mannually trigger
+  workflow_dispatch:
 
 jobs:
   build_and_deploy_job:
