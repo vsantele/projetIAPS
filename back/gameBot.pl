@@ -177,6 +177,19 @@ checkCountryCards(CountryCards, CountryCards, Cards, Cards).
 pickCard(Cards, CardPicked, NewCards) :-
     tirerCartes(Cards, 1, [CardPicked|_], NewCards).
 
+fillCards(CountriesCards, NewCards) :-
+    initCards(NewCards1),
+    % TODO: remove duplicates
+    NewCards = NewCards1.
+
+% La pile de cartes disponibles < nb_cartesSecondeTirer(X) (besoin de recréer une pile de cartes)
+play([CurrentCountry, PlayersPositions, CountriesCards, Cards], StateOut) :-
+    length(Cards, NbCards),
+    nb_cartesSecondeTirer(NbCardsPick),
+    NbCards < NbCardsPick,
+    fillCards(CountriesCards, NewCards),
+    play([CurrentCountry, PlayersPositions, CountriesCards, NewCards], StateOut).
+
 % Game state : [CurrentCountry, PlayersPositions, CountriesCards, Cards]
 play([CurrentCountry, PlayersPositions, CountriesCards, Cards], [NextCountry, NewPlayersPositions, NewCountriesCards, NewCards]) :-
     countryIndex(CurrentCountry, ICurrentCountry),
