@@ -149,6 +149,15 @@ function App() {
     }
   }, [lastMessage])
 
+  function updatePos(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const pos = formData.get('pos') as string
+    if (pos) {
+      setTeamsPositions(JSON.parse(pos))
+    }
+  }
+
   return (
     <Container maxWidth="xl">
       <Grid container justifyContent="center" alignContent="center" spacing={1}>
@@ -161,6 +170,10 @@ function App() {
               <p>Serveur du bot introuvable</p>
             )}
           </small>
+          <form onSubmit={updatePos}>
+            <input name="pos" />
+            <button>Envoyer</button>
+          </form>
         </Grid>
         <Grid item xs={12} md={6} xl={8} textAlign="center">
           <div id="map-area">
