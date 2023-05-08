@@ -15,6 +15,7 @@
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_files)).
+:- use_module(library(http/http_unix_daemon)).
 :- use_module(library(http/websocket)).
 :- include('bot.pl').
 
@@ -87,5 +88,3 @@ bot(WebSocket) :-
       ws_send(WebSocket, json(Response)),
       bot(WebSocket)
 ).
-
-:- start_server.
