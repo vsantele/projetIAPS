@@ -1,11 +1,10 @@
-import React from 'react'
 import { Box, Container, Grid } from '@mui/material'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
 import './App.css'
 import mapImage from './assets/map.png'
 import BotResponse from './models/BotResponse'
 import ChatMessage from './models/ChatMessage'
-import { useEffect, useState } from 'react'
+import { MouseEvent, useEffect, useState } from 'react'
 import { MessageAuthor } from './models/MessageAuthor'
 import Chat from './components/Chat'
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
@@ -120,7 +119,7 @@ function AppCoordsGen() {
     }
   }, [lastMessage])
 
-  const board = [
+  const board: (['d', number, number] | ['s', number])[] = [
     ['d', 8, 3],
     ['s', 2],
     ['d', 8, 2],
@@ -146,7 +145,7 @@ function AppCoordsGen() {
     for (let i = 0; i < board.length; i++) {
       const boardRule = board[i]
 
-      if (boardRule[i] === 's') {
+      if (boardRule[0] === 's') {
         zValue += boardRule[1] * 10
         ceQuonADejaAvance += boardRule[1]
       } else {
@@ -165,9 +164,9 @@ function AppCoordsGen() {
     }
   }
 
-  const onClickImage = event => {
+  const onClickImage = (event: MouseEvent<HTMLDivElement>) => {
     const elem = document.getElementById('map-area') //outer starts at your elem then walks out
-    const bounding = elem.getBoundingClientRect()
+    const bounding = elem!.getBoundingClientRect()
     const playerImageSize = 10
 
     const xRatio = ((event.clientX - playerImageSize / 2 - bounding.left) / bounding.width) * 100
@@ -175,12 +174,12 @@ function AppCoordsGen() {
 
     console.log(xRatio + '%, ' + yRatio + '%')
 
-    const caseFromClick = getCaseFromIClick(clickCount)
-    const newPosition = {
+    const caseFromClick = getCaseFromIClick(clickCount) as [number, number]
+    const newPosition: MapPosition = {
       mapXRatio: xRatio,
       mapYRatio: yRatio,
-      playerXPosition: caseFromClick[0],
-      playerZPosition: caseFromClick[1],
+      playerForward: caseFromClick[0],
+      playerLateral: caseFromClick[1],
     }
 
     setPositions([...positions, newPosition])
@@ -205,23 +204,13 @@ function AppCoordsGen() {
           <div id="map-area" onClick={onClickImage}>
             <img src={mapImage} id="map-image" alt="Plateau de jeu tour de france" />
 
-            {teamsPositions.map((team, iTeam) =>
-              team.map((player, iPlayer) => {
-                const position = positions.find(
-                  p => p.playerForward === player[0] && p.playerLateral === player[1]
-                )
-                if (position) {
-                  return (
-                    <div
-                      key={player.join(',')}
-                      className="player"
-                      style={{ left: position.mapXRatio + '%', top: position.mapYRatio + '%' }}>
-                      {iTeam + 1},{iPlayer + 1}
-                    </div>
-                  )
-                }
-              })
-            )}
+            {positions.map(position => (
+              <div
+                key={position.playerForward + '-' + position.playerLateral}
+                className="player"
+                style={{ left: position.mapXRatio + '%', top: position.mapYRatio + '%' }}
+              />
+            ))}
           </div>
         </Grid>
         <Grid item xs={12} md={6} xl={4}>
