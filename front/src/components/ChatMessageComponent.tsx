@@ -1,7 +1,7 @@
 import { Avatar, Stack } from '@mui/material'
 import ChatMessage from '../models/ChatMessage'
 import { MessageAuthor } from '../models/MessageAuthor'
-import RobotIcon from '@mui/icons-material/Smarttoy'
+import RobotIcon from '@mui/icons-material/SmartToy'
 import UserIcon from '@mui/icons-material/Person'
 import orange from '@mui/material/colors/orange'
 import grey from '@mui/material/colors/grey'
