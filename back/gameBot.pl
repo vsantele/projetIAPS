@@ -165,6 +165,11 @@ initCountriesCards([CountryCards|LCountriesCards], Cards, NewCards, Count) :-
     Count1 is Count - 1,
     initCountriesCards(LCountriesCards, NewCards1, NewCards, Count1).
 
+checkCountryCards([], NewCountryCards, Cards, NewCards) :-
+    initCountryCards(NewCountryCards, Cards, NewCards).
+
+checkCountryCards(CountryCards, CountryCards, Cards, Cards).
+
 % Tire une carte au hasard dans une liste
 %   Cards : cartes disponibles (IN)
 %   CardPicked : carte tirée (OUT)
@@ -173,23 +178,42 @@ pickCard(Cards, CardPicked, NewCards) :-
     tirerCartes(Cards, 1, [CardPicked|_], NewCards).
 
 % Game state : [CurrentCountry, PlayersPositions, CountriesCards, Cards]
-gameLoop([CurrentCountry, PlayersPositions, CountriesCards, Cards], StateOut) :-
+play([CurrentCountry, PlayersPositions, CountriesCards, Cards], [NextCountry, NewPlayersPositions, NewCountriesCards, NewCards]) :-
     countryIndex(CurrentCountry, ICurrentCountry),
     findCountry(CurrentCountry, Players, PlayersPositions), % Sélectionne les joueurs du CurrentCountry
-    (findLatestPlayer(Players, LatestPlayerI, PlayersPositions) ->nth1(LatestPlayerI, Players, [Px, Py]),
-    movePlayer([Px, Py], LatestPlayerI, CurrentCountry, 1, PlayersPositions, NewPlayersPositions)
-    ; NewPlayersPositions = PlayersPositions ),
+    findLatestPlayer(Players, LatestPlayerI, PlayersPositions),
+    nth1(LatestPlayerI, Players, [Px, Py]),
+    findCountry(CurrentCountry, CountryCards, CountriesCards), % sélectionne les cartes du CurrentCountry
+    checkCountryCards(CountryCards, CountryCards1, Cards, NewCards), % Vérifie si il reste des cartes pour le CurrentCountry
+    pickCard(CountryCards1, Card, NewCountryCards),
+    replace(NewCountryCards, ICurrentCountry, CountriesCards, NewCountriesCards), % replaceNewCountryCards à l'index ICurrentCountry dans la liste CountriesCards par la valeur NewPlayersPositions
+    movePlayer([Px, Py], LatestPlayerI, CurrentCountry, 1, PlayersPositions, NewPlayersPositions),
     nextCountry(CurrentCountry, NextCountry),
-    writeln(NewPlayersPositions),
-    gameLoop([NextCountry, NewPlayersPositions, CountriesCards, Cards], StateOut).
+    writeln(NewPlayersPositions).
+
+% Aucun joueur ne peut jouer dans le CurrentCountry, on passe donc au NextCountry
+play([CurrentCountry, PlayersPositions, CountriesCards, Cards], [NextCountry, PlayersPositions, CountriesCards, Cards]) :-
+    nextCountry(CurrentCountry, NextCountry),
+    writeln(NewPlayersPositions).
+
+
+
+gameLoop(S, SOut) :-
+    gameOver(S),
+    SOut = S.
+
+gameLoop(S, SOut) :-
+    play(S, S1),
+    gameLoop(S1, SOut).
+
 
 testGame(StateOut) :-
     initGame(State),
     gameLoop(State, StateOut).
 
 
-gameOver(PlayersPositions, Cards) :- gameOverCards(Cards).
-gameOver(PlayersPositions, Cards) :- gameOverPlayer(PlayersPositions).
+gameOver([_Country, _PlayersPositions, _CountriesCards, Cards]) :- gameOverCards(Cards).
+gameOver([_Country, PlayersPositions, _CountriesCards, _Cards]) :- gameOverPlayer(PlayersPositions).
 
 gameOverCards([]).
 
