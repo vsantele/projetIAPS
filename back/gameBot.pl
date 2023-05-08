@@ -2,11 +2,8 @@
 :- use_module('constants.pl').
 :- use_module('board.pl').
 
-% EXemples de plateau de jeu
-board([[[10, 1], [10, 2], [10, 3], [20, 1]],[[20, 2], [20, 3], [30, 1], [30, 2]],[[30, 3], [40, 1], [40, 2], [40, 3]],[[50, 1], [50, 2], [50, 3], [60, 1]]]).
-
 % Plateau de jeu où tous les joueurs sont en [0, 0]
-emptyBoard(Board) :- nb_coureurs(NbCoureurs), length(Team, NbCoureurs), maplist(=([0, 0]), Team), countryCount(Count), length(Board, Count), maplist(=(Team), Board).
+emptyPlayersPositions(PlayersPositions) :- nb_coureurs(NbCoureurs), length(Team, NbCoureurs), maplist(=([0, 0]), Team), countryCount(Count), length(PlayersPositions, Count), maplist(=(Team), PlayersPositions).
 
 
 % Tire un nombre entre val_chance_min et val_chance_max.
@@ -70,37 +67,37 @@ nextCountry(Country, NextCountry) :- countryIndex(Country, _), countryIndex(Next
 
 % Sur base d'une liste de joueurs [[p1x, p1y], [p2x, p2y], ...], renvoie l'index du dernier joueur sur le plateau pouvant bouger.
 % https://stackoverflow.com/questions/32918211/find-the-max-element-and-its-index-in-a-list-prolog
-findLatestPlayer(Players, LatestPlayerI, Board) :-
-    latestPlayer(Players, LPlayer, Board),
-    canMove(LPlayer,_DestCoord, Board),
+findLatestPlayer(Players, LatestPlayerI, PlayersPositions) :-
+    latestPlayer(Players, LPlayer, PlayersPositions),
+    canMove(LPlayer,_DestCoord, PlayersPositions),
     nth1(LatestPlayerI, Players, LPlayer).
 
-latestPlayer([HPlayer|LPlayers], LPlayer, Board) :-
-    canMove(HPlayer,_Dest, Board) -> latestPlayer(LPlayers, HPlayer, LPlayer, Board)
-    ; latestPlayer(LPlayers, LPlayer, Board).
+latestPlayer([HPlayer|LPlayers], LPlayer, PlayersPositions) :-
+    canMove(HPlayer,_Dest, PlayersPositions) -> latestPlayer(LPlayers, HPlayer, LPlayer, PlayersPositions)
+    ; latestPlayer(LPlayers, LPlayer, PlayersPositions).
 
 % https://stackoverflow.com/a/19810489/10171758
-latestPlayer([], Player,Player,_Board).
-latestPlayer([[P1x,P1y] | LPlayer], [LPx, LPy], LP, Board) :-
-    P1x < LPx, canMove([P1x,P1y],_Dest, Board ) -> latestPlayer(LPlayer, [P1x,P1y], LP, Board)
-    ; latestPlayer(LPlayer, [LPx, LPy], LP, Board).
+latestPlayer([], Player,Player,_PlayersPositions).
+latestPlayer([[P1x,P1y] | LPlayer], [LPx, LPy], LP, PlayersPositions) :-
+    P1x < LPx, canMove([P1x,P1y],_Dest, PlayersPositions ) -> latestPlayer(LPlayer, [P1x,P1y], LP, PlayersPositions)
+    ; latestPlayer(LPlayer, [LPx, LPy], LP, PlayersPositions).
 
 
 % Retourne le joueurs le plus en retard sur le plateau pouvant bouger et ses coordonnées.
-latestPlayer(Player2I,[P2x, P2y], _Player1I,[P1x, _P1y], Player2I, [P2x,P2y], Board) :-
-    P1x > P2x, canMove([P2x,P2y],_Dest, Board).
-latestPlayer(Player1I,[P1x, P1y], Player1I,[P1x, P1y], _Player2I, [P2x,_P2y], Board) :-
-    P1x < P2x, canMove([P1x,P1y],_Dest, Board).
-latestPlayer(Player1I,[P1x, P1y], Player1I,[P1x, P1y], _Player2I, [_P2x,_P2y], _Board).
+latestPlayer(Player2I,[P2x, P2y], _Player1I,[P1x, _P1y], Player2I, [P2x,P2y], PlayersPositions) :-
+    P1x > P2x, canMove([P2x,P2y],_Dest, PlayersPositions).
+latestPlayer(Player1I,[P1x, P1y], Player1I,[P1x, P1y], _Player2I, [P2x,_P2y], PlayersPositions) :-
+    P1x < P2x, canMove([P1x,P1y],_Dest, PlayersPositions).
+latestPlayer(Player1I,[P1x, P1y], Player1I,[P1x, P1y], _Player2I, [_P2x,_P2y], _PlayersPositions).
 
 % Sur base de coordonnées, vérifie s'il peut avancer sans risque.
 % TODO: Peut-être vérifier en cas de dépassement?
-canMove([Px, Py],[Tx,Ty], _Board) :-
+canMove([Px, Py],[Tx,Ty], _PlayersPositions) :-
     chemin(Px, Py, Tx, Ty),
     caseFin(Tx).
-canMove([Px, Py],[Tx,Ty], Board) :-
+canMove([Px, Py],[Tx,Ty], PlayersPositions) :-
     chemin(Px, Py, Tx, Ty),
-    not(hasPlayer([Tx, Ty], Board)).
+    not(hasPlayer([Tx, Ty], PlayersPositions)).
 
 
 % Vérifie s'il y a un joueur sur les coordonnées entrées.
@@ -111,28 +108,28 @@ hasPlayer([Px, Py], [Country]) :-
     member([Px, Py], Country).
 
 
-move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], Board) :-
+move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], PlayersPositions) :-
     NbSecondes > 0,
-    canMove([Px, Py], [Tx, Ty], Board),
+    canMove([Px, Py], [Tx, Ty], PlayersPositions),
     NbSecondes1 is NbSecondes - 1,
-    move([Tx,Ty], NbSecondes1, SecondesRestantes,[Fx, Fy], Board).
-move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], Board) :-
+    move([Tx,Ty], NbSecondes1, SecondesRestantes,[Fx, Fy], PlayersPositions).
+move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], PlayersPositions) :-
     NbSecondes < 0,
     write("neg: "), writeln(NbSecondes),
-    canMove([Tx, Ty], [Px, Py],  Board),
+    canMove([Tx, Ty], [Px, Py],  PlayersPositions),
     NbSecondes1 is NbSecondes + 1,
-    move([Tx,Ty], NbSecondes1, SecondesRestantes,[Fx, Fy], Board).
-move([Px,Py], 0, 0,[Px,Py], _Board).
-move([Px,Py], NbSecondes, NbSecondes,[Px,Py], Board) :- not(canMove([Px,Py], _, Board)).
+    move([Tx,Ty], NbSecondes1, SecondesRestantes,[Fx, Fy], PlayersPositions).
+move([Px,Py], 0, 0,[Px,Py], _PlayersPositions).
+move([Px,Py], NbSecondes, NbSecondes,[Px,Py], PlayersPositions) :- not(canMove([Px,Py], _, PlayersPositions)).
 
-movePlayer([Px, Py], IPlayer,Country, NbSecondes, Board, NewBoard) :-
-    move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], Board),
-    (caseChance([Fx,Fy]) -> valeurCarteChance(Val), move([Fx,Fy], Val, _, [Tx, Ty], Board), write("chance "), writeln(Val)
-    ; move([Fx,Fy], 0, 0, [Tx, Ty], Board)),
-    findCountry(Country, Players, Board),
+movePlayer([Px, Py], IPlayer,Country, NbSecondes, PlayersPositions, NewPlayersPositions) :-
+    move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], PlayersPositions),
+    (caseChance([Fx,Fy]) -> valeurCarteChance(Val), move([Fx,Fy], Val, _, [Tx, Ty], PlayersPositions), write("chance "), writeln(Val)
+    ; move([Fx,Fy], 0, 0, [Tx, Ty], PlayersPositions)),
+    findCountry(Country, Players, PlayersPositions),
     replace([Tx, Ty], IPlayer, Players, NewPlayers),
     countryIndex(Country,ICountry),
-    replace(NewPlayers, ICountry, Board, NewBoard).
+    replace(NewPlayers, ICountry, PlayersPositions, NewPlayersPositions).
 
 
 % Remplace le IElem dans List par Elem et le renvoit dans NewList
@@ -140,14 +137,11 @@ replace(Elem, IElem, List, NewList) :-
     nth1(IElem, List, _, Temp), % Enlève le IElem élément de List qui produit Temp
     nth1(IElem, NewList, Elem, Temp). % "Génére" un tableau NewList de (Temp elements + 1) éléments où Elem sera à la position IElem
 
-gameLoop(Board,Country, BoardOut) :-
-    findCountry(Country, Players, Board),
-    (findLatestPlayer(Players, LatestPlayerI, Board) ->nth1(LatestPlayerI, Players, [Px, Py]),
-    movePlayer([Px, Py], LatestPlayerI, Country, 1, Board, NewBoard)
-    ; NewBoard = Board ),
-    nextCountry(Country, NextCountry),
-    write(Country),
-    write(":"),
-    writeln(LatestPlayerI),
-    writeln(NewBoard),
-    gameLoop(NewBoard, NextCountry, BoardOut).
+gameLoop([CurrentCountry, PlayersPositions, CountryCards, Cards], StateOut) :-
+    findCountry(CurrentCountry, Players, PlayersPositions),
+    (findLatestPlayer(Players, LatestPlayerI, PlayersPositions) ->nth1(LatestPlayerI, Players, [Px, Py]),
+    movePlayer([Px, Py], LatestPlayerI, CurrentCountry, 1, PlayersPositions, NewPlayersPositions)
+    ; NewPlayersPositions = PlayersPositions ),
+    nextCountry(CurrentCountry, NextCountry),
+    writeln(NewPlayersPositions),
+    gameLoop([NextCountry, NewPlayersPositions, CountryCards, Cards], StateOut).
