@@ -1,7 +1,7 @@
 :- use_module(library(lists)).
 :- use_module('constants.pl').
 :- include('questions.pl').
-:- include('gameBot.pl').
+
 
 %:- debug.
 /* --------------------------------------------------------------------- */

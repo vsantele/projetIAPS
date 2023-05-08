@@ -15,8 +15,12 @@
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_files)).
+:- use_module(library(http/http_json)).
+:- use_module(library(http/http_log)).
+:- use_module(library(http/http_error)).
 :- use_module(library(http/websocket)).
 :- include('bot.pl').
+:- include('gameBot.pl').
 
 % http_handler docs: http://www.swi-prolog.org/pldoc/man?predicate=http_handler/3
 % =http_handler(+Path, :Closure, +Options)=
@@ -42,6 +46,14 @@
 :- http_handler(root(bot),
                 http_upgrade_to_websocket(bot, []),
                 [spawn([])]).
+
+:- http_handler(root(play),
+                handle_play,
+                [method(post)]).
+:- http_handler(root(init),
+                handle_init,
+                []).
+
 
 start_server :-
     default_port(Port),
@@ -87,5 +99,17 @@ bot(WebSocket) :-
       ws_send(WebSocket, json(Response)),
       bot(WebSocket)
 ).
+
+%TODO: Need to fix response?
+handle_play(Request) :-
+  http_read_json_dict(Request, State),
+  atom_string(Country,State.country),
+  play([Country, State.playersPositions, State.countriesCards, State.cards], [NewCountry, NewPlayersPositions, NewCountriesCards, NewCards]),
+  reply_json_dict(_{country:NewCountry, playersPositions:NewPlayersPositions, countriesCards:NewCountriesCards, cards:NewCards}).
+
+handle_init(Request) :-
+  initGame([Country, PlayersPositions, CountriesCards, Cards ]),
+  reply_json_dict(_{country:Country, playersPositions:PlayersPositions, countriesCards:CountriesCards, cards:Cards}).
+
 
 :- start_server.
