@@ -21,7 +21,7 @@ concatenerListes([], []).
 concatenerListes([L|Ls], List) :- concatenerListes(Ls, Liste2), append(L, Liste2, List).
 
 % Génère la liste des cartes secondes disponibles
-cartesDisponibles(Cartes) :- val_min_carte(Min), val_max_carte(Max), nb_repetition_cartes(NbRepet),
+initCards(Cartes) :- val_min_carte(Min), val_max_carte(Max), nb_repetition_cartes(NbRepet),
     elementsEntreBornes(Min, Max, Valeurs),
     length(Temp, NbRepet),
     maplist(=(Valeurs), Temp),
@@ -137,16 +137,66 @@ replace(Elem, IElem, List, NewList) :-
     nth1(IElem, List, _, Temp), % Enlève le IElem élément de List qui produit Temp
     nth1(IElem, NewList, Elem, Temp). % "Génére" un tableau NewList de (Temp elements + 1) éléments où Elem sera à la position IElem
 
-gameLoop([CurrentCountry, PlayersPositions, CountryCards, Cards], StateOut) :-
-    findCountry(CurrentCountry, Players, PlayersPositions),
+% Etat intial de la partie
+initGame([CurrentCountry, PlayersPositions, CountryCards, NewCards]) :-
+    emptyPlayersPositions(PlayersPositions),
+    countryIndex(CurrentCountry, 1),
+    initCards(Cards),
+    initCountriesCards(CountryCards, Cards, NewCards).
+
+% Tire 5 cartes
+%   Cards : cartes disponibles pour le tirage (IN)
+%   NewCards : cartes restantes (OUT)
+%   CountryCards : cartes tirées (OUT)
+initCountryCards(CountryCards, Cards, NewCards) :-
+    tirerCartes(Cards,5, CountryCards, NewCards).
+
+% Tires 5 cartes au hasard pour chaque pays
+%   CountriesCard : tableau de cartes pour chaque pays (OUT)
+%   Cards : cartes disponibles pour le tirage (IN)
+%   NewCards : cartes restantes après le tirage (OUT)
+initCountriesCards(CountriesCards, Cards, NewCards) :-
+    countryCount(Count),
+    initCountriesCards(CountriesCards, Cards, NewCards, Count).
+
+initCountriesCards([], Cards, Cards, 0) :- !.
+initCountriesCards([CountryCards|LCountriesCards], Cards, NewCards, Count) :-
+    initCountryCards(CountryCards, Cards, NewCards1),
+    Count1 is Count - 1,
+    initCountriesCards(LCountriesCards, NewCards1, NewCards, Count1).
+
+% Tire une carte au hasard dans une liste
+%   Cards : cartes disponibles (IN)
+%   CardPicked : carte tirée (OUT)
+%   NewCards : cartes restantes (OUT)
+pickCard(Cards, CardPicked, NewCards) :-
+    tirerCartes(Cards, 1, [CardPicked|_], NewCards).
+
+% Game state : [CurrentCountry, PlayersPositions, CountriesCards, Cards]
+gameLoop([CurrentCountry, PlayersPositions, CountriesCards, Cards], StateOut) :-
+    countryIndex(CurrentCountry, ICurrentCountry),
+    findCountry(CurrentCountry, Players, PlayersPositions), % Sélectionne les joueurs du CurrentCountry
     (findLatestPlayer(Players, LatestPlayerI, PlayersPositions) ->nth1(LatestPlayerI, Players, [Px, Py]),
     movePlayer([Px, Py], LatestPlayerI, CurrentCountry, 1, PlayersPositions, NewPlayersPositions)
     ; NewPlayersPositions = PlayersPositions ),
     nextCountry(CurrentCountry, NextCountry),
     writeln(NewPlayersPositions),
-    gameLoop([NextCountry, NewPlayersPositions, CountryCards, Cards], StateOut).
+    gameLoop([NextCountry, NewPlayersPositions, CountriesCards, Cards], StateOut).
 
-testGame(S) :-
-    emptyPlayersPositions(B),
-    countryIndex(C,1),
-    gameLoop([C, B, [], []], S).
+testGame(StateOut) :-
+    initGame(State),
+    gameLoop(State, StateOut).
+
+
+gameOver(PlayersPositions, Cards) :- gameOverCards(Cards).
+gameOver(PlayersPositions, Cards) :- gameOverPlayer(PlayersPositions).
+
+gameOverCards([]).
+
+% return true if all players are in [1000,0]
+gameOverPlayer([]).
+
+gameOverPlayer([Country|PlayersPositions]) :-
+    caseFin(EndCase),
+    maplist(=([EndCase,_]), Country),
+    gameOver(PlayersPositions).
