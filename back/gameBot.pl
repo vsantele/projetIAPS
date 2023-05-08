@@ -145,3 +145,8 @@ gameLoop([CurrentCountry, PlayersPositions, CountryCards, Cards], StateOut) :-
     nextCountry(CurrentCountry, NextCountry),
     writeln(NewPlayersPositions),
     gameLoop([NextCountry, NewPlayersPositions, CountryCards, Cards], StateOut).
+
+testGame(S) :-
+    emptyPlayersPositions(B),
+    countryIndex(C,1),
+    gameLoop([C, B, [], []], S).
