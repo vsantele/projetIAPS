@@ -1,0 +1,60 @@
+name: Trigger auto deployment for projetiaps-0523-ca
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ feat/deploy ]
+    paths:
+    - '**'
+    - '.github/workflows/projetiaps-0523-ca-AutoDeployTrigger-0a72c10d-0dca-4b13-a5b0-99b521401dee.yml'
+
+  # Allow mannually trigger 
+  workflow_dispatch:      
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to container registry
+        uses: docker/login-action@v1
+        with:
+          registry: vsantele.azurecr.io
+          username: ${{ secrets.PROJETIAPS0523CA_REGISTRY_USERNAME }}
+          password: ${{ secrets.PROJETIAPS0523CA_REGISTRY_PASSWORD }}
+
+      - name: Build and push container image to registry
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: vsantele.azurecr.io/projetiaps-0523-ca:${{ github.sha }}
+          file: ./Dockerfile
+          context: ./
+
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.PROJETIAPS0523CA_AZURE_CREDENTIALS }}
+
+
+      - name: Deploy to containerapp
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az config set extension.use_dynamic_install=yes_without_prompt
+            az containerapp registry set -n projetiaps-0523-ca -g projetIAPS-0523-rg --server vsantele.azurecr.io --username  ${{ secrets.PROJETIAPS0523CA_REGISTRY_USERNAME }} --password ${{ secrets.PROJETIAPS0523CA_REGISTRY_PASSWORD }}
+            az containerapp update -n projetiaps-0523-ca -g projetIAPS-0523-rg --image vsantele.azurecr.io/projetiaps-0523-ca:${{ github.sha }}
