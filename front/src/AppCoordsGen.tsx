@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import { Box, Container, Grid } from '@mui/material'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
 import './App.css'
@@ -9,8 +9,8 @@ import { useEffect, useState } from 'react'
 import { MessageAuthor } from './models/MessageAuthor'
 import Chat from './components/Chat'
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
-import MapPosition from "./models/MapPosition";
-import Board from "./board.json";
+import MapPosition from './models/MapPosition'
+import Board from './board.json'
 
 enum Team {
   ITALY,
@@ -76,7 +76,9 @@ function AppCoordsGen() {
   const [instructions, setInstruction] = useState<ChatMessage[]>(defaultInstructions)
 
   const [positions, setPositions] = useState<MapPosition[]>(Board ?? [])
-  const [clickCount, setClickCount] = useState<number>(Board == null ? 0 : Object.keys(Board).length + 1)
+  const [clickCount, setClickCount] = useState<number>(
+    Board == null ? 0 : Object.keys(Board).length + 1
+  )
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'en cours de connexion ...',
@@ -119,67 +121,66 @@ function AppCoordsGen() {
   }, [lastMessage])
 
   const board = [
-    ["d", 8, 3],
-    ["s", 2],
-    ["d", 8, 2],
-    ["d", 4, 3],
-    ["d", 3, 4],
-    ["s", 2],
-    ["d", 8, 4],
-    ["d", 27, 2],
-    ["s", 2],
-    ["d", 8, 2],
-    ["d", 3, 1],
-    ["d", 8, 2],
-    ["d", 5, 3],
-    ["s", 2],
-    ["d", 4, 3],
-    ["d", 1, 3],
+    ['d', 8, 3],
+    ['s', 2],
+    ['d', 8, 2],
+    ['d', 4, 3],
+    ['d', 3, 4],
+    ['s', 2],
+    ['d', 8, 4],
+    ['d', 27, 2],
+    ['s', 2],
+    ['d', 8, 2],
+    ['d', 3, 1],
+    ['d', 8, 2],
+    ['d', 5, 3],
+    ['s', 2],
+    ['d', 4, 3],
+    ['d', 1, 3],
   ]
 
-  function getCaseFromIClick(iClick: number){
-    let zValue = 1;
-    let ceQuonADejaAvance = 1;
+  function getCaseFromIClick(iClick: number) {
+    let zValue = 1
+    let ceQuonADejaAvance = 1
 
     for (let i = 0; i < board.length; i++) {
-      const boardRule = board[i];
+      const boardRule = board[i]
 
-      if(boardRule[i] === "s"){
-        zValue += boardRule[1] * 10;
-        ceQuonADejaAvance += boardRule[1];
-      }else{
+      if (boardRule[i] === 's') {
+        zValue += boardRule[1] * 10
+        ceQuonADejaAvance += boardRule[1]
+      } else {
         for (let z = 0; z < boardRule[1]; z++) {
           for (let x = 0; x <= boardRule[2]; x++) {
-
-            if(iClick == ceQuonADejaAvance){
-              return [zValue * 10, x];
+            if (iClick == ceQuonADejaAvance) {
+              return [zValue * 10, x]
             }
 
-            ceQuonADejaAvance ++;
+            ceQuonADejaAvance++
           }
 
-          zValue++;
+          zValue++
         }
       }
     }
   }
 
-  const onClickImage = (event) => {
-    const elem = document.getElementById("map-area");//outer starts at your elem then walks out
-    const bounding = elem.getBoundingClientRect();
-    const playerImageSize = 10;
+  const onClickImage = event => {
+    const elem = document.getElementById('map-area') //outer starts at your elem then walks out
+    const bounding = elem.getBoundingClientRect()
+    const playerImageSize = 10
 
-    const xRatio = (((event.clientX - (playerImageSize / 2)) - bounding.left) / bounding.width) * 100;
-    const yRatio = (((event.clientY - (playerImageSize / 2)) - bounding.top) / bounding.height) * 100;
+    const xRatio = ((event.clientX - playerImageSize / 2 - bounding.left) / bounding.width) * 100
+    const yRatio = ((event.clientY - playerImageSize / 2 - bounding.top) / bounding.height) * 100
 
-    console.log(xRatio + "%, " + yRatio + "%")
+    console.log(xRatio + '%, ' + yRatio + '%')
 
     const caseFromClick = getCaseFromIClick(clickCount)
     const newPosition = {
-      mapXRatio : xRatio,
+      mapXRatio: xRatio,
       mapYRatio: yRatio,
       playerXPosition: caseFromClick[0],
-      playerZPosition: caseFromClick[1]
+      playerZPosition: caseFromClick[1],
     }
 
     setPositions([...positions, newPosition])
@@ -204,11 +205,23 @@ function AppCoordsGen() {
           <div id="map-area" onClick={onClickImage}>
             <img src={mapImage} id="map-image" alt="Plateau de jeu tour de france" />
 
-            {
-              positions.map((position, i) => {
-                return <div key={i} className="player" style={{left: position.mapXRatio + "%", top: position.mapYRatio + "%"}}/>
+            {teamsPositions.map((team, iTeam) =>
+              team.map((player, iPlayer) => {
+                const position = positions.find(
+                  p => p.playerForward === player[0] && p.playerLateral === player[1]
+                )
+                if (position) {
+                  return (
+                    <div
+                      key={player.join(',')}
+                      className="player"
+                      style={{ left: position.mapXRatio + '%', top: position.mapYRatio + '%' }}>
+                      {iTeam + 1},{iPlayer + 1}
+                    </div>
+                  )
+                }
               })
-            }
+            )}
           </div>
         </Grid>
         <Grid item xs={12} md={6} xl={4}>

@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 import { MessageAuthor } from './models/MessageAuthor'
 import Chat from './components/Chat'
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
+import positions from './board.json'
 
 enum Team {
   ITALY,
@@ -21,6 +22,29 @@ const teams = [
   { id: Team.NETHERLANDS, name: 'Pays-Bas', cards: [5, 7, 10, 11, 12] },
   { id: Team.BELGIUM, name: 'Belgique', cards: [3, 5, 7, 9, 12] },
   { id: Team.GERMANY, name: 'Allemange', cards: [1, 6, 7, 8, 10] },
+]
+
+const emptyTeamsPositions = [
+  [
+    [0, 0],
+    [0, 0],
+    [0, 0],
+  ],
+  [
+    [0, 0],
+    [0, 0],
+    [0, 0],
+  ],
+  [
+    [0, 0],
+    [0, 0],
+    [0, 0],
+  ],
+  [
+    [0, 0],
+    [0, 0],
+    [0, 0],
+  ],
 ]
 
 const teamsGridColumns: GridColDef[] = [
@@ -45,6 +69,7 @@ function getAsciiValues(text: string) {
 }
 
 function App() {
+  const [teamsPositions, setTeamsPositions] = useState(emptyTeamsPositions)
   const { sendMessage, lastMessage, readyState } = useWebSocket(
     (import.meta.env.VITE_API_HOST ?? '') + '/bot',
     {
@@ -138,7 +163,26 @@ function App() {
           </small>
         </Grid>
         <Grid item xs={12} md={6} xl={8} textAlign="center">
-          <img src={mapImage} id="map-image" alt="Plateau de jeu tour de france" />
+          <div id="map-area">
+            <img src={mapImage} id="map-image" alt="Plateau de jeu tour de france" />
+            {teamsPositions.map((team, iTeam) =>
+              team.map((player, iPlayer) => {
+                const position = positions.find(
+                  p => p.playerForward === player[0] && p.playerLateral === player[1]
+                )
+                if (position) {
+                  return (
+                    <div
+                      key={player.join(',')}
+                      className="player"
+                      style={{ left: position.mapXRatio + '%', top: position.mapYRatio + '%' }}>
+                      {iTeam + 1},{iPlayer + 1}
+                    </div>
+                  )
+                }
+              })
+            )}
+          </div>
         </Grid>
         <Grid item xs={12} md={6} xl={4}>
           <Chat

@@ -4,6 +4,6 @@ export default interface MapPosition {
   mapYRatio: number,
 
   // Back-end
-  playerXPosition: number, // number of map column
-  playerZPosition: number, // number map row
+  playerForward: number, // number of map column
+  playerLateral: number, // number map row
 }
