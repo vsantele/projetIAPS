@@ -95,7 +95,7 @@ latestPlayer(Player1I,[P1x, P1y], Player1I,[P1x, P1y], _Player2I, [_P2x,_P2y], _
 
 % Sur base de coordonnées, vérifie s'il peut avancer sans risque.
 % TODO: Peut-être vérifier en cas de dépassement?
-canMove([Px, Py],[Tx,Ty], Board) :-
+canMove([Px, Py],[Tx,Ty], _Board) :-
     chemin(Px, Py, Tx, Ty),
     caseFin(Tx).
 canMove([Px, Py],[Tx,Ty], Board) :-
@@ -141,7 +141,6 @@ replace(Elem, IElem, List, NewList) :-
     nth1(IElem, NewList, Elem, Temp). % "Génére" un tableau NewList de (Temp elements + 1) éléments où Elem sera à la position IElem
 
 gameLoop(Board,Country, BoardOut) :-
-    countryIndex(Country, ICountry),
     findCountry(Country, Players, Board),
     (findLatestPlayer(Players, LatestPlayerI, Board) ->nth1(LatestPlayerI, Players, [Px, Py]),
     movePlayer([Px, Py], LatestPlayerI, Country, 1, Board, NewBoard)
