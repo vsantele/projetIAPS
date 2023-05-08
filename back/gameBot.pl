@@ -76,7 +76,8 @@ findLatestPlayer(Players, LatestPlayerI, Board) :-
     nth1(LatestPlayerI, Players, LPlayer).
 
 latestPlayer([HPlayer|LPlayers], LPlayer, Board) :-
-    latestPlayer(LPlayers, HPlayer, LPlayer, Board).
+    canMove(HPlayer,_Dest, Board) -> latestPlayer(LPlayers, HPlayer, LPlayer, Board)
+    ; latestPlayer(LPlayers, LPlayer, Board).
 
 % https://stackoverflow.com/a/19810489/10171758
 latestPlayer([], Player,Player,_Board).
@@ -96,7 +97,11 @@ latestPlayer(Player1I,[P1x, P1y], Player1I,[P1x, P1y], _Player2I, [_P2x,_P2y], _
 % TODO: Peut-être vérifier en cas de dépassement?
 canMove([Px, Py],[Tx,Ty], Board) :-
     chemin(Px, Py, Tx, Ty),
+    caseFin(Tx).
+canMove([Px, Py],[Tx,Ty], Board) :-
+    chemin(Px, Py, Tx, Ty),
     not(hasPlayer([Tx, Ty], Board)).
+
 
 % Vérifie s'il y a un joueur sur les coordonnées entrées.
 hasPlayer([Px, Py], [Country|LCountry]) :-
@@ -142,5 +147,8 @@ gameLoop(Board,Country, BoardOut) :-
     movePlayer([Px, Py], LatestPlayerI, Country, 1, Board, NewBoard)
     ; NewBoard = Board ),
     nextCountry(Country, NextCountry),
+    write(Country),
+    write(":"),
+    writeln(LatestPlayerI),
     writeln(NewBoard),
     gameLoop(NewBoard, NextCountry, BoardOut).

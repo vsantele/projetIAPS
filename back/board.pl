@@ -1,4 +1,4 @@
-:- module(board, [chemin/4,voisin/4, caseChance/1 ]).
+:- module(board, [chemin/4,voisin/4, caseChance/1, caseFin/1 ]).
 % chemin(X1, Y1, X2, Y2) où X est le numéro de la case * 10 + (A=1,B=2,C=3) et Y la position par rapport à la case numéro. Exemple: 10, 1, 20, 1 signifie que la case 1 à la position 1 est reliée à la case 2 position 2.
 
 :- discontiguous chemin/4, voisin/4.
