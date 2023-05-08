@@ -120,11 +120,11 @@ function App() {
   }
 
   const cleanMessageCharacters = (message: string) => {
-    message = message.replace(/á|à|â|ä/g, 'a')
-    message = message.replace(/é|è|ê|ë/g, 'e')
-    message = message.replace(/í|ì|î|ï/g, 'i')
-    message = message.replace(/ó|ò|ô|ö/g, 'o')
-    message = message.replace(/ú|ù|û|ü/g, 'u')
+    message = message.replace(/[áàâä]/g, 'a')
+    message = message.replace(/[éèêë]/g, 'e')
+    message = message.replace(/[íìîï]/g, 'i')
+    message = message.replace(/[óòôö]/g, 'o')
+    message = message.replace(/[úùûü]/g, 'u')
     message = message.replace(/'|-|_/g, ' ')
     message = message.replace(/ç/g, 'c')
     return message
