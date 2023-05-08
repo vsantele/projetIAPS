@@ -4,14 +4,13 @@ name: Trigger auto deployment for projetiaps-0523-ca
 on:
   # Automatically trigger it when detected changes in repo
   push:
-    branches: 
-      [ feat/deploy ]
+    branches: [feat/deploy]
     paths:
-    - '**'
-    - '.github/workflows/projetiaps-0523-ca-AutoDeployTrigger-0a72c10d-0dca-4b13-a5b0-99b521401dee.yml'
+      - "back/**"
+      - ".github/workflows/projetiaps-0523-ca-AutoDeployTrigger-0a72c10d-0dca-4b13-a5b0-99b521401dee.yml"
 
-  # Allow mannually trigger 
-  workflow_dispatch:      
+  # Allow mannually trigger
+  workflow_dispatch:
 
 jobs:
   build:
@@ -39,17 +38,15 @@ jobs:
           file: ./Dockerfile
           context: ./
 
-
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    
+
     steps:
       - name: Azure Login
         uses: azure/login@v1
         with:
           creds: ${{ secrets.PROJETIAPS0523CA_AZURE_CREDENTIALS }}
-
 
       - name: Deploy to containerapp
         uses: azure/CLI@v1

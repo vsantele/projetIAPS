@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - feat/deploy
+    paths:
+      - front/**
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
@@ -43,3 +45,6 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GENTLE_SAND_0514B5D03 }}
           action: "close"
+          app_location: "/front"
+          output_location: "../dist"
+          app_build_command: npm run build
