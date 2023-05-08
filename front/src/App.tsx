@@ -115,18 +115,64 @@ function App() {
       ...messages,
       { message, author: MessageAuthor.USER, timestamp: new Date() },
     ])
-    message = cleanMessageCharacters(message)
+    message = convertCharactersIntoRegular(message)
+    message = convertPluralIntoSingular(message)
     sendMessage(JSON.stringify({ message: getAsciiValues(message.toLowerCase()) }))
   }
 
-  const cleanMessageCharacters = (message: string) => {
-    message = message.replace(/[áàâä]/g, 'a')
-    message = message.replace(/[éèêë]/g, 'e')
-    message = message.replace(/[íìîï]/g, 'i')
-    message = message.replace(/[óòôö]/g, 'o')
-    message = message.replace(/[úùûü]/g, 'u')
-    message = message.replace(/'|-|_/g, ' ')
-    message = message.replace(/ç/g, 'c')
+  const convertCharactersIntoRegular = (message: string) => {
+    const letters = [
+      [/á|à|â|ä/g, 'a'],
+      [/é|è|ê|ë/g, 'e'],
+      [/í|ì|î|ï/g, 'i'],
+      [/ó|ò|ô|ö/g, 'o'],
+      [/ú|ù|û|ü/g, 'u'],
+      [/'|-|_/g, ' '],
+      [/ç/g, 'c']
+    ]
+
+    for (let i = 0; i < letters.length; i++) {
+      message = message.replace(letters[i][0], letters[i][1] as string)
+    }
+
+    return message
+  }
+
+  const convertPluralIntoSingular = (message: string) => {
+    const words = [
+      [' fleches', ' fleche'],
+      [' rouges', ' rouge'],
+      [' bleues', ' bleue'],
+      [' jaunes', ' jaune'],
+      [' doubles', ' double'],
+      [' lettres', ' lettre'],
+      [' nombres', ' nombre'],
+      [' cases', ' case'],
+      [' cartes', ' carte'],
+      ['occupee', ' occupe'],
+      [' chances', ' chance'],
+      [' secondes', ' seconde'],
+      [' coureurs', ' coureur'],
+      ['equipes', ' equipe'],
+      ['equipe', ' equipe'],
+      ['etapes', ' etape'],
+      ['etape', ' etape'],
+      [' cases', ' case'],
+      [' prioritaires', ' prioritaire'],
+      [' points', ' point'],
+      ['accidente', ' accidente'],
+      ['accidentes', ' accidente'],
+      ['accidentees', ' accidente'],
+      [' desavantages', ' desavantage'],
+      [' avantages', ' avantage'],
+      ['  ', ' '],
+      ['   ', ' ']
+    ]
+
+    for (let i = 0; i < words.length; i++) {
+      message = message.replace(words[i][0], words[i][1])
+    }
+
     return message
   }
 
