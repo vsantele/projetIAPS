@@ -4,21 +4,59 @@ import './App.css'
 import mapImage from './assets/map.png'
 import BotResponse from './models/BotResponse'
 import ChatMessage from './models/ChatMessage'
-import {MouseEvent, useEffect, useState} from 'react'
+import { MouseEvent, useEffect, useState } from 'react'
 import { MessageAuthor } from './models/MessageAuthor'
 import Chat from './components/Chat'
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
 import positions from './board.json'
+import PrologState from './models/PrologState'
+import JsState from './models/JsState'
 
-const defaultState = {
-  currentCountry: "italie",
-  cards : {},
-  teams : [
-    { id: "italie", name: 'Italie', cards: [], playersPositions: [[0, 0], [0, 0], [0, 0]]},
-    { id: "hollande", name: 'Pays-Bas', cards: [], playersPositions: [[0, 0], [0, 0], [0, 0]]},
-    { id: "belgique", name: 'Belgique', cards: [], playersPositions: [[0, 0], [0, 0], [0, 0]]},
-    { id: "allemagne", name: 'Allemange', cards: [], playersPositions: [[0, 0], [0, 0], [0, 0]]},
-  ]
+const defaultState: JsState = {
+  currentCountry: 'italie',
+  cards: [],
+  teams: [
+    {
+      id: 'italie',
+      name: 'Italie',
+      cards: [],
+      playersPositions: [
+        [0, 0],
+        [0, 0],
+        [0, 0],
+      ],
+    },
+    {
+      id: 'hollande',
+      name: 'Pays-Bas',
+      cards: [],
+      playersPositions: [
+        [0, 0],
+        [0, 0],
+        [0, 0],
+      ],
+    },
+    {
+      id: 'belgique',
+      name: 'Belgique',
+      cards: [],
+      playersPositions: [
+        [0, 0],
+        [0, 0],
+        [0, 0],
+      ],
+    },
+    {
+      id: 'allemagne',
+      name: 'Allemange',
+      cards: [],
+      playersPositions: [
+        [0, 0],
+        [0, 0],
+        [0, 0],
+      ],
+    },
+  ],
 }
 
 const teamsGridColumns: GridColDef[] = [
@@ -68,7 +106,7 @@ const convertCharactersIntoRegular = (message: string) => {
     [/ó|ò|ô|ö/g, 'o'],
     [/ú|ù|û|ü/g, 'u'],
     [/'|-|_/g, ' '],
-    [/ç/g, 'c']
+    [/ç/g, 'c'],
   ]
 
   for (let i = 0; i < letters.length; i++) {
@@ -107,7 +145,7 @@ const convertPluralIntoSingular = (message: string) => {
     [' desavantages', ' desavantage'],
     [' avantages', ' avantage'],
     ['  ', ' '],
-    ['   ', ' ']
+    ['   ', ' '],
   ]
 
   for (let i = 0; i < words.length; i++) {
@@ -117,23 +155,28 @@ const convertPluralIntoSingular = (message: string) => {
   return message
 }
 
-function prologStateToJsState(prologState){
-  const jsState = {
+function prologStateToJsState(prologState: PrologState) {
+  const jsState: JsState = {
     currentCountry: prologState.country,
-    cards : prologState.cards,
-    teams : []
+    cards: prologState.cards,
+    teams: [],
   }
 
-  for (let i = 0; i < defaultState.teams.length; i++){
-    jsState.teams.push({id: defaultState.teams[i].id, name: defaultState.teams[i].name, cards: prologState.countriesCards[i], playersPositions: prologState.playersPositions[i]})
+  for (let i = 0; i < defaultState.teams.length; i++) {
+    jsState.teams.push({
+      id: defaultState.teams[i].id,
+      name: defaultState.teams[i].name,
+      cards: prologState.countriesCards[i],
+      playersPositions: prologState.playersPositions[i],
+    })
   }
 
-  return jsState;
+  return jsState
 }
 
-function jsStateToPrologState(jsState){
+function jsStateToPrologState(jsState: JsState) {
   return {
-    cards : jsState.cards,
+    cards: jsState.cards,
     countriesCard: jsState.teams.map(team => team.cards),
     country: jsState.currentCountry,
     playersPositions: jsState.teams.map(team => team.playersPositions),
@@ -202,11 +245,11 @@ function App() {
     const formData = new FormData(e.currentTarget)
     const pos = formData.get('pos') as string
     if (pos) {
-      const currentState = {...gameState}
+      const currentState = { ...gameState }
       const teamPos = JSON.parse(pos)
 
       for (let i = 0; i < teamPos.length; i++) {
-        currentState.teams[i].playersPositions = teamPos[i];
+        currentState.teams[i].playersPositions = teamPos[i]
       }
 
       setGameState(currentState)
@@ -214,37 +257,37 @@ function App() {
   }
 
   const onClickStartGameButton = async (event: MouseEvent<HTMLButtonElement>) => {
-    try{
+    try {
       const response = await fetch((import.meta.env.VITE_API_HOST ?? '') + '/init')
       const data = await response.json()
 
       setGameState(prologStateToJsState(data))
       setGameIsStarted(true)
-    }catch (e) {
+    } catch (e) {
       alert("Une erreur s'est produite lors de l'initialisation de la partie !\n" + e)
     }
   }
 
   const onClickNextStepButton = (event: MouseEvent<HTMLButtonElement>) => {
-    play(1);
+    play(1)
   }
 
   const play = async (selectedCard: number) => {
-    try{
-      const prologState = jsStateToPrologState(gameState);
+    try {
+      const prologState = jsStateToPrologState(gameState)
       console.log(prologState)
 
       const response = await fetch((import.meta.env.VITE_API_HOST ?? '') + '/play', {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify(prologState),
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       })
 
       const data = await response.json()
-      console.log("Play response : " + data)
-    }catch (e) {
+      console.log('Play response : ' + data)
+    } catch (e) {
       alert("Une erreur s'est produite lors de l'initialisation du tour !\n" + e)
     }
   }
@@ -261,8 +304,12 @@ function App() {
               <p>Serveur du bot introuvable</p>
             )}
           </small>
-          <button onClick={onClickStartGameButton} disabled={gameIsStarted}>Démarrer la partie</button>
-          <button onClick={onClickNextStepButton} disabled={!gameIsStarted}>Prochaine étape</button>
+          <button onClick={onClickStartGameButton} disabled={gameIsStarted}>
+            Démarrer la partie
+          </button>
+          <button onClick={onClickNextStepButton} disabled={!gameIsStarted}>
+            Prochaine étape
+          </button>
           <form onSubmit={updatePos}>
             <input name="pos" />
             <button>Envoyer</button>
