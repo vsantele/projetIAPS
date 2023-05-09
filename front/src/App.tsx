@@ -82,7 +82,7 @@ function App() {
   const defaultChatMessages: ChatMessage[] = [
     {
       message:
-        'Bonjour, je suis TBot, le bot du Tour de France et je suis la pour vous conseiller et répondre à toutes vos questions. En quoi puis-je vous être utile ?',
+        'Bonjour, je suis le bot du Tour, BDT, pour les intimes, conseiller sur le Tour de France. En quoi puis-je vous etre utile ?',
       author: MessageAuthor.BOT,
       timestamp: new Date(),
     },
@@ -150,7 +150,6 @@ function App() {
       [' cases', ' case'],
       [' cartes', ' carte'],
       ['occupee', ' occupe'],
-      ['occupe', ' occupe'],
       [' chances', ' chance'],
       [' secondes', ' seconde'],
       [' coureurs', ' coureur'],
@@ -161,9 +160,9 @@ function App() {
       [' cases', ' case'],
       [' prioritaires', ' prioritaire'],
       [' points', ' point'],
-      ['accidentees', ' accidente'],
-      ['accidentes', ' accidente'],
       ['accidente', ' accidente'],
+      ['accidentes', ' accidente'],
+      ['accidentees', ' accidente'],
       [' desavantages', ' desavantage'],
       [' avantages', ' avantage'],
       ['  ', ' '],
