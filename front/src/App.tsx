@@ -202,7 +202,10 @@ function App() {
 
     fetch((import.meta.env.VITE_API_HOST ?? '') + '/init').then(response => {
       console.log(response)
-    }).catch(error => alert("Une erreur s'est produite lors de l'initialisation de la partie !\n" + error))
+    }).catch(error => {
+      alert("Une erreur s'est produite lors de l'initialisation de la partie !\n" + error)
+      setGameIsStarted(false)
+    })
 
   }, [gameIsStarted])
 
@@ -222,7 +225,7 @@ function App() {
               <p>Serveur du bot introuvable</p>
             )}
           </small>
-          <button onClick={onClickStartGameButton}>Démarrer la partie</button>
+          <button onClick={onClickStartGameButton} disabled={gameIsStarted}>Démarrer la partie</button>
           <form onSubmit={updatePos}>
             <input name="pos" />
             <button>Envoyer</button>
