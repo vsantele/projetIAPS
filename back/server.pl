@@ -105,7 +105,8 @@ handle_play(Request) :-
   http_read_json_dict(Request, State),
   atom_string(Country,State.country),
   play([Country, State.playersPositions, State.countriesCards, State.cards], [NewCountry, NewPlayersPositions, NewCountriesCards, NewCards]),
-  reply_json_dict(_{country:NewCountry, playersPositions:NewPlayersPositions, countriesCards:NewCountriesCards, cards:NewCards}).
+  atom_string(NewCountry,NewCountry1),
+  reply_json_dict(_{country:NewCountry1, playersPositions:NewPlayersPositions, countriesCards:NewCountriesCards, cards:NewCards}).
 
 handle_init(Request) :-
   initGame([Country, PlayersPositions, CountriesCards, Cards ]),
