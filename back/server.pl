@@ -4,7 +4,7 @@
 %
 % Then navigate to http://localhost:3000 in your browser
 
-
+:- encoding(utf8).
 :- module(echo_server,
   [ start_server/0,
     stop_server/0
