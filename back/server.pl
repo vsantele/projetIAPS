@@ -16,7 +16,7 @@
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_files)).
 :- use_module(library(http/http_json)).
-:- use_module(library(http/http_log)).
+% :- use_module(library(http/http_log)).
 :- use_module(library(http/http_error)).
 :- use_module(library(http/websocket)).
 :- use_module(library(http/http_cors)).
