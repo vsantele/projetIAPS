@@ -4,47 +4,24 @@ import './App.css'
 import mapImage from './assets/map.png'
 import BotResponse from './models/BotResponse'
 import ChatMessage from './models/ChatMessage'
-import { useEffect, useState } from 'react'
+import {MouseEventHandler, useEffect, useState} from 'react'
 import { MessageAuthor } from './models/MessageAuthor'
 import Chat from './components/Chat'
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
 import positions from './board.json'
 
 enum Team {
-  ITALY,
-  NETHERLANDS,
-  BELGIUM,
-  GERMANY,
+  ITALY = "italie",
+  NETHERLANDS = "hollande",
+  BELGIUM = "belgique",
+  GERMANY = "allemagne",
 }
 
-const teams = [
-  { id: Team.ITALY, name: 'Italie', cards: [1, 2, 4, 8, 12] },
-  { id: Team.NETHERLANDS, name: 'Pays-Bas', cards: [5, 7, 10, 11, 12] },
-  { id: Team.BELGIUM, name: 'Belgique', cards: [3, 5, 7, 9, 12] },
-  { id: Team.GERMANY, name: 'Allemange', cards: [1, 6, 7, 8, 10] },
-]
-
-const emptyTeamsPositions = [
-  [
-    [0, 0],
-    [0, 0],
-    [0, 0],
-  ],
-  [
-    [0, 0],
-    [0, 0],
-    [0, 0],
-  ],
-  [
-    [0, 0],
-    [0, 0],
-    [0, 0],
-  ],
-  [
-    [0, 0],
-    [0, 0],
-    [0, 0],
-  ],
+const defaultTeams = [
+  { id: Team.ITALY, name: 'Italie', cards: [], playersPositions: [[0, 0], [0, 0], [0, 0]]},
+  { id: Team.NETHERLANDS, name: 'Pays-Bas', cards: [], playersPositions: [[0, 0], [0, 0], [0, 0]]},
+  { id: Team.BELGIUM, name: 'Belgique', cards: [], playersPositions: [[0, 0], [0, 0], [0, 0]]},
+  { id: Team.GERMANY, name: 'Allemange', cards: [], playersPositions: [[0, 0], [0, 0], [0, 0]]},
 ]
 
 const teamsGridColumns: GridColDef[] = [
@@ -68,32 +45,35 @@ function getAsciiValues(text: string) {
   return asciiCodes
 }
 
+// Discussion messages
+const defaultChatMessages: ChatMessage[] = [
+  {
+    message:
+      'Bonjour, je suis le bot du Tour, BDT, pour les intimes, conseiller sur le Tour de France. En quoi puis-je vous etre utile ?',
+    author: MessageAuthor.BOT,
+    timestamp: new Date(),
+  },
+]
+
+const defaultInstructions: ChatMessage[] = [
+  {
+    message: "A l'équipe Belgique 2-avance-5",
+    author: MessageAuthor.BOT,
+    timestamp: new Date(),
+  },
+]
+
 function App() {
-  const [teamsPositions, setTeamsPositions] = useState(emptyTeamsPositions)
+  const [teams, setTeams] = useState(defaultTeams)
   const { sendMessage, lastMessage, readyState } = useWebSocket(
-    (import.meta.env.VITE_API_HOST ?? '') + '/bot',
+    (import.meta.env.VITE_WEBSOCKET_HOST ?? '') + '/bot',
     {
       retryOnError: true,
       reconnectInterval: 1000,
     }
   )
 
-  // Discussion messages
-  const defaultChatMessages: ChatMessage[] = [
-    {
-      message:
-        'Bonjour, je suis le bot du Tour, BDT, pour les intimes, conseiller sur le Tour de France. En quoi puis-je vous etre utile ?',
-      author: MessageAuthor.BOT,
-      timestamp: new Date(),
-    },
-  ]
-  const defaultInstructions: ChatMessage[] = [
-    {
-      message: "A l'équipe Belgique 2-avance-5",
-      author: MessageAuthor.BOT,
-      timestamp: new Date(),
-    },
-  ]
+  const [gameIsStarted, setGameIsStarted] = useState<boolean>(false)
   const [botMessages, setBotMessages] = useState<ChatMessage[]>(defaultChatMessages)
   const [instructions, setInstruction] = useState<ChatMessage[]>(defaultInstructions)
 
@@ -150,6 +130,7 @@ function App() {
       [' cases', ' case'],
       [' cartes', ' carte'],
       ['occupee', ' occupe'],
+      ['occupe', ' occupe'],
       [' chances', ' chance'],
       [' secondes', ' seconde'],
       [' coureurs', ' coureur'],
@@ -160,9 +141,9 @@ function App() {
       [' cases', ' case'],
       [' prioritaires', ' prioritaire'],
       [' points', ' point'],
-      ['accidente', ' accidente'],
-      ['accidentes', ' accidente'],
       ['accidentees', ' accidente'],
+      ['accidentes', ' accidente'],
+      ['accidente', ' accidente'],
       [' desavantages', ' desavantage'],
       [' avantages', ' avantage'],
       ['  ', ' '],
@@ -200,8 +181,33 @@ function App() {
     const formData = new FormData(e.currentTarget)
     const pos = formData.get('pos') as string
     if (pos) {
-      setTeamsPositions(JSON.parse(pos))
+      const currentTeams = [...teams]
+      const teamPos = JSON.parse(pos)
+
+      for (let i = 0; i < teamPos.length; i++) {
+        currentTeams[i].playersPositions = teamPos[i];
+      }
+
+      setTeams(currentTeams)
     }
+  }
+
+  useEffect(() => {
+    console.log("Set gameIsStarted : " + gameIsStarted)
+
+    if(!gameIsStarted){
+      setTeams(defaultTeams)
+      return;
+    }
+
+    fetch((import.meta.env.VITE_API_HOST ?? '') + '/init').then(response => {
+      console.log(response)
+    }).catch(error => alert("Une erreur s'est produite lors de l'initialisation de la partie !\n" + error))
+
+  }, [gameIsStarted])
+
+  const onClickStartGameButton = (event: MouseEventHandler) => {
+    setGameIsStarted(true);
   }
 
   return (
@@ -216,6 +222,7 @@ function App() {
               <p>Serveur du bot introuvable</p>
             )}
           </small>
+          <button onClick={onClickStartGameButton}>Démarrer la partie</button>
           <form onSubmit={updatePos}>
             <input name="pos" />
             <button>Envoyer</button>
@@ -224,8 +231,8 @@ function App() {
         <Grid item xs={12} md={6} xl={8} textAlign="center">
           <div id="map-area">
             <img src={mapImage} id="map-image" alt="Plateau de jeu tour de france" />
-            {teamsPositions.map((team, iTeam) =>
-              team.map((player, iPlayer) => {
+            {teams.map((team, iTeam) =>
+              team.playersPositions.map((player, iPlayer) => {
                 const position = positions.find(
                   p => p.playerForward === player[0] && p.playerLateral === player[1]
                 )
