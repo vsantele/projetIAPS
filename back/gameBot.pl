@@ -115,7 +115,6 @@ move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], PlayersPositions) :-
     move([Tx,Ty], NbSecondes1, SecondesRestantes,[Fx, Fy], PlayersPositions).
 move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], PlayersPositions) :-
     NbSecondes < 0,
-    write("neg: "), writeln(NbSecondes),
     canMove([Tx, Ty], [Px, Py],  PlayersPositions),
     NbSecondes1 is NbSecondes + 1,
     move([Tx,Ty], NbSecondes1, SecondesRestantes,[Fx, Fy], PlayersPositions).
@@ -124,7 +123,7 @@ move([Px,Py], NbSecondes, NbSecondes,[Px,Py], PlayersPositions) :- not(canMove([
 
 movePlayer([Px, Py], IPlayer,Country, NbSecondes, PlayersPositions, NewPlayersPositions) :-
     move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], PlayersPositions),
-    (caseChance([Fx,Fy]) -> valeurCarteChance(Val), move([Fx,Fy], Val, _, [Tx, Ty], PlayersPositions), write("chance "), writeln(Val)
+    (caseChance([Fx,Fy]) -> valeurCarteChance(Val), move([Fx,Fy], Val, _, [Tx, Ty], PlayersPositions)
     ; move([Fx,Fy], 0, 0, [Tx, Ty], PlayersPositions)),
     findCountry(Country, Players, PlayersPositions),
     replace([Tx, Ty], IPlayer, Players, NewPlayers),
@@ -201,13 +200,11 @@ play([CurrentCountry, PlayersPositions, CountriesCards, Cards], [NextCountry, Ne
     pickCard(CountryCards1, Card, NewCountryCards),
     replace(NewCountryCards, ICurrentCountry, CountriesCards, NewCountriesCards), % replaceNewCountryCards à l'index ICurrentCountry dans la liste CountriesCards par la valeur NewPlayersPositions
     movePlayer([Px, Py], LatestPlayerI, CurrentCountry, 1, PlayersPositions, NewPlayersPositions),
-    nextCountry(CurrentCountry, NextCountry),
-    writeln(NewPlayersPositions).
+    nextCountry(CurrentCountry, NextCountry).
 
 % Aucun joueur ne peut jouer dans le CurrentCountry, on passe donc au NextCountry
 play([CurrentCountry, PlayersPositions, CountriesCards, Cards], [NextCountry, PlayersPositions, CountriesCards, Cards]) :-
-    nextCountry(CurrentCountry, NextCountry),
-    writeln(NewPlayersPositions).
+    nextCountry(CurrentCountry, NextCountry).
 
 
 
