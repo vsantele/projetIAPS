@@ -31,7 +31,7 @@
 /*                      !!!    A MODIFIER   !!!                          */
 
 produire_reponse([fin],[L1]) :-
-    L1 = [merci, de, m, '\'', avoir, consulte], !.
+    L1 = ['Merci', de, 'm\'avoir', 'consulté'], !.
 
 produire_reponse(L,Rep) :-
     % write(L),
@@ -48,10 +48,10 @@ produire_reponse(_,[L1]) :-
     L1 = Choix.
 
 /* Réponses en cas d'échecs */
-reponseEchec([je, le ,ne, sais, pas]).
-reponseEchec([les, etudiants, vont, 'm\'aider']).
-reponseEchec([je, ne, suis, encore, qu,un, prototype]).
-reponseEchec(['vous le verrez']).
+reponseEchec(['Je', ne, sais, 'pas.']).
+reponseEchec(['Les', 'étudiants', vont, 'm\'aider.']).
+reponseEchec(['Je', ne, suis, encore, 'qu\'un', 'prototype.']).
+reponseEchec(['Vous le verrez.']).
 
 match_pattern(Pattern,Lmots) :- sublist(Pattern, Lmots).
 

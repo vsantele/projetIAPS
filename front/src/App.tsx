@@ -82,7 +82,7 @@ function App() {
   const defaultChatMessages: ChatMessage[] = [
     {
       message:
-        'Bonjour, je suis le bot du Tour, BDT, pour les intimes, conseiller sur le Tour de France. En quoi puis-je vous etre utile ?',
+        'Bonjour, je suis TBot, le bot du Tour de France et je suis la pour vous conseiller et répondre à toutes vos questions. En quoi puis-je vous être utile ?',
       author: MessageAuthor.BOT,
       timestamp: new Date(),
     },
