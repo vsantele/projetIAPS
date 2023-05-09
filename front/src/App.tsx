@@ -65,8 +65,14 @@ const teamsGridColumns: GridColDef[] = [
     headerName: 'Cartes',
     field: 'cards',
     resizable: false,
-    flex: 3,
+    flex: 2,
     renderCell: (params: GridRenderCellParams<number[]>) => <p>{params.value.join(' - ')}</p>,
+  },
+  {
+    headerName: 'Positions',
+    field: 'playersPositions',
+    flex: 3,
+    renderCell: (params: GridRenderCellParams<number[]>) => <p>{params.value.join(' | ')}</p>,
   },
 ]
 
