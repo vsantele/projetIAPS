@@ -76,7 +76,7 @@ function App() {
   const [gameIsStarted, setGameIsStarted] = useState<boolean>(false)
   const [botMessages, setBotMessages] = useState<ChatMessage[]>(defaultChatMessages)
   const [instructions, setInstruction] = useState<ChatMessage[]>(defaultInstructions)
-  const [cards, setCards] = useState<number>([])
+  const [cards, setCards] = useState<number[]>([])
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'en cours de connexion ...',
