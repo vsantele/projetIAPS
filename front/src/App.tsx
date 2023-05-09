@@ -10,19 +10,16 @@ import Chat from './components/Chat'
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
 import positions from './board.json'
 
-enum Team {
-  ITALY = "italie",
-  NETHERLANDS = "hollande",
-  BELGIUM = "belgique",
-  GERMANY = "allemagne",
+const defaultState = {
+  currentCountry: "italie",
+  cards : {},
+  teams : [
+    { id: "italie", name: 'Italie', cards: [], playersPositions: [[0, 0], [0, 0], [0, 0]]},
+    { id: "hollande", name: 'Pays-Bas', cards: [], playersPositions: [[0, 0], [0, 0], [0, 0]]},
+    { id: "belgique", name: 'Belgique', cards: [], playersPositions: [[0, 0], [0, 0], [0, 0]]},
+    { id: "allemagne", name: 'Allemange', cards: [], playersPositions: [[0, 0], [0, 0], [0, 0]]},
+  ]
 }
-
-const defaultTeams = [
-  { id: Team.ITALY, name: 'Italie', cards: [], playersPositions: [[0, 0], [0, 0], [0, 0]]},
-  { id: Team.NETHERLANDS, name: 'Pays-Bas', cards: [], playersPositions: [[0, 0], [0, 0], [0, 0]]},
-  { id: Team.BELGIUM, name: 'Belgique', cards: [], playersPositions: [[0, 0], [0, 0], [0, 0]]},
-  { id: Team.GERMANY, name: 'Allemange', cards: [], playersPositions: [[0, 0], [0, 0], [0, 0]]},
-]
 
 const teamsGridColumns: GridColDef[] = [
   { headerName: 'Équipe', field: 'name', resizable: false, flex: 1 },
@@ -63,8 +60,87 @@ const defaultInstructions: ChatMessage[] = [
   },
 ]
 
+const convertCharactersIntoRegular = (message: string) => {
+  const letters = [
+    [/á|à|â|ä/g, 'a'],
+    [/é|è|ê|ë/g, 'e'],
+    [/í|ì|î|ï/g, 'i'],
+    [/ó|ò|ô|ö/g, 'o'],
+    [/ú|ù|û|ü/g, 'u'],
+    [/'|-|_/g, ' '],
+    [/ç/g, 'c']
+  ]
+
+  for (let i = 0; i < letters.length; i++) {
+    message = message.replace(letters[i][0], letters[i][1] as string)
+  }
+
+  return message
+}
+
+const convertPluralIntoSingular = (message: string) => {
+  const words = [
+    [' fleches', ' fleche'],
+    [' rouges', ' rouge'],
+    [' bleues', ' bleue'],
+    [' jaunes', ' jaune'],
+    [' doubles', ' double'],
+    [' lettres', ' lettre'],
+    [' nombres', ' nombre'],
+    [' cases', ' case'],
+    [' cartes', ' carte'],
+    ['occupee', ' occupe'],
+    ['occupe', ' occupe'],
+    [' chances', ' chance'],
+    [' secondes', ' seconde'],
+    [' coureurs', ' coureur'],
+    ['equipes', ' equipe'],
+    ['equipe', ' equipe'],
+    ['etapes', ' etape'],
+    ['etape', ' etape'],
+    [' cases', ' case'],
+    [' prioritaires', ' prioritaire'],
+    [' points', ' point'],
+    ['accidentees', ' accidente'],
+    ['accidentes', ' accidente'],
+    ['accidente', ' accidente'],
+    [' desavantages', ' desavantage'],
+    [' avantages', ' avantage'],
+    ['  ', ' '],
+    ['   ', ' ']
+  ]
+
+  for (let i = 0; i < words.length; i++) {
+    message = message.replace(words[i][0], words[i][1])
+  }
+
+  return message
+}
+
+function prologStateToJsState(prologState){
+  const jsState = {
+    currentCountry: prologState.country,
+    cards : prologState.cards,
+    teams : []
+  }
+
+  for (let i = 0; i < defaultState.teams.length; i++){
+    jsState.teams.push({id: defaultState.teams[i].id, name: defaultState.teams[i].name, cards: prologState.countriesCards[i], playersPositions: prologState.playersPositions[i]})
+  }
+
+  return jsState;
+}
+
+function jsStateToPrologState(jsState){
+  return {
+    cards : jsState.cards,
+    countriesCard: jsState.teams.map(team => team.cards),
+    country: jsState.currentCountry,
+    playersPositions: jsState.teams.map(team => team.playersPositions),
+  }
+}
+
 function App() {
-  const [teams, setTeams] = useState(defaultTeams)
   const { sendMessage, lastMessage, readyState } = useWebSocket(
     (import.meta.env.VITE_WEBSOCKET_HOST ?? '') + '/bot',
     {
@@ -73,10 +149,11 @@ function App() {
     }
   )
 
-  const [gameIsStarted, setGameIsStarted] = useState<boolean>(false)
   const [botMessages, setBotMessages] = useState<ChatMessage[]>(defaultChatMessages)
   const [instructions, setInstruction] = useState<ChatMessage[]>(defaultInstructions)
-  const [cards, setCards] = useState<number[]>([])
+
+  const [gameState, setGameState] = useState(defaultState)
+  const [gameIsStarted, setGameIsStarted] = useState<boolean>(false)
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'en cours de connexion ...',
@@ -99,63 +176,6 @@ function App() {
     message = convertCharactersIntoRegular(message)
     message = convertPluralIntoSingular(message)
     sendMessage(JSON.stringify({ message: getAsciiValues(message.toLowerCase()) }))
-  }
-
-  const convertCharactersIntoRegular = (message: string) => {
-    const letters = [
-      [/á|à|â|ä/g, 'a'],
-      [/é|è|ê|ë/g, 'e'],
-      [/í|ì|î|ï/g, 'i'],
-      [/ó|ò|ô|ö/g, 'o'],
-      [/ú|ù|û|ü/g, 'u'],
-      [/'|-|_/g, ' '],
-      [/ç/g, 'c']
-    ]
-
-    for (let i = 0; i < letters.length; i++) {
-      message = message.replace(letters[i][0], letters[i][1] as string)
-    }
-
-    return message
-  }
-
-  const convertPluralIntoSingular = (message: string) => {
-    const words = [
-      [' fleches', ' fleche'],
-      [' rouges', ' rouge'],
-      [' bleues', ' bleue'],
-      [' jaunes', ' jaune'],
-      [' doubles', ' double'],
-      [' lettres', ' lettre'],
-      [' nombres', ' nombre'],
-      [' cases', ' case'],
-      [' cartes', ' carte'],
-      ['occupee', ' occupe'],
-      ['occupe', ' occupe'],
-      [' chances', ' chance'],
-      [' secondes', ' seconde'],
-      [' coureurs', ' coureur'],
-      ['equipes', ' equipe'],
-      ['equipe', ' equipe'],
-      ['etapes', ' etape'],
-      ['etape', ' etape'],
-      [' cases', ' case'],
-      [' prioritaires', ' prioritaire'],
-      [' points', ' point'],
-      ['accidentees', ' accidente'],
-      ['accidentes', ' accidente'],
-      ['accidente', ' accidente'],
-      [' desavantages', ' desavantage'],
-      [' avantages', ' avantage'],
-      ['  ', ' '],
-      ['   ', ' ']
-    ]
-
-    for (let i = 0; i < words.length; i++) {
-      message = message.replace(words[i][0], words[i][1])
-    }
-
-    return message
   }
 
   const onSendGameBotMessage = (message: string) => {
@@ -182,14 +202,14 @@ function App() {
     const formData = new FormData(e.currentTarget)
     const pos = formData.get('pos') as string
     if (pos) {
-      const currentTeams = [...teams]
+      const currentState = {...gameState}
       const teamPos = JSON.parse(pos)
 
       for (let i = 0; i < teamPos.length; i++) {
-        currentTeams[i].playersPositions = teamPos[i];
+        currentState.teams[i].playersPositions = teamPos[i];
       }
 
-      setTeams(currentTeams)
+      setGameState(currentState)
     }
   }
 
@@ -198,18 +218,34 @@ function App() {
       const response = await fetch((import.meta.env.VITE_API_HOST ?? '') + '/init')
       const data = await response.json()
 
-      setCards(data.cards) // Set cards stack
-
-      const initGameTeams = []
-
-      for (let i = 0; i < teams.length; i++){
-        initGameTeams.push({id: teams[i].id, name: teams[i].name, cards: data.countriesCards[i], playersPositions: data.playersPositions[i]})
-      }
-
-      setTeams(initGameTeams)
+      setGameState(prologStateToJsState(data))
       setGameIsStarted(true)
     }catch (e) {
       alert("Une erreur s'est produite lors de l'initialisation de la partie !\n" + e)
+    }
+  }
+
+  const onClickNextStepButton = (event: MouseEvent<HTMLButtonElement>) => {
+    play(1);
+  }
+
+  const play = async (selectedCard: number) => {
+    try{
+      const prologState = jsStateToPrologState(gameState);
+      console.log(prologState)
+
+      const response = await fetch((import.meta.env.VITE_API_HOST ?? '') + '/play', {
+        method: "POST",
+        body: JSON.stringify(prologState),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+
+      const data = await response.json()
+      console.log("Play response : " + data)
+    }catch (e) {
+      alert("Une erreur s'est produite lors de l'initialisation du tour !\n" + e)
     }
   }
 
@@ -226,6 +262,7 @@ function App() {
             )}
           </small>
           <button onClick={onClickStartGameButton} disabled={gameIsStarted}>Démarrer la partie</button>
+          <button onClick={onClickNextStepButton} disabled={!gameIsStarted}>Prochaine étape</button>
           <form onSubmit={updatePos}>
             <input name="pos" />
             <button>Envoyer</button>
@@ -234,7 +271,7 @@ function App() {
         <Grid item xs={12} md={6} xl={8} textAlign="center">
           <div id="map-area">
             <img src={mapImage} id="map-image" alt="Plateau de jeu tour de france" />
-            {teams.map((team, iTeam) =>
+            {gameState.teams.map((team, iTeam) =>
               team.playersPositions.map((player, iPlayer) => {
                 const position = positions.find(
                   p => p.playerForward === player[0] && p.playerLateral === player[1]
@@ -268,7 +305,7 @@ function App() {
           <Box sx={{ height: '20rem' }}>
             <DataGrid
               columns={teamsGridColumns}
-              rows={teams}
+              rows={gameState.teams}
               rowSelection={false}
               disableRowSelectionOnClick
               hideFooter={true}
@@ -285,7 +322,7 @@ function App() {
             placeholder="Entrer une instruction de jeu"
             label="Instruction de jeu"
             messages={instructions}
-            submitDisabled
+            submitDisabled={!gameIsStarted}
           />
         </Grid>
       </Grid>
