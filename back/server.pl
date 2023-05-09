@@ -53,7 +53,7 @@
 
 :- http_handler(root(play),
                 handle_play,
-                [method(post)]).
+                []).
 :- http_handler(root(init),
                 handle_init,
                 []).
@@ -105,6 +105,13 @@ bot(WebSocket) :-
 ).
 
 %TODO: Need to fix response?
+handle_play(Request) :-
+      option(method(options), Request), !,
+      cors_enable(Request,
+                  [ methods([post])
+                  ]),
+      format('~n').
+
 handle_play(Request) :-
   http_read_json_dict(Request, State),
   atom_string(Country,State.country),
