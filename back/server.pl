@@ -19,8 +19,7 @@
 :- use_module(library(http/http_log)).
 :- use_module(library(http/http_error)).
 :- use_module(library(http/websocket)).
-:- use_module(library(http/cors)).
-:- setting(http:cors, list, ['*'], 'Defines the CORS settings for the server').
+:- use_module(library(http/http_cors)).
 
 :- include('bot.pl').
 :- include('gameBot.pl').
@@ -109,10 +108,12 @@ handle_play(Request) :-
   atom_string(Country,State.country),
   play([Country, State.playersPositions, State.countriesCards, State.cards], [NewCountry, NewPlayersPositions, NewCountriesCards, NewCards]),
   atom_string(NewCountry,NewCountry1),
+  cors_enable,
   reply_json_dict(_{country:NewCountry1, playersPositions:NewPlayersPositions, countriesCards:NewCountriesCards, cards:NewCards}).
 
 handle_init(Request) :-
   initGame([Country, PlayersPositions, CountriesCards, Cards ]),
+  cors_enable,
   reply_json_dict(_{country:Country, playersPositions:PlayersPositions, countriesCards:CountriesCards, cards:Cards}).
 
 
