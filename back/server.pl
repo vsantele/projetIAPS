@@ -21,6 +21,8 @@
 :- use_module(library(http/websocket)).
 :- use_module(library(http/http_cors)).
 
+:- set_setting(http:cors, [*]).
+
 :- include('bot.pl').
 :- include('gameBot.pl').
 
