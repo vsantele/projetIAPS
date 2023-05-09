@@ -196,8 +196,8 @@ play([CurrentCountry, PlayersPositions, CountriesCards, Cards], [NextCountry, Ne
     findLatestPlayer(Players, LatestPlayerI, PlayersPositions),
     nth1(LatestPlayerI, Players, [Px, Py]),
     findCountry(CurrentCountry, CountryCards, CountriesCards), % sélectionne les cartes du CurrentCountry
-    checkCountryCards(CountryCards, CountryCards1, Cards, NewCards), % Vérifie si il reste des cartes pour le CurrentCountry
-    pickCard(CountryCards1, Card, NewCountryCards),
+    pickCard(CountryCards, Card, CountryCards1),
+    checkCountryCards(CountryCards1, NewCountryCards, Cards, NewCards), % Vérifie si il reste des cartes pour le CurrentCountry
     replace(NewCountryCards, ICurrentCountry, CountriesCards, NewCountriesCards), % replaceNewCountryCards à l'index ICurrentCountry dans la liste CountriesCards par la valeur NewPlayersPositions
     movePlayer([Px, Py], LatestPlayerI, CurrentCountry, 1, PlayersPositions, NewPlayersPositions),
     nextCountry(CurrentCountry, NextCountry).
@@ -234,3 +234,4 @@ gameOverPlayer([Country|PlayersPositions]) :-
     caseFin(EndCase),
     maplist(=([EndCase,_]), Country),
     gameOver(PlayersPositions).
+
