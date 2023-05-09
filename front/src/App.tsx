@@ -155,7 +155,7 @@ const convertPluralIntoSingular = (message: string) => {
   return message
 }
 
-function prologStateToJsState(prologState: PrologState) {
+function prologStateToJsState(prologState: PrologState): JsState {
   const jsState: JsState = {
     currentCountry: prologState.country,
     cards: prologState.cards,
@@ -174,10 +174,10 @@ function prologStateToJsState(prologState: PrologState) {
   return jsState
 }
 
-function jsStateToPrologState(jsState: JsState) {
+function jsStateToPrologState(jsState: JsState): PrologState {
   return {
     cards: jsState.cards,
-    countriesCard: jsState.teams.map(team => team.cards),
+    countriesCards: jsState.teams.map(team => team.cards),
     country: jsState.currentCountry,
     playersPositions: jsState.teams.map(team => team.playersPositions),
   }
@@ -285,8 +285,8 @@ function App() {
         },
       })
 
-      const data = await response.json()
-      console.log('Play response : ' + data)
+      const data: PrologState = await response.json()
+      setGameState(prologStateToJsState(data))
     } catch (e) {
       alert("Une erreur s'est produite lors de l'initialisation du tour !\n" + e)
     }
