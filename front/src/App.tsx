@@ -4,7 +4,7 @@ import './App.css'
 import mapImage from './assets/map.png'
 import BotResponse from './models/BotResponse'
 import ChatMessage from './models/ChatMessage'
-import {MouseEventHandler, useEffect, useState} from 'react'
+import {MouseEvent, useEffect, useState} from 'react'
 import { MessageAuthor } from './models/MessageAuthor'
 import Chat from './components/Chat'
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
@@ -76,6 +76,7 @@ function App() {
   const [gameIsStarted, setGameIsStarted] = useState<boolean>(false)
   const [botMessages, setBotMessages] = useState<ChatMessage[]>(defaultChatMessages)
   const [instructions, setInstruction] = useState<ChatMessage[]>(defaultInstructions)
+  const [cards, setCards] = useState<number>([])
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'en cours de connexion ...',
@@ -192,25 +193,24 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    console.log("Set gameIsStarted : " + gameIsStarted)
+  const onClickStartGameButton = async (event: MouseEvent<HTMLButtonElement>) => {
+    try{
+      const response = await fetch((import.meta.env.VITE_API_HOST ?? '') + '/init')
+      const data = await response.json()
 
-    if(!gameIsStarted){
-      setTeams(defaultTeams)
-      return;
+      setCards(data.cards) // Set cards stack
+
+      const initGameTeams = []
+
+      for (let i = 0; i < teams.length; i++){
+        initGameTeams.push({id: teams[i].id, name: teams[i].name, cards: data.countriesCards[i], playersPositions: data.playersPositions[i]})
+      }
+
+      setTeams(initGameTeams)
+      setGameIsStarted(true)
+    }catch (e) {
+      alert("Une erreur s'est produite lors de l'initialisation de la partie !\n" + e)
     }
-
-    fetch((import.meta.env.VITE_API_HOST ?? '') + '/init').then(response => {
-      console.log(response)
-    }).catch(error => {
-      alert("Une erreur s'est produite lors de l'initialisation de la partie !\n" + error)
-      setGameIsStarted(false)
-    })
-
-  }, [gameIsStarted])
-
-  const onClickStartGameButton = (event: MouseEventHandler) => {
-    setGameIsStarted(true);
   }
 
   return (
