@@ -19,6 +19,9 @@
 :- use_module(library(http/http_log)).
 :- use_module(library(http/http_error)).
 :- use_module(library(http/websocket)).
+:- use_module(library(http/cors)).
+:- setting(http:cors, list, ['*'], 'Defines the CORS settings for the server').
+
 :- include('bot.pl').
 :- include('gameBot.pl').
 
