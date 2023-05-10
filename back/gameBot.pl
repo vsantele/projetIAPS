@@ -136,12 +136,21 @@ replace(Elem, IElem, List, NewList) :-
     nth1(IElem, List, _, Temp), % Enlève le IElem élément de List qui produit Temp
     nth1(IElem, NewList, Elem, Temp). % "Génére" un tableau NewList de (Temp elements + 1) éléments où Elem sera à la position IElem
 
+% Trouver le pays qui a la plus grande carte seconde
+biggestCard([], Country) :- countryIndex(Country, 1).
+biggestCard(List, Country) :-
+    flatten(List, FlatList), % transforme [[1, 2, 3], [4, 5, 6]] -> [1, 2, 3, 4, 5, 6]
+    max_list(FlatList, Max),
+    nth1(Index, List, SubList),
+    member(Max, SubList),
+    countryIndex(Country, Index), !.
+
 % Etat intial de la partie
-initGame([CurrentCountry, PlayersPositions, CountryCards, NewCards]) :-
+initGame([CurrentCountry, PlayersPositions, CountriesCards, NewCards]) :-
     emptyPlayersPositions(PlayersPositions),
-    countryIndex(CurrentCountry, 1),
     initCards(Cards),
-    initCountriesCards(CountryCards, Cards, NewCards).
+    initCountriesCards(CountriesCards, Cards, NewCards),
+    biggestCard(CountriesCards, CurrentCountry).
 
 % Tire 5 cartes
 %   Cards : cartes disponibles pour le tirage (IN)
