@@ -4,4 +4,5 @@ export default interface JsState {
   currentCountry: string;
   cards: number[];
   teams: TeamState[];
+  playedCard: number;
 }

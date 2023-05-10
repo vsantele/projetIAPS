@@ -187,8 +187,10 @@ checkCountryCards(CountryCards, CountryCards, Cards, Cards).
 %   Cards : cartes disponibles (IN)
 %   CardPicked : carte tirée (OUT)
 %   NewCards : cartes restantes (OUT)
-pickCard(Cards, CardPicked, NewCards) :-
+pickCard(Cards, 0, CardPicked, NewCards) :-
     tirerCartes(Cards, 1, [CardPicked|_], NewCards).
+pickCard(Cards, SelectedCard, SelectedCard, NewCards) :-
+    select(SelectedCard, Cards, NewCards).
 
 % Supprime une occurence dans List des éléments de [E|Es]
 % et renvoi la liste finale dans newList
@@ -212,28 +214,28 @@ fillCards(Cards, [CountryCards|CountriesCards], CardsStack) :-
     fillCards(CardsOut, CountriesCards, CardsStack), !.
 
 % La pile de cartes disponibles < nb_cartesSecondeTirer(X) (besoin de recréer une pile de cartes)
-play([CurrentCountry, PlayersPositions, CountriesCards, Cards], StateOut) :-
+play([CurrentCountry, PlayersPositions, CountriesCards, Cards, SelectedCard], StateOut) :-
     length(Cards, NbCards),
     nb_cartesSecondeTirer(NbCardsPick),
     NbCards < NbCardsPick,
     fillCards(CountriesCards, NewCards),
-    play([CurrentCountry, PlayersPositions, CountriesCards, NewCards], StateOut).
+    play([CurrentCountry, PlayersPositions, CountriesCards, NewCards, SelectedCard], StateOut).
 
-% Game state : [CurrentCountry, PlayersPositions, CountriesCards, Cards]
-play([CurrentCountry, PlayersPositions, CountriesCards, Cards], [NextCountry, NewPlayersPositions, NewCountriesCards, NewCards]) :-
+% Game state : [CurrentCountry, PlayersPositions, CountriesCards, Cards, SelectedCard]
+play([CurrentCountry, PlayersPositions, CountriesCards, Cards, SelectedCard], [NextCountry, NewPlayersPositions, NewCountriesCards, NewCards, Card]) :-
     countryIndex(CurrentCountry, ICurrentCountry),
     findCountry(CurrentCountry, Players, PlayersPositions), % Sélectionne les joueurs du CurrentCountry
     findLatestPlayer(Players, LatestPlayerI, PlayersPositions),
     nth1(LatestPlayerI, Players, [Px, Py]),
     findCountry(CurrentCountry, CountryCards, CountriesCards), % sélectionne les cartes du CurrentCountry
-    pickCard(CountryCards, Card, CountryCards1),
+    pickCard(CountryCards, SelectedCard, Card, CountryCards1),
     checkCountryCards(CountryCards1, NewCountryCards, Cards, NewCards), % Vérifie si il reste des cartes pour le CurrentCountry
     replace(NewCountryCards, ICurrentCountry, CountriesCards, NewCountriesCards), % replaceNewCountryCards à l'index ICurrentCountry dans la liste CountriesCards par la valeur NewPlayersPositions
     movePlayer([Px, Py], LatestPlayerI, CurrentCountry, 1, PlayersPositions, NewPlayersPositions),
     nextCountry(CurrentCountry, NextCountry).
 
 % Aucun joueur ne peut jouer dans le CurrentCountry, on passe donc au NextCountry
-play([CurrentCountry, PlayersPositions, CountriesCards, Cards], [NextCountry, PlayersPositions, CountriesCards, Cards]) :-
+play([CurrentCountry, PlayersPositions, CountriesCards, Cards, Card], [NextCountry, PlayersPositions, CountriesCards, Cards, Card]) :-
     nextCountry(CurrentCountry, NextCountry).
 
 

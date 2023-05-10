@@ -5,4 +5,5 @@ export default interface PrologState {
   cards: number[];
   countriesCards: number[][];
   playersPositions: PlayerPosition;
+  selectedCard: number;
 }
