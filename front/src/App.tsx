@@ -14,7 +14,7 @@ import JsState from './models/JsState'
 
 const gameInstructionRegex = /(\d+)-(\w+)-(\d+)/g
 
-const teamColors = {
+const teamColors: Record<string, string> = {
   italie: '#ffffff',
   hollande: '#fff900',
   belgique: '#00ff3c',
@@ -420,7 +420,6 @@ function App() {
                   p => p.playerForward === player[0] && p.playerLateral === player[1]
                 )
                 if (position) {
-                  console.log(team.color)
                   return (
                     <div
                       key={player.join(',')}
