@@ -99,6 +99,10 @@ canMove([Px, Py],[Tx,Ty], PlayersPositions) :-
     chemin(Px, Py, Tx, Ty),
     not(hasPlayer([Tx, Ty], PlayersPositions)).
 
+canMoveBackward([Px, Py],[Tx,Ty], PlayersPositions) :-
+    chemin(Tx, Ty, Px, Py),
+    not(hasPlayer([Tx, Ty], PlayersPositions)).
+
 
 % Vérifie s'il y a un joueur sur les coordonnées entrées.
 hasPlayer([Px, Py], [Country|LCountry]) :-
@@ -115,11 +119,12 @@ move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], PlayersPositions) :-
     move([Tx,Ty], NbSecondes1, SecondesRestantes,[Fx, Fy], PlayersPositions).
 move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], PlayersPositions) :-
     NbSecondes < 0,
-    canMove([Tx, Ty], [Px, Py],  PlayersPositions),
+    canMoveBackward([Px, Py], [Tx, Ty], PlayersPositions),
     NbSecondes1 is NbSecondes + 1,
     move([Tx,Ty], NbSecondes1, SecondesRestantes,[Fx, Fy], PlayersPositions).
 move([Px,Py], 0, 0,[Px,Py], _PlayersPositions).
-move([Px,Py], NbSecondes, NbSecondes,[Px,Py], PlayersPositions) :- not(canMove([Px,Py], _, PlayersPositions)).
+move([Px,Py], NbSecondes, NbSecondes,[Px,Py], PlayersPositions) :- nbSecondes > 0, not(canMove([Px,Py], _, PlayersPositions)).
+move([Px,Py], NbSecondes, NbSecondes,[Px,Py], PlayersPositions) :- not(canMoveBackward([Px,Py], _, PlayersPositions)).
 
 movePlayer([Px, Py], IPlayer,Country, NbSecondes, PlayersPositions, NewPlayersPositions) :-
     move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], PlayersPositions),
