@@ -123,7 +123,7 @@ move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], PlayersPositions) :-
     NbSecondes1 is NbSecondes + 1,
     move([Tx,Ty], NbSecondes1, SecondesRestantes,[Fx, Fy], PlayersPositions).
 move([Px,Py], 0, 0,[Px,Py], _PlayersPositions).
-move([Px,Py], NbSecondes, NbSecondes,[Px,Py], PlayersPositions) :- nbSecondes > 0, not(canMove([Px,Py], _, PlayersPositions)).
+move([Px,Py], NbSecondes, NbSecondes,[Px,Py], PlayersPositions) :- NbSecondes > 0, not(canMove([Px,Py], _, PlayersPositions)).
 move([Px,Py], NbSecondes, NbSecondes,[Px,Py], PlayersPositions) :- not(canMoveBackward([Px,Py], _, PlayersPositions)).
 
 movePlayer([Px, Py], IPlayer,Country, NbSecondes, PlayersPositions, NewPlayersPositions) :-
