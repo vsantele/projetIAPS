@@ -7,25 +7,11 @@ import ChatMessage from './models/ChatMessage'
 import { MouseEvent, useEffect, useState } from 'react'
 import { MessageAuthor } from './models/MessageAuthor'
 import Chat from './components/Chat'
-import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
 import positions from './board.json'
 import PrologState from './models/PrologState'
 import JsState from './models/JsState'
-import { delay } from './utils'
-
-const teamColors: Record<string, string> = {
-  italie: '#ffffff',
-  hollande: '#fff900',
-  belgique: '#00ff3c',
-  allemagne: '#ff0000',
-}
-
-const teamIsBot: Record<string, boolean> = {
-  italie: false,
-  hollande: true,
-  belgique: false,
-  allemagne: true,
-}
+import { delay, teamIsBot, teamColors } from './utils'
+import InfoTable from './InfoTable'
 
 const defaultState: JsState = {
   currentCountry: 'italie',
@@ -74,25 +60,6 @@ const defaultState: JsState = {
   ],
   playedCard: 0,
 }
-
-const teamsGridColumns: GridColDef[] = [
-  { headerName: 'Équipe', field: 'name', resizable: false, flex: 1 },
-  {
-    headerName: 'Cartes',
-    field: 'cards',
-    resizable: false,
-    flex: 2,
-    renderCell: (params: GridRenderCellParams<number[]>) => (
-      <p>{params.value.sort((a: number, b: number) => a - b).join(' - ')}</p>
-    ),
-  },
-  {
-    headerName: 'Positions',
-    field: 'playersPositions',
-    flex: 3,
-    renderCell: (params: GridRenderCellParams<number[]>) => <p>{params.value.join(' | ')}</p>,
-  },
-]
 
 function getAsciiValues(text: string) {
   const asciiCodes = []
@@ -457,15 +424,7 @@ function App() {
         </Grid>
         <Grid item xs={12} md={6} xl={8}>
           <Box sx={{ height: '20rem' }}>
-            <DataGrid
-              columns={teamsGridColumns}
-              rows={gameState.teams}
-              rowSelection={false}
-              disableRowSelectionOnClick
-              hideFooter={true}
-              hideFooterPagination={true}
-              hideFooterSelectedRowCount={true}
-            />
+            <InfoTable infos={gameState.teams} currentTeam={gameState.currentTeam} />
           </Box>
         </Grid>
         <Grid item xs={12} md={6} xl={4}>
