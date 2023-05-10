@@ -231,7 +231,7 @@ play([CurrentCountry, PlayersPositions, CountriesCards, Cards, SelectedCard], [N
     pickCard(CountryCards, SelectedCard, Card, CountryCards1),
     checkCountryCards(CountryCards1, NewCountryCards, Cards, NewCards), % Vérifie si il reste des cartes pour le CurrentCountry
     replace(NewCountryCards, ICurrentCountry, CountriesCards, NewCountriesCards), % replaceNewCountryCards à l'index ICurrentCountry dans la liste CountriesCards par la valeur NewPlayersPositions
-    movePlayer([Px, Py], LatestPlayerI, CurrentCountry, 1, PlayersPositions, NewPlayersPositions),
+    movePlayer([Px, Py], LatestPlayerI, CurrentCountry, Card, PlayersPositions, NewPlayersPositions),
     nextCountry(CurrentCountry, NextCountry).
 
 % Aucun joueur ne peut jouer dans le CurrentCountry, on passe donc au NextCountry
