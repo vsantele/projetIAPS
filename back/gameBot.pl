@@ -267,3 +267,102 @@ gameOverPlayer([Country|PlayersPositions]) :-
     maplist(=([EndCase,_]), Country),
     gameOver(PlayersPositions).
 
+% ================ AI ==================
+
+heuristics([_OC, OldPlayersPos, _OCC, _OCa ], [_NC, NewPlayersPos, _NCC, _NCa ], IPlayer, Country, Heuristic) :-
+    findCountry(Country, OldCountryPlayersPos, OldPlayersPos),
+    nth1(IPlayer, OldCountryPlayersPos, [OX1, OY1]),
+    findCountry(Country, NewCountryPlayersPos, NewPlayersPos),
+    nth1(IPlayer, NewCountryPlayersPos, [NX1, NY1]),
+    heuristicEnd(NX1, HeuristicEnd),
+    distance([OX1, OY1], [NX1, NY1], HeuristicDistance),
+    Heuristic is HeuristicDistance + HeuristicEnd.
+
+heuristicEnd(X, Heuristic) :-
+    caseFin(X),
+    Heuristic is 1000, !.
+heuristicEnd(_, 0).
+
+distance([X1, Y1], [X2, Y2], D) :-
+    D is truncate(X2/10) - truncate(X1/10).
+
+% MINIMAX
+
+% minMax(State, IPlayer, Depth, Alpha, Beta, BestMove, BestScore)
+minMax(State, IPlayer,Country, Depth, Alpha, Beta, BestMove, BestScore) :-
+    Depth > 0,
+    findall([Move, Score], (move(State, IPlayer,Country, Move, NewState), minMax(NewState, IPlayer,Country, Depth-1, Alpha, Beta, _, Score)), Moves),
+    bestMove(Moves, IPlayer, Depth, Alpha, Beta, BestMove, BestScore), !.
+
+minMax(State, IPlayer, Country,_, _, _, _, Score) :-
+    heuristics(State, State, IPlayer, Country, Score).
+
+bestMove([[Move, Score]], _, _, _, _, Move, Score) :- !.
+
+bestMove([[Move, Score]|Moves], IPlayer, Depth, Alpha, Beta, BestMove, BestScore) :-
+    bestMove(Moves, IPlayer, Depth, Alpha, Beta, Move1, Score1),
+    betterOf(Move, Score, Move1, Score1, IPlayer, Depth, Alpha, Beta, BestMove, BestScore).
+
+betterOf(Move0, Score0, _, Score1, IPlayer, Depth, _, _, Move0, Score0) :-
+    minToMove(IPlayer, Depth),
+    Score0 > Score1, !.
+
+betterOf(Move0, Score0, _, Score1, IPlayer, Depth, _, _, Move0, Score0) :-
+    maxToMove(IPlayer, Depth),
+    Score0 < Score1, !.
+
+betterOf(_, _, Move1, Score1, IPlayer, Depth, Alpha, Beta, Move1, Score1) :-
+    minToMove(IPlayer, Depth),
+    Score1 > Alpha,
+    Score1 < Beta, !.
+
+betterOf(_, _, Move1, Score1, IPlayer, Depth, Alpha, Beta, Move1, Score1) :-
+    maxToMove(IPlayer, Depth),
+    Score1 < Beta,
+    Score1 > Alpha, !.
+
+betterOf(Move0, Score0, _, Score1, IPlayer, Depth, Alpha, Beta, Move0, Score0) :-
+    minToMove(IPlayer, Depth),
+    Score0 > Alpha,
+    Score0 > Beta, !.
+
+betterOf(Move0, Score0, _, Score1, IPlayer, Depth, Alpha, Beta, Move0, Score0) :-
+    maxToMove(IPlayer, Depth),
+    Score0 < Beta,
+    Score0 < Alpha, !.
+
+betterOf(_, _, Move1, Score1, IPlayer, Depth, Alpha, Beta, Move1, Score1) :-
+    minToMove(IPlayer, Depth),
+    Score1 > Alpha,
+    Score1 > Beta, !.
+
+betterOf(_, _, Move1, Score1, IPlayer, Depth, Alpha, Beta, Move1, Score1) :-
+    maxToMove(IPlayer, Depth),
+    Score1 < Beta,
+    Score1 < Alpha, !.
+
+betterOf(Move0, Score0, _, Score1, IPlayer, Depth, Alpha, Beta, Move0, Score0) :-
+    minToMove(IPlayer, Depth),
+    Score0 > Alpha,
+    Score0 < Beta, !.
+
+betterOf(Move0, Score0, _, Score1, IPlayer, Depth, Alpha, Beta, Move0, Score0) :-
+    maxToMove(IPlayer, Depth),
+    Score0 < Beta,
+    Score0 > Alpha, !.
+
+minToMove(IPlayer, Depth) :-
+    Depth mod 2 =:= 0,
+    IPlayer = 1, !.
+
+maxToMove(IPlayer, Depth) :-
+    Depth mod 2 =:= 0,
+    IPlayer = 2, !.
+
+minToMove(IPlayer, Depth) :-
+    Depth mod 2 =:= 1,
+    IPlayer = 2, !.
+
+maxToMove(IPlayer, Depth) :-
+    Depth mod 2 =:= 1,
+    IPlayer = 1, !.
