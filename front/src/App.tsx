@@ -12,6 +12,14 @@ import positions from './board.json'
 import PrologState from './models/PrologState'
 import JsState from './models/JsState'
 
+const gameInstructionRegex = /(\d+)-(\w+)-(\d+)/g
+
+const teamColors = {
+  italie: '#ffffff',
+  hollande: '#fff900',
+  belgique: '#00ff3c',
+  allemagne: '#ff0000',
+}
 const defaultState: JsState = {
   currentCountry: 'italie',
   cards: [],
@@ -66,7 +74,9 @@ const teamsGridColumns: GridColDef[] = [
     field: 'cards',
     resizable: false,
     flex: 2,
-    renderCell: (params: GridRenderCellParams<number[]>) => <p>{params.value.join(' - ')}</p>,
+    renderCell: (params: GridRenderCellParams<number[]>) => (
+      <p>{params.value.sort((a, b) => a - b).join(' - ')}</p>
+    ),
   },
   {
     headerName: 'Positions',
@@ -96,13 +106,7 @@ const defaultChatMessages: ChatMessage[] = [
   },
 ]
 
-const defaultInstructions: ChatMessage[] = [
-  {
-    message: "A l'équipe Belgique 2-avance-5",
-    author: MessageAuthor.BOT,
-    timestamp: new Date(),
-  },
-]
+const defaultInstructions: ChatMessage[] = []
 
 const convertCharactersIntoRegular = (message: string) => {
   const letters = [
@@ -199,7 +203,7 @@ function App() {
   )
 
   const [botMessages, setBotMessages] = useState<ChatMessage[]>(defaultChatMessages)
-  const [instructions, setInstruction] = useState<ChatMessage[]>(defaultInstructions)
+  const [instructions, setInstructions] = useState<ChatMessage[]>(defaultInstructions)
 
   const [gameState, setGameState] = useState(defaultState)
   const [gameIsStarted, setGameIsStarted] = useState<boolean>(false)
@@ -228,7 +232,74 @@ function App() {
   }
 
   const onSendGameBotMessage = (message: string) => {
-    alert('ToDo : send game bot message (' + message + ')')
+    message = message.trim()
+    const chatMessages = [
+      ...instructions,
+      {
+        message: message,
+        author: MessageAuthor.USER,
+        timestamp: new Date(),
+      },
+    ]
+
+    const messageData = gameInstructionRegex.exec(message)
+
+    if (!messageData) {
+      chatMessages.push({
+        message:
+          'Je ne comprends pas vote demande. Format requis : joueur-avance-carte (ex : 1-avance-5)',
+        author: MessageAuthor.BOT,
+        timestamp: new Date(),
+      })
+
+      setInstructions(chatMessages)
+      return
+    }
+
+    const playerId = parseInt(messageData[1])
+    if (playerId < 1 || playerId > 3) {
+      chatMessages.push({
+        message: 'Numéro de joueur invalide. Joueurs disponibles : (1, 2, 3)',
+        author: MessageAuthor.BOT,
+        timestamp: new Date(),
+      })
+
+      setInstructions(chatMessages)
+      return
+    }
+
+    const action = messageData[2]
+    console.log(action)
+
+    if (!action.includes('av') && !action.includes('forward')) {
+      chatMessages.push({
+        message: 'Action de déplacement invalide (instructions autorisées : avance, forward)',
+        author: MessageAuthor.BOT,
+        timestamp: new Date(),
+      })
+
+      setInstructions(chatMessages)
+      return
+    }
+
+    const card = parseInt(messageData[3])
+    const currentTeam = gameState.teams.find(team => team.id == gameState.currentCountry)
+    if (!currentTeam.cards.includes(card)) {
+      chatMessages.push({
+        message:
+          'Vous ne possédez pas la carte ' +
+          card +
+          '. Cartes disponibles : ' +
+          currentTeam.cards.sort((a, b) => a - b).join('-'),
+        author: MessageAuthor.BOT,
+        timestamp: new Date(),
+      })
+    }
+
+    setInstructions(chatMessages)
+
+    // ToDo : call play action
+    console.error('ToDo : process is ok but play action is not called !')
   }
 
   // Bot response
@@ -268,6 +339,7 @@ function App() {
       const data = await response.json()
 
       setGameState(prologStateToJsState(data))
+      addCurrentTeamMessageInGameBotChat(data.country)
       setGameIsStarted(true)
     } catch (e) {
       alert("Une erreur s'est produite lors de l'initialisation de la partie !\n" + e)
@@ -293,13 +365,30 @@ function App() {
 
       const data: PrologState = await response.json()
       setGameState(prologStateToJsState(data))
+
+      addCurrentTeamMessageInGameBotChat(data.country)
     } catch (e) {
       alert("Une erreur s'est produite lors de l'initialisation du tour !\n" + e)
     }
   }
 
+  const addCurrentTeamMessageInGameBotChat = (teamName: string) => {
+    addBotMessageInGameChat('Joueur actuel : ' + teamName)
+  }
+
+  const addBotMessageInGameChat = (stringMessage: string) => {
+    setInstructions([
+      ...instructions,
+      {
+        message: stringMessage,
+        author: MessageAuthor.BOT,
+        timestamp: new Date(),
+      },
+    ])
+  }
+
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="false">
       <Grid container justifyContent="center" alignContent="center" spacing={1}>
         <Grid item xs={12} textAlign={'center'}>
           <h1>Tour de France</h1>
@@ -330,11 +419,16 @@ function App() {
                   p => p.playerForward === player[0] && p.playerLateral === player[1]
                 )
                 if (position) {
+                  console.log(team.color)
                   return (
                     <div
                       key={player.join(',')}
                       className="player"
-                      style={{ left: position.mapXRatio + '%', top: position.mapYRatio + '%' }}>
+                      style={{
+                        left: position.mapXRatio + '%',
+                        top: position.mapYRatio + '%',
+                        background: teamColors[team.id],
+                      }}>
                       {iTeam + 1},{iPlayer + 1}
                     </div>
                   )

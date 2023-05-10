@@ -176,10 +176,26 @@ checkCountryCards(CountryCards, CountryCards, Cards, Cards).
 pickCard(Cards, CardPicked, NewCards) :-
     tirerCartes(Cards, 1, [CardPicked|_], NewCards).
 
+% Supprime une occurence dans List des éléments de [E|Es]
+% et renvoi la liste finale dans newList
+removeDuplicates(List, [], List).
+removeDuplicates(List, [E|Es], NewList) :-
+    select(E, List, ListOut),
+    removeDuplicates(ListOut, Es, NewList).
+removeDuplicates(List, [_|Es], NewList) :-
+    removeDuplicates(List, Es, NewList).
+
+% Génére une nouvelle pile de carte : initCards \ {cartes possédées par les joueurs}
+% Pour tester : fillCards([1,1,2,2,3,4,5,6,7,8,9,10],[[1,2,3],[5, 10, 28],[]],R).
 fillCards(CountriesCards, NewCards) :-
-    initCards(NewCards1),
-    % TODO: remove duplicates
-    NewCards = NewCards1.
+    initCards(DefaultCards),
+    fillCards(DefaultCards, CountriesCards, NewCards).
+
+fillCards([], _, []) :- !.
+fillCards(Cards, [], Cards) :- !.
+fillCards(Cards, [CountryCards|CountriesCards], CardsStack) :-
+    removeDuplicates(Cards, CountryCards, CardsOut),
+    fillCards(CardsOut, CountriesCards, CardsStack), !.
 
 % La pile de cartes disponibles < nb_cartesSecondeTirer(X) (besoin de recréer une pile de cartes)
 play([CurrentCountry, PlayersPositions, CountriesCards, Cards], StateOut) :-

@@ -59,8 +59,8 @@ const Chat = ({
         style={{ overflowY: 'scroll', width: '100%' }}
         height={height}
         ref={messagesEndRef}>
-        {messages.map(chatMessage => {
-          return <ChatMessageComponent {...chatMessage} key={chatMessage.timestamp.getTime()} />
+        {messages.map((chatMessage, iMessage) => {
+          return <ChatMessageComponent {...chatMessage} key={iMessage} />
         })}
       </Grid>
 
