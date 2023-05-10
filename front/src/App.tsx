@@ -75,7 +75,7 @@ const teamsGridColumns: GridColDef[] = [
     resizable: false,
     flex: 2,
     renderCell: (params: GridRenderCellParams<number[]>) => (
-      <p>{params.value.sort((a, b) => a - b).join(' - ')}</p>
+      <p>{params.value.sort((a: number, b: number) => a - b).join(' - ')}</p>
     ),
   },
   {
@@ -283,14 +283,15 @@ function App() {
     }
 
     const card = parseInt(messageData[3])
-    const currentTeam = gameState.teams.find(team => team.id == gameState.currentCountry)
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const currentTeam = gameState.teams.find(team => team.id == gameState.currentCountry)!
     if (!currentTeam.cards.includes(card)) {
       chatMessages.push({
         message:
           'Vous ne possédez pas la carte ' +
           card +
           '. Cartes disponibles : ' +
-          currentTeam.cards.sort((a, b) => a - b).join('-'),
+          [...currentTeam.cards].sort((a, b) => a - b).join('-'),
         author: MessageAuthor.BOT,
         timestamp: new Date(),
       })
@@ -388,7 +389,7 @@ function App() {
   }
 
   return (
-    <Container maxWidth="false">
+    <Container maxWidth={false}>
       <Grid container justifyContent="center" alignContent="center" spacing={1}>
         <Grid item xs={12} textAlign={'center'}>
           <h1>Tour de France</h1>
