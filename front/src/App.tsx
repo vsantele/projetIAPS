@@ -13,6 +13,8 @@ import PrologState from './models/PrologState'
 import JsState from './models/JsState'
 
 const gameInstructionRegex = /(\d+)-(\w+)-(\d+)/g
+
+const teamColors = { italie: "#ffffff", hollande: "#fff900", belgique: "#00ff3c", allemagne: "#ff0000" }
 const defaultState: JsState = {
   currentCountry: 'italie',
   cards: [],
@@ -393,11 +395,12 @@ function App() {
                   p => p.playerForward === player[0] && p.playerLateral === player[1]
                 )
                 if (position) {
+                  console.log(team.color)
                   return (
                     <div
                       key={player.join(',')}
                       className="player"
-                      style={{ left: position.mapXRatio + '%', top: position.mapYRatio + '%' }}>
+                      style={{ left: position.mapXRatio + '%', top: position.mapYRatio + '%', background: teamColors[team.id] }}>
                       {iTeam + 1},{iPlayer + 1}
                     </div>
                   )
