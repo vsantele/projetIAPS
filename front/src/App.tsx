@@ -12,8 +12,6 @@ import positions from './board.json'
 import PrologState from './models/PrologState'
 import JsState from './models/JsState'
 
-const gameInstructionRegex = /(\d+)-(\w+)-(\d+)/g
-
 const teamColors: Record<string, string> = {
   italie: '#ffffff',
   hollande: '#fff900',
@@ -242,7 +240,7 @@ function App() {
       },
     ]
 
-    const messageData = gameInstructionRegex.exec(message)
+    const messageData = message.split('-')
 
     if (!messageData) {
       chatMessages.push({
@@ -256,7 +254,7 @@ function App() {
       return
     }
 
-    const playerId = parseInt(messageData[1])
+    const playerId = parseInt(messageData[0])
     if (playerId < 1 || playerId > 3) {
       chatMessages.push({
         message: 'Numéro de joueur invalide. Joueurs disponibles : (1, 2, 3)',
@@ -268,8 +266,7 @@ function App() {
       return
     }
 
-    const action = messageData[2]
-    console.log(action)
+    const action = messageData[1]
 
     if (!action.includes('av') && !action.includes('forward')) {
       chatMessages.push({
@@ -282,7 +279,7 @@ function App() {
       return
     }
 
-    const card = parseInt(messageData[3])
+    const card = parseInt(messageData[2])
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const currentTeam = gameState.teams.find(team => team.id == gameState.currentCountry)!
     if (!currentTeam.cards.includes(card)) {
