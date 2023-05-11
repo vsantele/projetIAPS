@@ -187,9 +187,10 @@ checkCountryCards(CountryCards, CountryCards, Cards, Cards).
 %   Cards : cartes disponibles (IN)
 %   CardPicked : carte tirée (OUT)
 %   NewCards : cartes restantes (OUT)
-pickCard(Cards, 0, CardPicked, NewCards) :-
-    tirerCartes(Cards, 1, [CardPicked|_], NewCards).
-pickCard(Cards, SelectedCard, SelectedCard, NewCards) :-
+pickCard(Cards, 0, CardPicked, NewCards, State) :-
+    pickBestCard(State, CardPicked),
+    select(CardPicked, Cards, NewCards).
+pickCard(Cards, SelectedCard, SelectedCard, NewCards, _) :-
     select(SelectedCard, Cards, NewCards).
 
 % Supprime une occurence dans List des éléments de [E|Es]
@@ -228,7 +229,7 @@ play([CurrentCountry, PlayersPositions, CountriesCards, Cards, SelectedCard], [N
     findLatestPlayer(Players, LatestPlayerI, PlayersPositions),
     nth1(LatestPlayerI, Players, [Px, Py]),
     findCountry(CurrentCountry, CountryCards, CountriesCards), % sélectionne les cartes du CurrentCountry
-    pickCard(CountryCards, SelectedCard, Card, CountryCards1),
+    pickCard(CountryCards, SelectedCard, Card, CountryCards1, [CurrentCountry, PlayersPositions, CountriesCards, Cards, SelectedCard]),
     checkCountryCards(CountryCards1, NewCountryCards, Cards, NewCards), % Vérifie si il reste des cartes pour le CurrentCountry
     replace(NewCountryCards, ICurrentCountry, CountriesCards, NewCountriesCards), % replaceNewCountryCards à l'index ICurrentCountry dans la liste CountriesCards par la valeur NewPlayersPositions
     movePlayer([Px, Py], LatestPlayerI, CurrentCountry, Card, PlayersPositions, NewPlayersPositions),
@@ -305,6 +306,9 @@ distance([X1, Y1], [X2, Y2], D) :-
 removeDuplicates(List, Result) :-
     sort(List, Result).
 
+pickBestCard(State, BestCard) :-
+    minMax(State,State, 8, _,_, BestCard, _).
+
 minMax(StateInit, [CurrentCountry, PlayersPositions, CountriesCards, Cards,_], Depth, Alpha, Beta, BestMove, BestScores ) :-
     Depth > 0,
     findCountry(CurrentCountry, Players, PlayersPositions),
@@ -314,7 +318,7 @@ minMax(StateInit, [CurrentCountry, PlayersPositions, CountriesCards, Cards,_], D
         findLatestPlayer(Players, LatestPlayerI, PlayersPositions) ->
         findall([Move, Scores], (
             member(SelectedCard, CountryCardsOut),
-            play([X, PlayersPositions, CountriesCards, Cards, SelectedCard], StateOut),
+            play([CurrentCountry, PlayersPositions, CountriesCards, Cards, SelectedCard], StateOut),
             [Country,_,_,_,Move] = StateOut,
             minMax(StateInit, StateOut, Depth-1, _,_,_, Scores)
         ),Moves)
