@@ -414,12 +414,12 @@ function App() {
         <Grid item xs={12} md={6} xl={4}>
           <Chat
             height="40vh"
-            onSendMessage={handleSendChatBotMessage}
-            title="Discussion avec le bot du tour"
-            submitDisabled={readyState !== ReadyState.OPEN}
-            messages={botMessages}
-            label="Message"
-            placeholder="Qui commence le jeu?"
+            onSendMessage={onSendGameBotMessage}
+            title="Bot de jeu"
+            placeholder="Entrer une instruction de jeu"
+            label="Instruction de jeu"
+            messages={instructions}
+            submitDisabled={!gameIsStarted}
           />
         </Grid>
         <Grid item xs={12} md={6} xl={8}>
@@ -429,13 +429,13 @@ function App() {
         </Grid>
         <Grid item xs={12} md={6} xl={4}>
           <Chat
-            height="24vh"
-            onSendMessage={onSendGameBotMessage}
-            title="Bot de jeu"
-            placeholder="Entrer une instruction de jeu"
-            label="Instruction de jeu"
-            messages={instructions}
-            submitDisabled={!gameIsStarted}
+            height="40vh"
+            onSendMessage={handleSendChatBotMessage}
+            title="Discussion avec le bot du tour"
+            submitDisabled={readyState !== ReadyState.OPEN}
+            messages={botMessages}
+            label="Message"
+            placeholder="Qui commence le jeu?"
           />
         </Grid>
       </Grid>
