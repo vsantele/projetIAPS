@@ -3,14 +3,14 @@ name: Azure Static Web Apps CI/CD
 on:
   push:
     branches:
-      - feat/deploy
+      - deploy
     paths:
       - front/**
       - ".github/workflows/azure-static-web-apps-gentle-sand-0514b5d03.yml"
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
-      - feat/deploy
+      - deploy
   # Allow mannually trigger
   workflow_dispatch:
 
