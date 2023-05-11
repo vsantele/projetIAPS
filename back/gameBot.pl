@@ -94,22 +94,23 @@ latestPlayer(Player1I,[P1x, P1y], Player1I,[P1x, P1y], _Player2I, [_P2x,_P2y], _
 % TODO: Peut-être vérifier en cas de dépassement?
 canMove([Px, Py],[Tx,Ty], _PlayersPositions) :-
     chemin(Px, Py, Tx, Ty),
-    caseFin(Tx).
+    caseFin(Tx), !.
 canMove([Px, Py],[Tx,Ty], PlayersPositions) :-
     chemin(Px, Py, Tx, Ty),
-    not(hasPlayer([Tx, Ty], PlayersPositions)).
+    not(hasPlayer([Tx, Ty], PlayersPositions)),!.
 
 canMoveBackward([Px, Py],[Tx,Ty], PlayersPositions) :-
     chemin(Tx, Ty, Px, Py),
-    not(hasPlayer([Tx, Ty], PlayersPositions)).
+    not(hasPlayer([Tx, Ty], PlayersPositions)), !.
 
 
 % Vérifie s'il y a un joueur sur les coordonnées entrées.
 hasPlayer([Px, Py], [Country|LCountry]) :-
-    hasPlayer([Px, Py], LCountry);
-    member([Px, Py], Country).
-hasPlayer([Px, Py], [Country]) :-
-    member([Px, Py], Country).
+    member([Px, Py], Country), !.
+
+hasPlayer([Px, Py], [Country|LCountry]) :-
+    hasPlayer([Px, Py], LCountry), !.
+
 
 
 move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], PlayersPositions) :-
@@ -273,13 +274,12 @@ gameOverPlayer([Country|PlayersPositions]) :-
 heuristics(OldState, NewState, Country, Heuristic) :-
     [_, OldPlayersPos, _, _, _] = OldState,
     findCountry(Country, OldCountryPlayersPos, OldPlayersPos),
-    findall(Score, (
-        member(Player, OldCountryPlayersPos),
-        nth1(IPlayer, OldCountryPlayersPos, Player),
+    aggregate(Score, (
+        nth1(IPlayer, OldCountryPlayersPos, _),
         heuristics(OldState, NewState, IPlayer, Country, Score)
         )
-    , Scores),
-    sum_list(Scores, Heuristic).
+    , Heuristic).
+    % sum_list(Scores, Heuristic).
 
 heuristics([_OC, OldPlayersPos, _OCC, _OCa, _OSC ], [_NC, NewPlayersPos, _NCC, _NCa, _NSC ], IPlayer, Country, Heuristic) :-
     findCountry(Country, OldCountryPlayersPos, OldPlayersPos),
@@ -290,10 +290,9 @@ heuristics([_OC, OldPlayersPos, _OCC, _OCa, _OSC ], [_NC, NewPlayersPos, _NCC, _
     distance([OX1, OY1], [NX1, NY1], HeuristicDistance),
     Heuristic is HeuristicDistance + HeuristicEnd.
 
-heuristicEnd(X, Heuristic) :-
-    caseFin(X),
-    Heuristic is 1000, !.
-heuristicEnd(_, 0).
+heuristicEnd(X, 0) :-
+    not(caseFin(X)), !.
+heuristicEnd(_, 1000).
 
 distance([X1, Y1], [X2, Y2], D) :-
     D is truncate(X2/10) - truncate(X1/10).
@@ -314,15 +313,16 @@ minMax(StateInit, [CurrentCountry, PlayersPositions, CountriesCards, Cards,_], D
     findCountry(CurrentCountry, Players, PlayersPositions),
     findCountry(CurrentCountry, CountryCards, CountriesCards),
     removeDuplicates(CountryCards, CountryCardsOut),
+    Depth1 is Depth-1,
     (
         findLatestPlayer(Players, LatestPlayerI, PlayersPositions) ->
         findall([Move, Scores], (
             member(SelectedCard, CountryCardsOut),
             play([CurrentCountry, PlayersPositions, CountriesCards, Cards, SelectedCard], StateOut),
-            [Country,_,_,_,Move] = StateOut,
-            minMax(StateInit, StateOut, Depth-1, _,_,_, Scores)
+            [_,_,_,_,Move] = StateOut,
+            minMax(StateInit, StateOut, Depth1, _,_,_, Scores)
         ),Moves)
-        ;  nextCountry(CurrentCountry, Country), minMax(StateInit, [Country, PlayersPositions, CountriesCards, Cards,_], Depth-1, _,_,_, Scores), Moves = [[0, Scores]]
+        ;  nextCountry(CurrentCountry, Country), minMax(StateInit, [Country, PlayersPositions, CountriesCards, Cards,_], Depth1, _,_,_, Scores), Moves = [[0, Scores]]
     ),
     % trace,
     bestMove(Moves, CurrentCountry, Depth, Alpha, Beta, BestMove, BestScores), !.
