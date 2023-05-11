@@ -1,4 +1,4 @@
-import { Box, Container, Grid } from '@mui/material'
+import { Box, Container, Grid, Typography } from '@mui/material'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
 import './App.css'
 import mapImage from './assets/map.png'
@@ -366,25 +366,25 @@ function App() {
 
   return (
     <Container maxWidth={false}>
+      <Box sx={{ textAlign: 'center', mb: '0.5rem' }}>
+        <Typography variant="h1">Tour de France</Typography>
+        <small>
+          {readyState ? (
+            <p>Connexion avec le bot : {connectionStatus}</p>
+          ) : (
+            <p>Serveur du bot introuvable</p>
+          )}
+        </small>
+        <button onClick={onClickStartGameButton}>Démarrer la partie</button>
+        <button onClick={onClickNextStepButton} disabled={!gameIsStarted}>
+          Prochaine étape
+        </button>
+        <form onSubmit={updatePos}>
+          <input name="pos" />
+          <button>Envoyer</button>
+        </form>
+      </Box>
       <Grid container justifyContent="center" alignContent="center" spacing={1}>
-        <Grid item xs={12} textAlign={'center'}>
-          <h1>Tour de France</h1>
-          <small>
-            {readyState ? (
-              <p>Connexion avec le bot : {connectionStatus}</p>
-            ) : (
-              <p>Serveur du bot introuvable</p>
-            )}
-          </small>
-          <button onClick={onClickStartGameButton}>Démarrer la partie</button>
-          <button onClick={onClickNextStepButton} disabled={!gameIsStarted}>
-            Prochaine étape
-          </button>
-          <form onSubmit={updatePos}>
-            <input name="pos" />
-            <button>Envoyer</button>
-          </form>
-        </Grid>
         <Grid item xs={12} md={6} xl={8} textAlign="center">
           <div id="map-area">
             <img src={mapImage} id="map-image" alt="Plateau de jeu tour de france" />
