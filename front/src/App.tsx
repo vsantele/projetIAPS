@@ -424,7 +424,7 @@ function App() {
         </Grid>
         <Grid item xs={12} md={6} xl={8}>
           <Box sx={{ height: '20rem' }}>
-            <InfoTable infos={gameState.teams} currentTeam={gameState.currentTeam} />
+            <InfoTable infos={gameState.teams} currentTeam={gameState.currentCountry} />
           </Box>
         </Grid>
         <Grid item xs={12} md={6} xl={4}>

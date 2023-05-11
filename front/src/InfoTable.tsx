@@ -28,7 +28,12 @@ export default function InfoTable({
         </TableHead>
         <TableBody>
           {infos.map(team => (
-            <TableRow key={team.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+            <TableRow
+              key={team.name}
+              sx={{
+                '&:last-child td, &:last-child th': { border: 0 },
+                backgroundColor: currentTeam === team.id ? 'lightgrey' : 'inherit',
+              }}>
               <TableCell component="th" scope="row">
                 <div
                   style={{
