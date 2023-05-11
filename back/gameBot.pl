@@ -232,7 +232,7 @@ play([CurrentCountry, PlayersPositions, CountriesCards, Cards, SelectedCard], [N
     checkCountryCards(CountryCards1, NewCountryCards, Cards, NewCards), % Vérifie si il reste des cartes pour le CurrentCountry
     replace(NewCountryCards, ICurrentCountry, CountriesCards, NewCountriesCards), % replaceNewCountryCards à l'index ICurrentCountry dans la liste CountriesCards par la valeur NewPlayersPositions
     movePlayer([Px, Py], LatestPlayerI, CurrentCountry, Card, PlayersPositions, NewPlayersPositions),
-    nextCountry(CurrentCountry, NextCountry).
+    nextCountry(CurrentCountry, NextCountry), !.
 
 % Aucun joueur ne peut jouer dans le CurrentCountry, on passe donc au NextCountry
 play([CurrentCountry, PlayersPositions, CountriesCards, Cards, Card], [NextCountry, PlayersPositions, CountriesCards, Cards, Card]) :-
@@ -254,8 +254,8 @@ testGame(StateOut) :-
     gameLoop(State, StateOut).
 
 
-gameOver([_Country, _PlayersPositions, _CountriesCards, Cards]) :- gameOverCards(Cards).
-gameOver([_Country, PlayersPositions, _CountriesCards, _Cards]) :- gameOverPlayer(PlayersPositions).
+gameOver([_Country, _PlayersPositions, _CountriesCards, Cards, _SelectedCard]) :- gameOverCards(Cards).
+gameOver([_Country, PlayersPositions, _CountriesCards, _Cards, _SelectedCard]) :- gameOverPlayer(PlayersPositions).
 
 gameOverCards([]).
 
@@ -269,7 +269,18 @@ gameOverPlayer([Country|PlayersPositions]) :-
 
 % ================ AI ==================
 
-heuristics([_OC, OldPlayersPos, _OCC, _OCa ], [_NC, NewPlayersPos, _NCC, _NCa ], IPlayer, Country, Heuristic) :-
+heuristics(OldState, NewState, Country, Heuristic) :-
+    [_, OldPlayersPos, _, _, _] = OldState,
+    findCountry(Country, OldCountryPlayersPos, OldPlayersPos),
+    findall(Score, (
+        member(Player, OldCountryPlayersPos),
+        nth1(IPlayer, OldCountryPlayersPos, Player),
+        heuristics(OldState, NewState, IPlayer, Country, Score)
+        )
+    , Scores),
+    sum_list(Scores, Heuristic).
+
+heuristics([_OC, OldPlayersPos, _OCC, _OCa, _OSC ], [_NC, NewPlayersPos, _NCC, _NCa, _NSC ], IPlayer, Country, Heuristic) :-
     findCountry(Country, OldCountryPlayersPos, OldPlayersPos),
     nth1(IPlayer, OldCountryPlayersPos, [OX1, OY1]),
     findCountry(Country, NewCountryPlayersPos, NewPlayersPos),
@@ -288,81 +299,137 @@ distance([X1, Y1], [X2, Y2], D) :-
 
 % MINIMAX
 
-% minMax(State, IPlayer, Depth, Alpha, Beta, BestMove, BestScore)
-minMax(State, IPlayer,Country, Depth, Alpha, Beta, BestMove, BestScore) :-
+% findall(X,countryIndex(X,_),R).
+
+
+
+minMax(StateInit, [CurrentCountry, PlayersPositions, CountriesCards, Cards,_], Depth, Alpha, Beta, BestMove, BestScores ) :-
     Depth > 0,
-    findall([Move, Score], (move(State, IPlayer,Country, Move, NewState), minMax(NewState, IPlayer,Country, Depth-1, Alpha, Beta, _, Score)), Moves),
-    bestMove(Moves, IPlayer, Depth, Alpha, Beta, BestMove, BestScore), !.
+    findall([Move, Scores], (
+        findCountry(CurrentCountry, Players, PlayersPositions),
+        findCountry(CurrentCountry, CountryCards, CountriesCards),
+        findLatestPlayer(Players, LatestPlayerI, PlayersPositions) ->
+        nth1(LatestPlayerI, Players, [Px, Py]),
+        member(SelectedCard, CountryCards),
+        play([X, PlayersPositions, CountriesCards, Cards, SelectedCard], StateOut),
+        [Country,_,_,_,Move] = StateOut,
+        % nextCountry(CurrentCountry, Country),
+        % StateOut = [Country, PlayersPositions, CountriesCards, Cards, SelectedCard],
+        % Move is SelectedCard,
+        %  minMax([X, PlayersPositions, CountriesCards, Cards, SelectedCard], StateOut, X, LatestPlayerI, Depth,_, _, _,Score),
+        minMax(StateInit, StateOut, Depth-1, _,_,_, Scores)
+    ),Moves),
+    % trace,
+    bestMove(Moves, CurrentCountry, Depth, Alpha, Beta, BestMove, BestScores), !.
 
-minMax(State, IPlayer, Country,_, _, _, _, Score) :-
-    heuristics(State, State, IPlayer, Country, Score).
+minMax(StateInit, State, Depth, _, _, _, Scores) :-
+    findall(Score, (
+        countryIndex(Country, _),
+        heuristics(StateInit, State, Country, Score)
+     ), Scores).
 
-bestMove([[Move, Score]], _, _, _, _, Move, Score) :- !.
+bestMove([[Move, Scores]], _, _, _, _, Move, Scores) :- !.
 
-bestMove([[Move, Score]|Moves], IPlayer, Depth, Alpha, Beta, BestMove, BestScore) :-
-    bestMove(Moves, IPlayer, Depth, Alpha, Beta, Move1, Score1),
-    betterOf(Move, Score, Move1, Score1, IPlayer, Depth, Alpha, Beta, BestMove, BestScore).
+bestMove([[Move, Scores]|Moves], Country, Depth, Alpha, Beta, BestMove, BestScores) :-
+    bestMove(Moves, Country, Depth, Alpha, Beta, Move1, Scores1),
+    betterOf(Move, Scores, Move1, Scores1, Country, Depth, Alpha, Beta, BestMove, BestScores).
 
-betterOf(Move0, Score0, _, Score1, IPlayer, Depth, _, _, Move0, Score0) :-
-    minToMove(IPlayer, Depth),
-    Score0 > Score1, !.
+betterOf(_,Scores1, Move2, Scores2, Country, Depth, Alpha, Beta, Move2, Scores2) :-
+    findCountry(Country, Score1, Scores1),
+    findCountry(Country, Score2, Scores2),
+    Score1 < Score2, !.
 
-betterOf(Move0, Score0, _, Score1, IPlayer, Depth, _, _, Move0, Score0) :-
-    maxToMove(IPlayer, Depth),
-    Score0 < Score1, !.
+betterOf(Move1,Scores1, Move2, Scores2, Country, Depth, Alpha, Beta, Move1, Scores1) :- !.
 
-betterOf(_, _, Move1, Score1, IPlayer, Depth, Alpha, Beta, Move1, Score1) :-
-    minToMove(IPlayer, Depth),
-    Score1 > Alpha,
-    Score1 < Beta, !.
+bestMoveCountry([[Move, Score]], _, Move, Score).
 
-betterOf(_, _, Move1, Score1, IPlayer, Depth, Alpha, Beta, Move1, Score1) :-
-    maxToMove(IPlayer, Depth),
-    Score1 < Beta,
-    Score1 > Alpha, !.
+bestMoveCountry([[Move, Score]|Moves], Depth, BestMove, BestScore) :-
+    bestMoveCountry(Moves, Depth, Move1, Score1),
+    betterOfCountry(Move, Score, Move1, Score1,BestMove, BestScore).
+bestMoveCountry([[]|Moves], _, BestMove, BestScore) :-
+    bestMoveCountry(Moves, _, BestMove, BestScore).
+bestMoveCountry([[]], _, -1, -10).
 
-betterOf(Move0, Score0, _, Score1, IPlayer, Depth, Alpha, Beta, Move0, Score0) :-
-    minToMove(IPlayer, Depth),
-    Score0 > Alpha,
-    Score0 > Beta, !.
 
-betterOf(Move0, Score0, _, Score1, IPlayer, Depth, Alpha, Beta, Move0, Score0) :-
-    maxToMove(IPlayer, Depth),
-    Score0 < Beta,
-    Score0 < Alpha, !.
+betterOfCountry(_,Score1, Move2, Score2, Move2, Score2) :-
+    Score1 < Score2, !.
+betterOfCountry(Move1,Score1, _, _, Move1, Score1) :- !.
 
-betterOf(_, _, Move1, Score1, IPlayer, Depth, Alpha, Beta, Move1, Score1) :-
-    minToMove(IPlayer, Depth),
-    Score1 > Alpha,
-    Score1 > Beta, !.
+% minMax(State, IPlayer, Depth, Alpha, Beta, BestMove, BestScore)
+% minMax(State, IPlayer,Country, Depth, Alpha, Beta, BestMove, BestScore) :-
+%     Depth > 0,
+%     findall([Move, Score], (move(State, IPlayer,Country, Move, NewState), minMax(NewState, IPlayer,Country, Depth-1, Alpha, Beta, _, Score)), Moves),
+%     bestMove(Moves, IPlayer, Depth, Alpha, Beta, BestMove, BestScore), !.
 
-betterOf(_, _, Move1, Score1, IPlayer, Depth, Alpha, Beta, Move1, Score1) :-
-    maxToMove(IPlayer, Depth),
-    Score1 < Beta,
-    Score1 < Alpha, !.
+% minMax(State, IPlayer, Country,_, _, _, _, Score) :-
+%     heuristics(State, State, IPlayer, Country, Score).
 
-betterOf(Move0, Score0, _, Score1, IPlayer, Depth, Alpha, Beta, Move0, Score0) :-
-    minToMove(IPlayer, Depth),
-    Score0 > Alpha,
-    Score0 < Beta, !.
+% bestMove([[Move, Score]], _, _, _, _, Move, Score) :- !.
 
-betterOf(Move0, Score0, _, Score1, IPlayer, Depth, Alpha, Beta, Move0, Score0) :-
-    maxToMove(IPlayer, Depth),
-    Score0 < Beta,
-    Score0 > Alpha, !.
+% bestMove([[Move, Score]|Moves], IPlayer, Depth, Alpha, Beta, BestMove, BestScore) :-
+%     bestMove(Moves, IPlayer, Depth, Alpha, Beta, Move1, Score1),
+%     betterOf(Move, Score, Move1, Score1, IPlayer, Depth, Alpha, Beta, BestMove, BestScore).
 
-minToMove(IPlayer, Depth) :-
-    Depth mod 2 =:= 0,
-    IPlayer = 1, !.
+% betterOf(Move0, Score0, _, Score1, IPlayer, Depth, _, _, Move0, Score0) :-
+%     minToMove(IPlayer, Depth),
+%     Score0 > Score1, !.
 
-maxToMove(IPlayer, Depth) :-
-    Depth mod 2 =:= 0,
-    IPlayer = 2, !.
+% betterOf(Move0, Score0, _, Score1, IPlayer, Depth, _, _, Move0, Score0) :-
+%     maxToMove(IPlayer, Depth),
+%     Score0 < Score1, !.
 
-minToMove(IPlayer, Depth) :-
-    Depth mod 2 =:= 1,
-    IPlayer = 2, !.
+% betterOf(_, _, Move1, Score1, IPlayer, Depth, Alpha, Beta, Move1, Score1) :-
+%     minToMove(IPlayer, Depth),
+%     Score1 > Alpha,
+%     Score1 < Beta, !.
 
-maxToMove(IPlayer, Depth) :-
-    Depth mod 2 =:= 1,
-    IPlayer = 1, !.
+% betterOf(_, _, Move1, Score1, IPlayer, Depth, Alpha, Beta, Move1, Score1) :-
+%     maxToMove(IPlayer, Depth),
+%     Score1 < Beta,
+%     Score1 > Alpha, !.
+
+% betterOf(Move0, Score0, _, Score1, IPlayer, Depth, Alpha, Beta, Move0, Score0) :-
+%     minToMove(IPlayer, Depth),
+%     Score0 > Alpha,
+%     Score0 > Beta, !.
+
+% betterOf(Move0, Score0, _, Score1, IPlayer, Depth, Alpha, Beta, Move0, Score0) :-
+%     maxToMove(IPlayer, Depth),
+%     Score0 < Beta,
+%     Score0 < Alpha, !.
+
+% betterOf(_, _, Move1, Score1, IPlayer, Depth, Alpha, Beta, Move1, Score1) :-
+%     minToMove(IPlayer, Depth),
+%     Score1 > Alpha,
+%     Score1 > Beta, !.
+
+% betterOf(_, _, Move1, Score1, IPlayer, Depth, Alpha, Beta, Move1, Score1) :-
+%     maxToMove(IPlayer, Depth),
+%     Score1 < Beta,
+%     Score1 < Alpha, !.
+
+% betterOf(Move0, Score0, _, Score1, IPlayer, Depth, Alpha, Beta, Move0, Score0) :-
+%     minToMove(IPlayer, Depth),
+%     Score0 > Alpha,
+%     Score0 < Beta, !.
+
+% betterOf(Move0, Score0, _, Score1, IPlayer, Depth, Alpha, Beta, Move0, Score0) :-
+%     maxToMove(IPlayer, Depth),
+%     Score0 < Beta,
+%     Score0 > Alpha, !.
+
+% minToMove(IPlayer, Depth) :-
+%     Depth mod 2 =:= 0,
+%     IPlayer = 1, !.
+
+% maxToMove(IPlayer, Depth) :-
+%     Depth mod 2 =:= 0,
+%     IPlayer = 2, !.
+
+% minToMove(IPlayer, Depth) :-
+%     Depth mod 2 =:= 1,
+%     IPlayer = 2, !.
+
+% maxToMove(IPlayer, Depth) :-
+%     Depth mod 2 =:= 1,
+%     IPlayer = 1, !.
