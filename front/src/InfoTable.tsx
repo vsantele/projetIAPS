@@ -11,9 +11,11 @@ import { teamColors, teamIsBot } from './utils'
 export default function InfoTable({
   infos,
   currentTeam,
+  isGameStarted,
 }: {
   infos: TeamState[]
   currentTeam: string
+  isGameStarted: boolean
 }) {
   return (
     <TableContainer component={Paper}>
@@ -32,7 +34,7 @@ export default function InfoTable({
               key={team.name}
               sx={{
                 '&:last-child td, &:last-child th': { border: 0 },
-                backgroundColor: currentTeam === team.id ? 'lightgrey' : 'inherit',
+                backgroundColor: isGameStarted && currentTeam === team.id ? 'lightgrey' : 'inherit',
               }}>
               <TableCell component="th" scope="row">
                 <div
