@@ -7,7 +7,6 @@ import ChatMessage from './models/ChatMessage'
 import { MouseEvent, useEffect, useState } from 'react'
 import { MessageAuthor } from './models/MessageAuthor'
 import Chat from './components/Chat'
-import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
 import MapPosition from './models/MapPosition'
 import Board from './board.json'
 
@@ -23,17 +22,6 @@ const teams = [
   { id: Team.NETHERLANDS, name: 'Pays-Bas', cards: [5, 7, 10, 11, 12] },
   { id: Team.BELGIUM, name: 'Belgique', cards: [3, 5, 7, 9, 12] },
   { id: Team.GERMANY, name: 'Allemange', cards: [1, 6, 7, 8, 10] },
-]
-
-const teamsGridColumns: GridColDef[] = [
-  { headerName: 'Équipe', field: 'name', resizable: false, flex: 1 },
-  {
-    headerName: 'Cartes',
-    field: 'cards',
-    resizable: false,
-    flex: 3,
-    renderCell: (params: GridRenderCellParams<number[]>) => <p>{params.value.join(' - ')}</p>,
-  },
 ]
 
 function getAsciiValues(text: string) {
@@ -225,17 +213,7 @@ function AppCoordsGen() {
           />
         </Grid>
         <Grid item xs={12} md={6} xl={8}>
-          <Box sx={{ height: '20rem' }}>
-            <DataGrid
-              columns={teamsGridColumns}
-              rows={teams}
-              rowSelection={false}
-              disableRowSelectionOnClick
-              hideFooter={true}
-              hideFooterPagination={true}
-              hideFooterSelectedRowCount={true}
-            />
-          </Box>
+          <Box sx={{ height: '20rem' }}></Box>
         </Grid>
         <Grid item xs={12} md={6} xl={4}>
           <Chat
