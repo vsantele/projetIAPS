@@ -18,6 +18,7 @@
 :- use_module(library(http/http_json)).
 % :- use_module(library(http/http_log)).
 :- use_module(library(http/http_error)).
+:- use_module(library(http/http_unix_daemon)).
 :- use_module(library(http/websocket)).
 :- use_module(library(http/http_cors)).
 
@@ -125,5 +126,3 @@ handle_init(Request) :-
   cors_enable,
   reply_json_dict(_{country:Country, playersPositions:PlayersPositions, countriesCards:CountriesCards, cards:Cards}).
 
-
-:- start_server.
