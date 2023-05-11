@@ -302,15 +302,18 @@ distance([X1, Y1], [X2, Y2], D) :-
 % findall(X,countryIndex(X,_),R).
 
 
+removeDuplicates(List, Result) :-
+    sort(List, Result).
 
 minMax(StateInit, [CurrentCountry, PlayersPositions, CountriesCards, Cards,_], Depth, Alpha, Beta, BestMove, BestScores ) :-
     Depth > 0,
+    findCountry(CurrentCountry, Players, PlayersPositions),
+    findCountry(CurrentCountry, CountryCards, CountriesCards),
+    removeDuplicates(CountryCards, CountryCardsOut),
+    findLatestPlayer(Players, LatestPlayerI, PlayersPositions),
+    nth1(LatestPlayerI, Players, [Px, Py]),
     findall([Move, Scores], (
-        findCountry(CurrentCountry, Players, PlayersPositions),
-        findCountry(CurrentCountry, CountryCards, CountriesCards),
-        findLatestPlayer(Players, LatestPlayerI, PlayersPositions) ->
-        nth1(LatestPlayerI, Players, [Px, Py]),
-        member(SelectedCard, CountryCards),
+        member(SelectedCard, CountryCardsOut),
         play([X, PlayersPositions, CountriesCards, Cards, SelectedCard], StateOut),
         [Country,_,_,_,Move] = StateOut,
         % nextCountry(CurrentCountry, Country),
