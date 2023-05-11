@@ -310,18 +310,16 @@ minMax(StateInit, [CurrentCountry, PlayersPositions, CountriesCards, Cards,_], D
     findCountry(CurrentCountry, Players, PlayersPositions),
     findCountry(CurrentCountry, CountryCards, CountriesCards),
     removeDuplicates(CountryCards, CountryCardsOut),
-    findLatestPlayer(Players, LatestPlayerI, PlayersPositions),
-    nth1(LatestPlayerI, Players, [Px, Py]),
-    findall([Move, Scores], (
-        member(SelectedCard, CountryCardsOut),
-        play([X, PlayersPositions, CountriesCards, Cards, SelectedCard], StateOut),
-        [Country,_,_,_,Move] = StateOut,
-        % nextCountry(CurrentCountry, Country),
-        % StateOut = [Country, PlayersPositions, CountriesCards, Cards, SelectedCard],
-        % Move is SelectedCard,
-        %  minMax([X, PlayersPositions, CountriesCards, Cards, SelectedCard], StateOut, X, LatestPlayerI, Depth,_, _, _,Score),
-        minMax(StateInit, StateOut, Depth-1, _,_,_, Scores)
-    ),Moves),
+    (
+        findLatestPlayer(Players, LatestPlayerI, PlayersPositions) ->
+        findall([Move, Scores], (
+            member(SelectedCard, CountryCardsOut),
+            play([X, PlayersPositions, CountriesCards, Cards, SelectedCard], StateOut),
+            [Country,_,_,_,Move] = StateOut,
+            minMax(StateInit, StateOut, Depth-1, _,_,_, Scores)
+        ),Moves)
+        ;  nextCountry(CurrentCountry, Country), minMax(StateInit, [Country, PlayersPositions, CountriesCards, Cards,_], Depth-1, _,_,_, Scores), Moves = [[0, Scores]]
+    ),
     % trace,
     bestMove(Moves, CurrentCountry, Depth, Alpha, Beta, BestMove, BestScores), !.
 
