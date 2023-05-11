@@ -50,6 +50,12 @@ Ce projet a pour but de mettre en place un bot pour expliquer les règles du jeu
   swipl -s server.pl
   ```
 
+  Puis lancer le serveur
+
+  ```prolog
+  ?- start_server.
+  ```
+
 ## Déploiement
 
 - Build le front
