@@ -69,35 +69,66 @@ nextCountry(Country, NextCountry) :- countryIndex(Country, _), countryIndex(Next
 % https://stackoverflow.com/questions/32918211/find-the-max-element-and-its-index-in-a-list-prolog
 findLatestPlayer(Players, LatestPlayerI, PlayersPositions) :-
     latestPlayer(Players, LPlayer, PlayersPositions),
-    canMove(LPlayer,_DestCoord, PlayersPositions),
+    canMove(LPlayer,_DestCoord, PlayersPositions,_),
     nth1(LatestPlayerI, Players, LPlayer).
 
 latestPlayer([HPlayer|LPlayers], LPlayer, PlayersPositions) :-
-    canMove(HPlayer,_Dest, PlayersPositions) -> latestPlayer(LPlayers, HPlayer, LPlayer, PlayersPositions)
+    canMove(HPlayer,_Dest, PlayersPositions, _) -> latestPlayer(LPlayers, HPlayer, LPlayer, PlayersPositions)
     ; latestPlayer(LPlayers, LPlayer, PlayersPositions).
 
 % https://stackoverflow.com/a/19810489/10171758
 latestPlayer([], Player,Player,_PlayersPositions).
 latestPlayer([[P1x,P1y] | LPlayer], [LPx, LPy], LP, PlayersPositions) :-
-    P1x < LPx, canMove([P1x,P1y],_Dest, PlayersPositions ) -> latestPlayer(LPlayer, [P1x,P1y], LP, PlayersPositions)
+    P1x < LPx, canMove([P1x,P1y],_Dest, PlayersPositions,_ ) -> latestPlayer(LPlayer, [P1x,P1y], LP, PlayersPositions)
     ; latestPlayer(LPlayer, [LPx, LPy], LP, PlayersPositions).
 
 
 % Retourne le joueurs le plus en retard sur le plateau pouvant bouger et ses coordonnées.
 latestPlayer(Player2I,[P2x, P2y], _Player1I,[P1x, _P1y], Player2I, [P2x,P2y], PlayersPositions) :-
-    P1x > P2x, canMove([P2x,P2y],_Dest, PlayersPositions).
+    P1x > P2x, canMove([P2x,P2y],_Dest, PlayersPositions,_).
 latestPlayer(Player1I,[P1x, P1y], Player1I,[P1x, P1y], _Player2I, [P2x,_P2y], PlayersPositions) :-
-    P1x < P2x, canMove([P1x,P1y],_Dest, PlayersPositions).
+    P1x < P2x, canMove([P1x,P1y],_Dest, PlayersPositions,_).
 latestPlayer(Player1I,[P1x, P1y], Player1I,[P1x, P1y], _Player2I, [_P2x,_P2y], _PlayersPositions).
 
 % Sur base de coordonnées, vérifie s'il peut avancer sans risque.
 % TODO: Peut-être vérifier en cas de dépassement?
-canMove([Px, Py],[Tx,Ty], _PlayersPositions) :-
+canMove([Px, Py],[Tx,Ty], _PlayersPositions, _PlayersPositionsOut) :-
     chemin(Px, Py, Tx, Ty),
     caseFin(Tx), !.
-canMove([Px, Py],[Tx,Ty], PlayersPositions) :-
+% canMove([Px, Py],[Tx,Ty], PlayersPositions, PlayersPositions) :-
+%     chemin(Px, Py, Tx, Ty),
+%     not(hasPlayer([Tx, Ty], PlayersPositions)),!.
+
+canMove([Px, Py],[Tx,Ty], PlayersPositions, PlayersPositionsOut) :-
     chemin(Px, Py, Tx, Ty),
-    not(hasPlayer([Tx, Ty], PlayersPositions)),!.
+    (
+        hasPlayer([Tx, Ty], PlayersPositions)
+        -> movePlayersRight([Tx, Ty], PlayersPositions, PlayersPositionsOut)
+        ; PlayersPositionsOut = PlayersPositions
+    ), !.
+
+
+movePlayersRight([Px, Py], PlayerPositions, PlayersPositionsOut) :-
+    voisinDroite(Px, Py, Tx, Ty),
+    hasPlayer([Tx, Ty], PlayerPositions),
+    movePlayersRight([Tx, Ty], PlayerPositions, NewPlayersPositionsOut),
+    movePlayersRight([Px, Py], NewPlayersPositionsOut, PlayersPositionsOut), !.
+
+%! Attention, hasPlayer est couteux et utilisé 2 fois
+movePlayersRight([Px, Py], PlayerPositions, PlayersPositionsOut) :-
+    voisinDroite(Px, Py, Tx, Ty),
+    not(hasPlayer([Tx, Ty], PlayerPositions)),
+    getCountryDataFromPlayerPos([Px, Py], PlayerPositions, ICountry, IPlayer),
+    countryIndex(CountryName, ICountry),
+    findCountry(CountryName, Country, PlayerPositions),
+    replace([Tx, Ty], IPlayer, Country, NewCountry),
+    replace(NewCountry, ICountry, PlayerPositions, PlayersPositionsOut), !.
+
+getCountryDataFromPlayerPos([Px, Py], PlayerPositions, ICountry, IPlayer) :-
+    nth1(ICountry, PlayerPositions, Country),
+    nth1(IPlayer, Country, [Px, Py]).
+
+
 
 canMoveBackward([Px, Py],[Tx,Ty], PlayersPositions) :-
     chemin(Tx, Ty, Px, Py),
@@ -112,29 +143,34 @@ hasPlayer([Px, Py], [Country|LCountry]) :-
     hasPlayer([Px, Py], LCountry), !.
 
 
-
-move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], PlayersPositions) :-
+% Bouge un joueur
+%   [Px,Py] : position initiale du joueur (IN)
+%   NbSecondes : nb déplacement (IN)
+%   [Fx, Fy] : position du joueur après le déplacement (OUT)
+%   PlayersPositions : positions des joueurs (IN)
+%   PlayersPositionsOut : nouvelles positions des joueurs (OUT)
+move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], PlayersPositions, PlayersPositionsOut) :-
     NbSecondes > 0,
-    canMove([Px, Py], [Tx, Ty], PlayersPositions),
+    canMove([Px, Py], [Tx, Ty], PlayersPositions, NewPlayersPositions),
     NbSecondes1 is NbSecondes - 1,
-    move([Tx,Ty], NbSecondes1, SecondesRestantes,[Fx, Fy], PlayersPositions).
-move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], PlayersPositions) :-
+    move([Tx,Ty], NbSecondes1, SecondesRestantes,[Fx, Fy], NewPlayersPositions, PlayersPositionsOut).
+move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], PlayersPositions, PlayersPositions) :-
     NbSecondes < 0,
     canMoveBackward([Px, Py], [Tx, Ty], PlayersPositions),
     NbSecondes1 is NbSecondes + 1,
-    move([Tx,Ty], NbSecondes1, SecondesRestantes,[Fx, Fy], PlayersPositions).
-move([Px,Py], 0, 0,[Px,Py], _PlayersPositions).
-move([Px,Py], NbSecondes, NbSecondes,[Px,Py], PlayersPositions) :- NbSecondes > 0, not(canMove([Px,Py], _, PlayersPositions)).
-move([Px,Py], NbSecondes, NbSecondes,[Px,Py], PlayersPositions) :- not(canMoveBackward([Px,Py], _, PlayersPositions)).
+    move([Tx,Ty], NbSecondes1, SecondesRestantes,[Fx, Fy], PlayersPositions, PlayersPositions).
+move([Px,Py], 0, 0,[Px,Py], PlayersPositions, PlayersPositions).
+move([Px,Py], NbSecondes, NbSecondes,[Px,Py], PlayersPositions, PlayersPositions) :- NbSecondes > 0, not(canMove([Px,Py], _,PlayersPositions, _)). % Veut avancer
+move([Px,Py], NbSecondes, NbSecondes,[Px,Py], PlayersPositions, PlayersPositions).% :- not(canMoveBackward([Px,Py], _, PlayersPositions)).
 
 movePlayer([Px, Py], IPlayer,Country, NbSecondes, PlayersPositions, NewPlayersPositions) :-
-    move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], PlayersPositions),
-    (caseChance([Fx,Fy]) -> valeurCarteChance(Val), move([Fx,Fy], Val, _, [Tx, Ty], PlayersPositions)
-    ; move([Fx,Fy], 0, 0, [Tx, Ty], PlayersPositions)),
-    findCountry(Country, Players, PlayersPositions),
+    move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], PlayersPositions, NewPlayersPositionsOut),
+    (caseChance([Fx,Fy]) -> valeurCarteChance(Val), move([Fx,Fy], Val, _, [Tx, Ty], NewPlayersPositionsOut,PlayersPositionsOut)
+    ; move([Fx,Fy], 0, 0, [Tx, Ty], NewPlayersPositionsOut,PlayersPositionsOut)),
+    findCountry(Country, Players, PlayersPositionsOut),
     replace([Tx, Ty], IPlayer, Players, NewPlayers),
     countryIndex(Country,ICountry),
-    replace(NewPlayers, ICountry, PlayersPositions, NewPlayersPositions).
+    replace(NewPlayers, ICountry, PlayersPositionsOut, NewPlayersPositions).
 
 
 % Remplace le IElem dans List par Elem et le renvoit dans NewList
