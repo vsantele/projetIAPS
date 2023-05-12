@@ -434,9 +434,14 @@ function App() {
         </form>
       </Box>
       <Grid container justifyContent="center" alignContent="center" spacing={1}>
-        <Grid item xs={12} md={12} textAlign="center">
+        <Grid item xs={12} md={9} textAlign="center">
           <div id="map-area">
-            <img src={mapImage} id="map-image" alt="Plateau de jeu tour de france" />
+            <img
+              src={mapImage}
+              style={{ width: '60rem' }}
+              id="map-image"
+              alt="Plateau de jeu tour de france"
+            />
             {gameState.teams.map((team, iTeam) =>
               team.playersPositions.map((player, iPlayer) => {
                 const position = positions.find(
@@ -460,6 +465,17 @@ function App() {
             )}
           </div>
         </Grid>
+        <Grid item xs={12} md={8}>
+          <Box sx={{ height: '20rem' }}>
+            <InfoTable
+              infos={gameState.teams}
+              currentTeam={gameState.currentCountry}
+              isGameStarted={gameIsStarted}
+              onPlayCard={card => play(gameState, card)}
+              isThinking={isThinking}
+            />
+          </Box>
+        </Grid>
         <Grid item xs={12} md={4}>
           <Chat
             height="40vh"
@@ -471,17 +487,6 @@ function App() {
             submitDisabled={!gameIsStarted}
             onClickHint={onClickGameHint}
           />
-        </Grid>
-        <Grid item xs={12} md={8}>
-          <Box sx={{ height: '20rem' }}>
-            <InfoTable
-              infos={gameState.teams}
-              currentTeam={gameState.currentCountry}
-              isGameStarted={gameIsStarted}
-              onPlayCard={card => play(gameState, card)}
-              isThinking={isThinking}
-            />
-          </Box>
         </Grid>
         <Grid item xs={12}>
           <Chat
