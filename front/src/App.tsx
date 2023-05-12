@@ -184,6 +184,7 @@ function App() {
 
   const [gameState, setGameState] = useState(defaultState)
   const [gameIsStarted, setGameIsStarted] = useState<boolean>(false)
+  const [isThinking, setIsThinking] = useState<boolean>(false)
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'en cours de connexion ...',
@@ -298,10 +299,11 @@ function App() {
       const data = await response.json()
 
       setGameIsStarted(true)
+      setGameState(() => prologStateToJsState(data))
       if (teamIsBot[data.country]) {
+        addMessageInGameChat(MessageAuthor.BOT, "C'est à " + data.country + ' de commencer !')
         await play(prologStateToJsState(data), 0)
       } else {
-        setGameState(() => prologStateToJsState(data))
         addCurrentTeamMessageInGameBotChat(data.country)
       }
     } catch (e) {
@@ -315,13 +317,14 @@ function App() {
 
   const play = async (gameState: JsState, selectedCard: number) => {
     try {
+      setIsThinking(true)
       let data = await sendMove({ ...gameState, playedCard: selectedCard })
-      if (teamIsBot[gameState.currentCountry]) {
-        addMessageInGameChat(
-          MessageAuthor.BOT,
-          `${gameState.currentCountry} a joué ${data.selectedCard}`
-        )
-      }
+      // if (teamIsBot[gameState.currentCountry]) {
+      addMessageInGameChat(
+        MessageAuthor.BOT,
+        `${gameState.currentCountry} a joué ${data.selectedCard}`
+      )
+      // }
       setGameState(() => prologStateToJsState(data))
       if (teamIsBot[data.country]) {
         const country = data.country
@@ -331,6 +334,7 @@ function App() {
       }
       addCurrentTeamMessageInGameBotChat(data.country)
       setGameState(() => prologStateToJsState(data))
+      setIsThinking(false)
     } catch (e) {
       alert("Une erreur s'est produite lors de l'initialisation du tour !\n" + e)
     }
@@ -428,6 +432,8 @@ function App() {
               infos={gameState.teams}
               currentTeam={gameState.currentCountry}
               isGameStarted={gameIsStarted}
+              onPlayCard={card => play(gameState, card)}
+              isThinking={isThinking}
             />
           </Box>
         </Grid>
