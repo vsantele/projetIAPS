@@ -557,3 +557,5 @@ caseChance([660, 1]).
 caseChance([660, 2]).
 caseChance([740, 1]).
 caseChance([903, 3]).
+
+chemin(X,0, X,1). % bas coté de la route.
