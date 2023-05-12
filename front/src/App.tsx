@@ -389,7 +389,7 @@ function App() {
         </form>
       </Box>
       <Grid container justifyContent="center" alignContent="center" spacing={1}>
-        <Grid item xs={12} md={6} xl={8} textAlign="center">
+        <Grid item xs={12} md={12} textAlign="center">
           <div id="map-area">
             <img src={mapImage} id="map-image" alt="Plateau de jeu tour de france" />
             {gameState.teams.map((team, iTeam) =>
@@ -415,7 +415,7 @@ function App() {
             )}
           </div>
         </Grid>
-        <Grid item xs={12} md={6} xl={4}>
+        <Grid item xs={12} md={4}>
           <Chat
             height="40vh"
             onSendMessage={onSendGameBotMessage}
@@ -426,7 +426,7 @@ function App() {
             submitDisabled={!gameIsStarted}
           />
         </Grid>
-        <Grid item xs={12} md={6} xl={8}>
+        <Grid item xs={12} md={8}>
           <Box sx={{ height: '20rem' }}>
             <InfoTable
               infos={gameState.teams}
@@ -437,7 +437,7 @@ function App() {
             />
           </Box>
         </Grid>
-        <Grid item xs={12} md={6} xl={4}>
+        <Grid item xs={12}>
           <Chat
             height="40vh"
             onSendMessage={handleSendChatBotMessage}
