@@ -58,6 +58,9 @@
 :- http_handler(root(init),
                 handle_init,
                 []).
+:- http_handler(root(bestCard),
+                handle_best_card,
+                []).
 
 
 start_server :-
@@ -125,4 +128,17 @@ handle_init(Request) :-
   initGame([Country, PlayersPositions, CountriesCards, Cards ]),
   cors_enable,
   reply_json_dict(_{country:Country, playersPositions:PlayersPositions, countriesCards:CountriesCards, cards:Cards}).
+
+handle_best_card(Request) :-
+      option(method(options), Request), !,
+      cors_enable(Request,
+                  [ methods([post])
+                  ]),
+      format('~n').
+handle_best_card(Request) :-
+  http_read_json_dict(Request, State),
+  atom_string(Country,State.country),
+  pickBestCard([Country, State.playersPositions, State.countriesCards, State.cards, -1], BestCard),
+  cors_enable,
+  reply_json_dict(_{bestCard: BestCard}).
 

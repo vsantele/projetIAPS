@@ -1,10 +1,10 @@
-import { Box, Container, Grid, Typography } from '@mui/material'
+import { Box, Container, Grid, Snackbar, Typography } from '@mui/material'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
 import './App.css'
 import mapImage from './assets/map.png'
 import BotResponse from './models/BotResponse'
 import ChatMessage from './models/ChatMessage'
-import { MouseEvent, useEffect, useState } from 'react'
+import React, { MouseEvent, useEffect, useState } from 'react'
 import { MessageAuthor } from './models/MessageAuthor'
 import Chat from './components/Chat'
 import positions from './board.json'
@@ -185,6 +185,8 @@ function App() {
   const [gameState, setGameState] = useState(defaultState)
   const [gameIsStarted, setGameIsStarted] = useState<boolean>(false)
   const [isThinking, setIsThinking] = useState<boolean>(false)
+
+  const [notificationMessage, setNotificationMessage] = useState<string|undefined>(undefined)
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'en cours de connexion ...',
@@ -368,6 +370,47 @@ function App() {
     ])
   }
 
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setNotificationMessage(undefined);
+  }
+
+  const onClickGameHint = async () => {
+    if(!gameIsStarted || teamIsBot[gameState.currentCountry]){
+      return
+    }
+
+    setNotificationMessage(undefined)
+
+    try{
+      const prologState = jsStateToPrologState(gameState)
+
+      setNotificationMessage("Je recherche la meilleure carte pour toi ! (" + gameState.currentCountry + ") ...")
+
+      const response = await fetch((import.meta.env.VITE_API_HOST ?? '') + '/bestCard', {
+        method: 'POST',
+        body: JSON.stringify(prologState),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if(response.status !== 200){
+        setNotificationMessage("Je suis connecté mais un soucis m'empeche de te répondre :(")
+        return
+      }
+
+      const data = await response.json()
+
+      setNotificationMessage("Je te conseille de jouer la carte " + data.bestCard)
+    }catch (e){
+      setNotificationMessage("Je ne suis pas disponible pour aider :(")
+    }
+  }
+
   return (
     <Container maxWidth={false}>
       <Box sx={{ textAlign: 'center', mb: '0.5rem' }}>
@@ -424,6 +467,7 @@ function App() {
             label="Instruction de jeu"
             messages={instructions}
             submitDisabled={!gameIsStarted}
+            onClickHint={onClickGameHint}
           />
         </Grid>
         <Grid item xs={12} md={8}>
@@ -449,6 +493,8 @@ function App() {
           />
         </Grid>
       </Grid>
+
+      <Snackbar open={notificationMessage !== undefined } autoHideDuration={6000} onClose={handleCloseSnackbar} message={notificationMessage}/>
     </Container>
   )
 }

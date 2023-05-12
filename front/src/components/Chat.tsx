@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Grid, IconButton, TextField } from '@mui/material'
+import { Avatar, Grid, IconButton, TextField } from '@mui/material'
 import ChatMessageComponent from './ChatMessageComponent'
 import ChatMessage from '../models/ChatMessage'
 import SendIcon from '@mui/icons-material/Send'
+import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
+import grey from '@mui/material/colors/grey'
 
 interface ChatProps {
   onSendMessage(message: string): void
@@ -11,7 +13,8 @@ interface ChatProps {
   placeholder?: string
   label?: string
   height?: string
-  messages: ChatMessage[]
+  messages: ChatMessage[],
+  onClickHint (): void | undefined,
 }
 
 const Chat = ({
@@ -22,6 +25,7 @@ const Chat = ({
   label,
   height = '100%',
   messages,
+  onClickHint
 }: ChatProps) => {
   // User message
   const [userMessage, setUserMessage] = useState<string>('')
@@ -48,10 +52,43 @@ const Chat = ({
     }
   }
 
+  const onClickHintButton = () => {
+    if(onClickHint != null){
+      onClickHint();
+    }
+  }
+
+  const header = () => {
+    if(onClickHint != null){
+      return (
+        <>
+          <Grid item xs={6}>
+            <h2 className="text-center">{title}</h2>
+          </Grid>
+          <Grid item xs={6} display="flex" justifyContent="flex-end">
+            <Avatar sx={{width:30, height: 30, mr: 5, bgcolor: grey[500], borderRadius: '5px', my: 'auto'}} variant="square" onClick={onClickHintButton}>
+              <TipsAndUpdatesIcon />
+            </Avatar>
+          </Grid>
+        </>
+      )
+    }
+
+    return (
+      <Grid item xs={12}>
+        <h2 className="text-center">{title}</h2>
+      </Grid>
+    )
+  }
+
   return (
     <Grid container>
-      <Grid item xs={12} sx={{ m: 0, p: 0 }}>
-        <h2 className="text-center">{title}</h2>
+      <Grid container>
+        {
+          (() => {
+            return header()
+          })()
+        }
       </Grid>
 
       <Grid
