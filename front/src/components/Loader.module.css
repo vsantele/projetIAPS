@@ -1,34 +1,32 @@
 .custom-loader {
-  width: 40px;
-  height: 10px;
-  color: #766df4;
-  background: radial-gradient(farthest-side, currentColor 90%, #0000) left / 10px 10px,
-    radial-gradient(farthest-side, currentColor 90%, #0000) center/10px 10px,
-    radial-gradient(farthest-side, currentColor 90%, #0000) right / 10px 10px,
-    linear-gradient(currentColor 0 0) center/100% 4px;
-  background-repeat: no-repeat;
-  position: relative;
-  animation: s6 2s infinite linear;
+  width: 100px;
+  height: 100px;
+  display: grid;
+  border: 8px solid #0000;
+  border-radius: 50%;
+  border-color: #e4e4ed #0000;
+  animation: s6 1s infinite linear;
 }
-.custom-loader:before,
-.custom-loader:after {
+.custom-loader::before,
+.custom-loader::after {
   content: '';
-  position: absolute;
-  inset: 0;
-  background: inherit;
+  grid-area: 1/1;
+  margin: 4px;
+  border: inherit;
+  border-radius: 50%;
+}
+.custom-loader::before {
+  border-color: #766df4 #0000;
   animation: inherit;
-  --s: calc(50% - 5px);
+  animation-duration: 0.5s;
   animation-direction: reverse;
 }
-.custom-loader:after {
-  --s: calc(5px - 50%);
+.custom-loader::after {
+  margin: 16px;
 }
 
 @keyframes s6 {
-  0% {
-    transform: translate(var(--s, 0)) rotate(0);
-  }
   100% {
-    transform: translate(var(--s, 0)) rotate(1turn);
+    transform: rotate(1turn);
   }
 }
