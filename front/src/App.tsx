@@ -1,10 +1,10 @@
-import { Box, Container, Grid, Snackbar, Typography } from '@mui/material'
+import { Box, Container, Grid, Snackbar, SnackbarCloseReason, Typography } from '@mui/material'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
 import './App.css'
 import mapImage from './assets/map.png'
 import BotResponse from './models/BotResponse'
 import ChatMessage from './models/ChatMessage'
-import React, { MouseEvent, useEffect, useState } from 'react'
+import React, { MouseEvent, SyntheticEvent, useEffect, useState } from 'react'
 import { MessageAuthor } from './models/MessageAuthor'
 import Chat from './components/Chat'
 import positions from './board.json'
@@ -186,7 +186,7 @@ function App() {
   const [gameIsStarted, setGameIsStarted] = useState<boolean>(false)
   const [isThinking, setIsThinking] = useState<boolean>(false)
 
-  const [notificationMessage, setNotificationMessage] = useState<string|undefined>(undefined)
+  const [notificationMessage, setNotificationMessage] = useState<string | undefined>(undefined)
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'en cours de connexion ...',
@@ -370,25 +370,27 @@ function App() {
     ])
   }
 
-  const handleCloseSnackbar = (event, reason) => {
+  const handleCloseSnackbar = (reason: SnackbarCloseReason) => {
     if (reason === 'clickaway') {
-      return;
+      return
     }
 
-    setNotificationMessage(undefined);
+    setNotificationMessage(undefined)
   }
 
   const onClickGameHint = async () => {
-    if(!gameIsStarted || teamIsBot[gameState.currentCountry]){
+    if (!gameIsStarted || teamIsBot[gameState.currentCountry]) {
       return
     }
 
     setNotificationMessage(undefined)
 
-    try{
+    try {
       const prologState = jsStateToPrologState(gameState)
 
-      setNotificationMessage("Je recherche la meilleure carte pour toi ! (" + gameState.currentCountry + ") ...")
+      setNotificationMessage(
+        'Je recherche la meilleure carte pour toi ! (' + gameState.currentCountry + ') ...'
+      )
 
       const response = await fetch((import.meta.env.VITE_API_HOST ?? '') + '/bestCard', {
         method: 'POST',
@@ -398,16 +400,16 @@ function App() {
         },
       })
 
-      if(response.status !== 200){
+      if (response.status !== 200) {
         setNotificationMessage("Je suis connecté mais un soucis m'empeche de te répondre :(")
         return
       }
 
       const data = await response.json()
 
-      setNotificationMessage("Je te conseille de jouer la carte " + data.bestCard)
-    }catch (e){
-      setNotificationMessage("Je ne suis pas disponible pour aider :(")
+      setNotificationMessage('Je te conseille de jouer la carte ' + data.bestCard)
+    } catch (e) {
+      setNotificationMessage('Je ne suis pas disponible pour aider :(')
     }
   }
 
@@ -494,7 +496,12 @@ function App() {
         </Grid>
       </Grid>
 
-      <Snackbar open={notificationMessage !== undefined } autoHideDuration={6000} onClose={handleCloseSnackbar} message={notificationMessage}/>
+      <Snackbar
+        open={notificationMessage !== undefined}
+        autoHideDuration={6000}
+        onClose={(_, reason) => handleCloseSnackbar(reason)}
+        message={notificationMessage}
+      />
     </Container>
   )
 }

@@ -3,7 +3,7 @@ import { Avatar, Grid, IconButton, TextField } from '@mui/material'
 import ChatMessageComponent from './ChatMessageComponent'
 import ChatMessage from '../models/ChatMessage'
 import SendIcon from '@mui/icons-material/Send'
-import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
+import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates'
 import grey from '@mui/material/colors/grey'
 
 interface ChatProps {
@@ -13,8 +13,8 @@ interface ChatProps {
   placeholder?: string
   label?: string
   height?: string
-  messages: ChatMessage[],
-  onClickHint (): void | undefined,
+  messages: ChatMessage[]
+  onClickHint?: () => void
 }
 
 const Chat = ({
@@ -25,7 +25,7 @@ const Chat = ({
   label,
   height = '100%',
   messages,
-  onClickHint
+  onClickHint,
 }: ChatProps) => {
   // User message
   const [userMessage, setUserMessage] = useState<string>('')
@@ -53,20 +53,28 @@ const Chat = ({
   }
 
   const onClickHintButton = () => {
-    if(onClickHint != null){
-      onClickHint();
-    }
+    onClickHint?.()
   }
 
   const header = () => {
-    if(onClickHint != null){
+    if (onClickHint) {
       return (
         <>
           <Grid item xs={6}>
             <h2 className="text-center">{title}</h2>
           </Grid>
           <Grid item xs={6} display="flex" justifyContent="flex-end">
-            <Avatar sx={{width:30, height: 30, mr: 5, bgcolor: grey[500], borderRadius: '5px', my: 'auto'}} variant="square" onClick={onClickHintButton}>
+            <Avatar
+              sx={{
+                width: 30,
+                height: 30,
+                mr: 5,
+                bgcolor: grey[500],
+                borderRadius: '5px',
+                my: 'auto',
+              }}
+              variant="square"
+              onClick={onClickHintButton}>
               <TipsAndUpdatesIcon />
             </Avatar>
           </Grid>
@@ -83,21 +91,20 @@ const Chat = ({
 
   return (
     <Grid container>
-      <Grid container>
-        {
-          (() => {
-            return header()
-          })()
-        }
-      </Grid>
+      <Grid container>{header()}</Grid>
 
       <Grid
         item
         style={{ overflowY: 'scroll', width: '100%' }}
         height={height}
         ref={messagesEndRef}>
-        {messages.map((chatMessage, iMessage) => {
-          return <ChatMessageComponent {...chatMessage} key={iMessage} />
+        {messages.map(chatMessage => {
+          return (
+            <ChatMessageComponent
+              {...chatMessage}
+              key={chatMessage.timestamp.getTime() + chatMessage.message.slice(0, 5)}
+            />
+          )
         })}
       </Grid>
 
