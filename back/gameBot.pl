@@ -188,6 +188,7 @@ checkCountryCards(CountryCards, CountryCards, Cards, Cards).
 %   Cards : cartes disponibles (IN)
 %   CardPicked : carte tirée (OUT)
 %   NewCards : cartes restantes (OUT)
+pickCard([SelectedCard], _, SelectedCard, [], _).
 pickCard(Cards, 0, CardPicked, NewCards, State) :-
     pickBestCard(State, CardPicked),
     select(CardPicked, Cards, NewCards).
@@ -274,12 +275,12 @@ gameOverPlayer([Country|PlayersPositions]) :-
 heuristics(OldState, NewState, Country, Heuristic) :-
     [_, OldPlayersPos, _, _, _] = OldState,
     findCountry(Country, OldCountryPlayersPos, OldPlayersPos),
-    aggregate(Score, (
+    findall(Score, (
         nth1(IPlayer, OldCountryPlayersPos, _),
         heuristics(OldState, NewState, IPlayer, Country, Score)
         )
-    , Heuristic).
-    % sum_list(Scores, Heuristic).
+    , Scores),
+    sum_list(Scores, Heuristic).
 
 heuristics([_OC, OldPlayersPos, _OCC, _OCa, _OSC ], [_NC, NewPlayersPos, _NCC, _NCa, _NSC ], IPlayer, Country, Heuristic) :-
     findCountry(Country, OldCountryPlayersPos, OldPlayersPos),
@@ -325,13 +326,17 @@ minMax(StateInit, [CurrentCountry, PlayersPositions, CountriesCards, Cards,_], D
         ;  nextCountry(CurrentCountry, Country), minMax(StateInit, [Country, PlayersPositions, CountriesCards, Cards,_], Depth1, _,_,_, Scores), Moves = [[0, Scores]]
     ),
     % trace,
+%    write(Depth), weerite(" Moves "), write(Moves), nl,
     bestMove(Moves, CurrentCountry, Depth, Alpha, Beta, BestMove, BestScores), !.
 
 minMax(StateInit, State, Depth, _, _, _, Scores) :-
     findall(Score, (
         countryIndex(Country, _),
         heuristics(StateInit, State, Country, Score)
-     ), Scores).
+        % write("heuristics "), write(Score), nl
+     ), Scores)
+    %  , write("Scores "), write(Scores), nl
+     .
 
 bestMove([[Move, Scores]], _, _, _, _, Move, Scores) :- !.
 
@@ -344,21 +349,9 @@ betterOf(_,Scores1, Move2, Scores2, Country, Depth, Alpha, Beta, Move2, Scores2)
     findCountry(Country, Score2, Scores2),
     Score1 < Score2, !.
 
+% betterOf(Move1,Scores1, Move2, Scores2, Country, Depth, Alpha, Beta, Move1, Scores1) :- !.
 betterOf(Move1,Scores1, Move2, Scores2, Country, Depth, Alpha, Beta, Move1, Scores1) :- !.
 
-bestMoveCountry([[Move, Score]], _, Move, Score).
-
-bestMoveCountry([[Move, Score]|Moves], Depth, BestMove, BestScore) :-
-    bestMoveCountry(Moves, Depth, Move1, Score1),
-    betterOfCountry(Move, Score, Move1, Score1,BestMove, BestScore).
-bestMoveCountry([[]|Moves], _, BestMove, BestScore) :-
-    bestMoveCountry(Moves, _, BestMove, BestScore).
-bestMoveCountry([[]], _, -1, -10).
-
-
-betterOfCountry(_,Score1, Move2, Score2, Move2, Score2) :-
-    Score1 < Score2, !.
-betterOfCountry(Move1,Score1, _, _, Move1, Score1) :- !.
 
 % minMax(State, IPlayer, Depth, Alpha, Beta, BestMove, BestScore)
 % minMax(State, IPlayer,Country, Depth, Alpha, Beta, BestMove, BestScore) :-
