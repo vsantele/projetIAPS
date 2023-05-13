@@ -524,6 +524,7 @@ chemin(940, 3, 950, 3).
 voisinDroite(950, 1, 950, 2).
 voisinDroite(950, 2, 950, 3).
 voisinBi(X1,Y1,X2,Y2) :- voisinDroite(X2,Y2,X1,Y1).
+voisinBi(X1,Y1,X2,Y2) :- voisinDroite(X1,Y1,X2,Y2).
 voisinAll(X1,Y1,X2,Y2) :- chemin(X1,Y1,X2,Y2).
 voisinAll(X1,Y1,X2,Y2) :- voisinBi(X1,Y1,X2,Y2).
 
