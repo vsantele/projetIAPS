@@ -4,7 +4,7 @@ import './App.css'
 import mapImage from './assets/map.png'
 import BotResponse from './models/BotResponse'
 import ChatMessage from './models/ChatMessage'
-import React, { MouseEvent, SyntheticEvent, useEffect, useState } from 'react'
+import React, { MouseEvent, useEffect, useState } from 'react'
 import { MessageAuthor } from './models/MessageAuthor'
 import Chat from './components/Chat'
 import positions from './board.json'
@@ -434,11 +434,11 @@ function App() {
         </form>
       </Box>
       <Grid container justifyContent="center" alignContent="center" spacing={1}>
-        <Grid item xs={12} md={9} textAlign="center">
-          <div id="map-area">
+        <Grid item xs={12} textAlign="center">
+          <div id="map-area" style={{ width: '60rem', maxWidth: '90vw', margin: 'auto' }}>
             <img
               src={mapImage}
-              style={{ width: '60rem' }}
+              style={{ width: '100%' }}
               id="map-image"
               alt="Plateau de jeu tour de france"
             />
