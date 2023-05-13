@@ -12,6 +12,7 @@ import PrologState from './models/PrologState'
 import JsState from './models/JsState'
 import { delay, teamIsBot, teamColors } from './utils'
 import InfoTable from './InfoTable'
+import Favicon from './assets/icon.png'
 
 const defaultState: JsState = {
   currentCountry: 'italie',
@@ -416,7 +417,7 @@ function App() {
   return (
     <Container maxWidth={false}>
       <Box sx={{ textAlign: 'center', mb: '0.5rem' }}>
-        <Typography variant="h1">Tour de France</Typography>
+        <img src={Favicon} style={{ display: 'inline', width: '8rem', paddingRight: '0.5rem' }} />
         <small>
           {readyState ? (
             <p>Connexion avec le bot : {connectionStatus}</p>
