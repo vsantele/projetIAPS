@@ -173,6 +173,32 @@ movePlayer([Px, Py], IPlayer,Country, NbSecondes, PlayersPositions, NewPlayersPo
     replace(NewPlayers, ICountry, PlayersPositionsOut, NewPlayersPositions).
 
 
+% Vérifie si le phénomène d'aspiration peut être activé (la position est juste derrière un joueur ou à coté)
+aspirationAtPosition([X, Y], PlayersPositions, [TargetPlayerX, Y]) :-
+    chemin(X, Y, TargetPlayerX, Y), % Position du joueur en [X, Y] après aspiration si autorisée
+    chemin(TargetPlayerX, Y, OtherPlayerX, Y), % Position du joueur qui entraine l'aspiration
+    move([X, Y], 1, 0,[TargetPlayerX, Y], PlayersPositions, NewPlayersPositionsOut), % Position du joueur en [X, Y] après aspiration si autorisée
+    chemin(TargetPlayerX, Y, OtherPlayerX, Y), % Position du joueur qui entraine l'aspiration
+    hasPlayer([OtherPlayerX, Y], NewPlayersPositionsOut).
+
+% Vérifie si le phénomène d'aspiration peut être activé (la position est à coté d'un joueur)
+aspirationAtPosition([X, Y], PlayersPositions, [TargetX, Y]) :-
+    move([X, Y], 1, 0,[TargetX, Y], PlayersPositions, _),
+    voisinBi(TargetX, Y, TargetX, Ny),
+    hasPlayer([TargetX, Ny], PlayersPositions).
+
+% Déplace la position d'un joueur en fonction de l'aspiration
+aspiration(PlayersPositions, ICountry, IPlayer, PlayersPositionsOut) :-
+    nth1(ICountry, PlayersPositions, Country),
+    nth1(IPlayer, Country, PlayerPos),
+    move(PlayerPos, 1, 0, NewPlayerPos, PlayersPositions, PlayersPositionsOut1), % 0 car on s'assure ici que le joueur a bien bougé d'une case
+    aspirationAtPosition(NewPlayerPos, PlayersPositionsOut1, PlayerPosAfterAspi),
+    replace(PlayerPosAfterAspi, IPlayer, Country, NewCountryPositions),
+    replace(NewCountryPositions, ICountry, PlayersPositions, PlayersPositionsOut).
+
+aspiration(PlayersPositions, _, _, PlayersPositions). % Phénomène d'aspiration n'est pas possible, on renvoi PlayersPositions comme on l'a reçu
+
+
 % Remplace le IElem dans List par Elem et le renvoit dans NewList
 replace(Elem, IElem, List, NewList) :-
     nth1(IElem, List, _, Temp), % Enlève le IElem élément de List qui produit Temp
