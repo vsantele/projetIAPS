@@ -105,7 +105,7 @@ canMove([Px, Py],[Tx,Ty], PlayersPositions, PlayersPositionsOut) :-
         hasPlayer([Tx, Ty], PlayersPositions)
         -> movePlayersRight([Tx, Ty], PlayersPositions, PlayersPositionsOut)
         ; PlayersPositionsOut = PlayersPositions
-    ), !.
+    ).
 
 
 movePlayersRight([Px, Py], PlayerPositions, PlayersPositionsOut) :-
@@ -173,28 +173,27 @@ movePlayer([Px, Py], IPlayer,Country, NbSecondes, PlayersPositions, NewPlayersPo
     replace(NewPlayers, ICountry, PlayersPositionsOut, NewPlayersPositions).
 
 
-% Vérifie si le phénomène d'aspiration peut être activé (la position est juste derrière un joueur ou à coté)
+% Vérifie si le phénomène d'aspiration peut être activé (la position est une case libre derrière un joueur)
 aspirationAtPosition([X, Y], PlayersPositions, [TargetPlayerX, Y]) :-
-    chemin(X, Y, TargetPlayerX, Y), % Position du joueur en [X, Y] après aspiration si autorisée
-    chemin(TargetPlayerX, Y, OtherPlayerX, Y), % Position du joueur qui entraine l'aspiration
-    move([X, Y], 1, 0,[TargetPlayerX, Y], PlayersPositions, NewPlayersPositionsOut), % Position du joueur en [X, Y] après aspiration si autorisée
-    chemin(TargetPlayerX, Y, OtherPlayerX, Y), % Position du joueur qui entraine l'aspiration
-    hasPlayer([OtherPlayerX, Y], NewPlayersPositionsOut).
+    chemin(X, Y, TargetPlayerX, Y), % Position du joueur en [TargetPlayerX, TargetPlayerY] après aspiration si autorisée
+    not(hasPlayer([TargetPlayerX, Y], PlayersPositions)),
+    chemin(TargetPlayerX, Y, AspiPlayerX, Y),
+    hasPlayer([AspiPlayerX, Y], PlayersPositions).
 
-% Vérifie si le phénomène d'aspiration peut être activé (la position est à coté d'un joueur)
-aspirationAtPosition([X, Y], PlayersPositions, [TargetX, Y]) :-
-    move([X, Y], 1, 0,[TargetX, Y], PlayersPositions, _),
-    voisinBi(TargetX, Y, TargetX, Ny),
-    hasPlayer([TargetX, Ny], PlayersPositions).
+% Vérifie si le phénomène d'aspiration peut être activé (la position suivante est à coté d'un joueur)
+aspirationAtPosition([X, Y], PlayersPositions, [TargetPlayerX, TargetPlayerY]) :-
+    chemin(X, Y, TargetPlayerX, TargetPlayerY), % Nouvelle position du joueur après l'aspi
+    not(hasPlayer([TargetPlayerX, TargetPlayerY], PlayersPositions)),
+    voisinBi(TargetPlayerX, TargetPlayerY, NX, NY), % On récupére son/ses voisins
+    hasPlayer([NX, NY], PlayersPositions).
 
 % Déplace la position d'un joueur en fonction de l'aspiration
 aspiration(PlayersPositions, ICountry, IPlayer, PlayersPositionsOut) :-
     nth1(ICountry, PlayersPositions, Country),
     nth1(IPlayer, Country, PlayerPos),
-    move(PlayerPos, 1, 0, NewPlayerPos, PlayersPositions, PlayersPositionsOut1), % 0 car on s'assure ici que le joueur a bien bougé d'une case
-    aspirationAtPosition(NewPlayerPos, PlayersPositionsOut1, PlayerPosAfterAspi),
+    aspirationAtPosition(PlayerPos, PlayersPositions, PlayerPosAfterAspi),
     replace(PlayerPosAfterAspi, IPlayer, Country, NewCountryPositions),
-    replace(NewCountryPositions, ICountry, PlayersPositions, PlayersPositionsOut).
+    replace(NewCountryPositions, ICountry, PlayersPositions, PlayersPositionsOut), !.
 
 aspiration(PlayersPositions, _, _, PlayersPositions). % Phénomène d'aspiration n'est pas possible, on renvoi PlayersPositions comme on l'a reçu
 
