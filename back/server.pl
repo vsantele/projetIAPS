@@ -61,6 +61,9 @@
 :- http_handler(root(bestCard),
                 handle_best_card,
                 []).
+:- http_handler(root(results),
+                handle_results,
+                []).
 
 
 start_server :-
@@ -142,3 +145,15 @@ handle_best_card(Request) :-
   cors_enable,
   reply_json_dict(_{bestCard: BestCard}).
 
+handle_best_card(Request) :-
+      option(method(options), Request), !,
+      cors_enable(Request,
+                  [ methods([post])
+                  ]),
+      format('~n').
+handle_results(Request) :-
+  http_read_json_dict(Request, State),
+  atom_string(Country,State.country),
+  globalRanking(State.playersPositions, RankingPoints, GlobalRanking),
+  cors_enable,
+  reply_json_dict(_{rankingPoints: RankingPoints, globalRanking: GlobalRanking}).
