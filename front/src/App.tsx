@@ -204,6 +204,8 @@ function App() {
 
   const [notificationMessage, setNotificationMessage] = useState<string | undefined>(undefined)
 
+  const playersPositionsProlog = JSON.stringify(gameState.teams.map(team => team.playersPositions))
+
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'en cours de connexion ...',
     [ReadyState.OPEN]: 'connecté',
@@ -540,6 +542,7 @@ function App() {
             <form onSubmit={updatePos}>
               <TextField name="pos" label="PlayersPositions" />
             </form>
+            <TextField disabled label="Current PlayersPositions" value={playersPositionsProlog} />
           </DialogContentText>
         </DialogContent>
         <DialogActions>
