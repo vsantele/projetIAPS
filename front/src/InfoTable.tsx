@@ -11,6 +11,16 @@ import { teamColors, teamIsBot } from './utils'
 import ButtonGroup from '@mui/material/ButtonGroup'
 import BlockUi from './components/BlockUi'
 
+function convertCoord([x, y]: number[]) {
+  if (x % 10 === 0) {
+    const xClean = Math.floor(x / 10)
+    return `${xClean},${y}`
+  }
+  const xCleqn = Math.floor(x / 10)
+  const letter = String.fromCharCode(97 + (x % 10) - 1)
+  return `${xCleqn}${letter},${y}`
+}
+
 export default function InfoTable({
   infos,
   currentTeam,
@@ -65,7 +75,7 @@ export default function InfoTable({
                   />
                 </TableCell>
                 <TableCell align="left">
-                  {team.playersPositions.map(positions => positions.join(',')).join(' | ')}
+                  {team.playersPositions.map(positions => convertCoord(positions)).join(' | ')}
                 </TableCell>
               </TableRow>
             ))}
