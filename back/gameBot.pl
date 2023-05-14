@@ -164,6 +164,7 @@ move([Px,Py], NbSecondes, NbSecondes,[Px,Py], PlayersPositions, PlayersPositions
 
 % On sort d'une case de chute et on joue
 movePlayer([Px, 0], IPlayer,Country, NbSecondes, PlayersPositions, NewPlayersPositionsOut) :-
+    Px \= 0, % On n'est pas sur une case de départ (0, 0)
     move([Px,0], 1, 0, [Fx, 1], PlayersPositions, PlayersPositionsOut),
     movePlayer([Fx, 1], IPlayer,Country, NbSecondes, PlayersPositionsOut, NewPlayersPositionsOut).
 
@@ -172,9 +173,9 @@ movePlayer([Px, Py], IPlayer, CountryName, NbSecondes, PlayersPositions, Players
     ((caseFin(Fx)) -> PlayersPositionsOut = NewPlayersPositions,!; true),
     (NbSecondesRestantes = 0
         -> (
-            findCountry(Country, Players, NewPlayersPositions),
+            findCountry(CountryName, Players, NewPlayersPositions),
             replace([Fx, Fy], IPlayer, Players, NewPlayers),
-            countryIndex(Country,ICountry),
+            countryIndex(CountryName,ICountry),
             replace(NewPlayers, ICountry, NewPlayersPositions, PlayersPositionsOut)
         )
         ;(
