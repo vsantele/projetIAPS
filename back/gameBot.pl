@@ -457,12 +457,25 @@ heuristics([_OC, OldPlayersPos, _OCC, _OCa, _OSC ], [_NC, NewPlayersPos, _NCC, _
     findCountry(Country, NewCountryPlayersPos, NewPlayersPos),
     nth1(IPlayer, NewCountryPlayersPos, [NX1, NY1]),
     heuristicEnd(NX1, HeuristicEnd),
+    heuristicChute(NewPlayersPos, Country, HeuristicChute),
     distance([OX1, OY1], [NX1, NY1], HeuristicDistance),
-    Heuristic is HeuristicDistance + HeuristicEnd.
+    Heuristic is HeuristicDistance + HeuristicEnd + HeuristicChute.
 
 heuristicEnd(X, 0) :-
     not(caseFin(X)), !.
 heuristicEnd(_, 1000).
+
+heuristicChute(PlayersPos, Country, Score) :-
+    findCountry(Country, CountryPlayersPos, PlayersPos),
+    findall(Score, (
+        nth1(IPlayer, CountryPlayersPos, [X, Y]),
+        isChute(X, Y, Score)
+        )
+    , Scores),
+    sum_list(Scores, Score).
+
+isChute(X, 0, -10) :- !.
+isChute(X, _, 0).
 
 distance([X1, Y1], [X2, Y2], D) :-
     D is truncate(X2/10) - truncate(X1/10).
