@@ -51,7 +51,7 @@ Concernant le choix des outils, il a principalement été fait par la première 
 
 Nous avons choisi d'utiliser React comme base pour construire le site web et le projet. Il s'agit donc ici d'une single-page application. Cependant, toute l'intelligence du projet est écrit en Prolog. La partie React et donc TypeScript sert juste d'interface entre les states envoyés et reçus.\newline
 
-Évidemment, le jeu fonctionne grâce à des requêtes HTTP et la communication pour le chat se fait via WebSocket. Enfin, nous avons décidé de déployé le projet sur Azure Container App et Azure Static Web App. 
+Évidemment, le jeu fonctionne grâce à des requêtes HTTP et la communication pour le chat se fait via WebSocket. Enfin, nous avons décidé de déployé le projet sur Azure Container App et Azure Static Web App. Enfin, il est évident que le CSS et le HTML sont utilisés afin de créer le réel affichage de la page.
 
 \newpage
 
@@ -112,6 +112,50 @@ Grâce à toutes ces améliorations, le bot comprend les questions avec ou sans 
 \newpage
 
 \section{Interface}
+
+L'interface est un élément crucial du projet car elle permet toute interaction avec le joueur. Celle-ci se compose de plusieurs éléments :
+\begin{itemize}
+    \item Le plateau
+    \item Le tableau des scores/cartes
+    \item La conversation avec le ChatBot
+    \item Le bot du jeu
+    \item l'état de connexion du bot
+    \item Les paramètres de démarrage d'une partie
+\end{itemize}
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=.5]{assets/interface-1.png}
+	\caption{Interface principale}
+\end{figure}
+
+\newpage
+
+L'état de connexion du bot se trouve tout en haut de la page et permet au joueur d'être informé sur l'état de fonctionnement du bot, plusieurs types d'états peuvent être affichés. Si le bot est hors connexion, il sera impossible de communiquer avec celui-ci et donc d'être guidé dans le jeu.\newline
+
+En dessous de celui-ci se trouve les paramètres du jeu et permettent de lancer une partie, de passer à l'étape suivante et \newline
+
+Ensuite, le plateau est affiché et permet de voir le déplacement sur la carte des joueurs. Il est possible de voir à tout moment ou se trouvent ses coureurs en suivant les couleurs indiquées plus bas.\newline
+
+Le tableau se trouvant en dessous du plateau indique les différentes équipes ainsi que leurs couleurs et leurs scores.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=.5]{assets/interface-2.png}
+	\caption{Interface du bot}
+\end{figure}
+
+Le bot du jeu permet d'envoyer les différentes commandes que l'on veut faire.
+
+\newpage
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=.5]{assets/interface-3.png}
+	\caption{Interface du ChatBot}
+\end{figure}
+
+Et enfin la dernière partie, c'est le bot permettant de demandé des conseils.
 
 \newpage
 
