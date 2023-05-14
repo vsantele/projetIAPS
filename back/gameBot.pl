@@ -92,7 +92,7 @@ latestPlayer(Player1I,[P1x, P1y], Player1I,[P1x, P1y], _Player2I, [_P2x,_P2y], _
 
 % Sur base de coordonnées, vérifie s'il peut avancer sans risque.
 % TODO: Peut-être vérifier en cas de dépassement?
-canMove([Px, Py],[Tx,Ty], _PlayersPositions, _PlayersPositionsOut) :-
+canMove([Px, Py],[Tx,Ty], PlayersPositions, PlayersPositions) :-
     chemin(Px, Py, Tx, Ty),
     caseFin(Tx), !.
 % canMove([Px, Py],[Tx,Ty], PlayersPositions, PlayersPositions) :-
@@ -128,6 +128,11 @@ getCountryDataFromPlayerPos([Px, Py], PlayerPositions, ICountry, IPlayer) :-
     nth1(ICountry, PlayerPositions, Country),
     nth1(IPlayer, Country, [Px, Py]).
 
+getNeighbors([Px, Py], PlayersPositions, []) :- not(hasPlayer([Px, Py], PlayersPositions)), writeln("Not palayer getNeighbors 1 "), !.
+    getNeighbors([Px, Py], PlayersPositions, Neighbors) :-
+    findall([NeighborX, NeighborY],(voisinAll(Px, Py, NeighborX, NeighborY), hasPlayer([NeighborX, NeighborY], PlayersPositions)), Neighbors),
+    write("CurrentNeighbors : "), writeln(Neighbors).
+
 
 
 canMoveBackward([Px, Py],[Tx,Ty], PlayersPositions) :-
@@ -149,6 +154,8 @@ hasPlayer([Px, Py], [Country|LCountry]) :-
 %   [Fx, Fy] : position du joueur après le déplacement (OUT)
 %   PlayersPositions : positions des joueurs (IN)
 %   PlayersPositionsOut : nouvelles positions des joueurs (OUT)
+move([Px,Py], 0, 0,[Px,Py], PlayersPositions, PlayersPositions).
+move([Px,Py], NbSecondes, NbSecondes,[Px,Py], PlayersPositions, PlayersPositions) :- caseFin(Px).
 move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], PlayersPositions, PlayersPositionsOut) :-
     NbSecondes > 0,
     canMove([Px, Py], [Tx, Ty], PlayersPositions, NewPlayersPositions),
@@ -159,39 +166,39 @@ move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], PlayersPositions, PlayersP
     canMoveBackward([Px, Py], [Tx, Ty], PlayersPositions),
     NbSecondes1 is NbSecondes + 1,
     move([Tx,Ty], NbSecondes1, SecondesRestantes,[Fx, Fy], PlayersPositions, PlayersPositions).
-move([Px,Py], 0, 0,[Px,Py], PlayersPositions, PlayersPositions).
 move([Px,Py], NbSecondes, NbSecondes,[Px,Py], PlayersPositions, PlayersPositions) :- NbSecondes > 0, not(canMove([Px,Py], _,PlayersPositions, _)). % Veut avancer
 move([Px,Py], NbSecondes, NbSecondes,[Px,Py], PlayersPositions, PlayersPositions).% :- not(canMoveBackward([Px,Py], _, PlayersPositions)).
 
 % On sort d'une case de chute et on joue
-movePlayer([Px, 0], IPlayer,Country, NbSecondes, PlayersPositions, NewPlayersPositionsOut) :-
-    move([Px,0], 1, 0, [Fx, 1], PlayersPositions, PlayersPositionsOut),
-    movePlayer([Fx, 1], IPlayer,Country, NbSecondes, PlayersPositionsOut, NewPlayersPositionsOut).
+% movePlayer([Px, 0], IPlayer,Country, NbSecondes, PlayersPositions, NewPlayersPositionsOut) :-
+%     move([Px,0], 1, 0, [Fx, 1], PlayersPositions, PlayersPositionsOut),
+%     movePlayer([Fx, 1], IPlayer,Country, NbSecondes, PlayersPositionsOut, NewPlayersPositionsOut).
 
 movePlayer([Px, Py], IPlayer,Country, NbSecondes, PlayersPositions, NewPlayersPositions) :-
-    move([Px,Py], NbSecondes, 0,[Fx, Fy], PlayersPositions, NewPlayersPositionsOut),
-    (caseChance([Fx,Fy]) -> valeurCarteChance(Val), move([Fx,Fy], Val, _, [Tx, Ty], NewPlayersPositionsOut,PlayersPositionsOut)
+    move([Px,Py], NbSecondes, _,[Fx, Fy], PlayersPositions, NewPlayersPositionsOut),
+    (caseChance([Fx,Fy]) -> valeurCarteChance(Val), move([Fx,Fy], Val, _, [Tx, Ty], NewPlayersPositionsOut, PlayersPositionsOut)
     ; move([Fx,Fy], 0, 0, [Tx, Ty], NewPlayersPositionsOut,PlayersPositionsOut)),
     findCountry(Country, Players, PlayersPositionsOut),
     replace([Tx, Ty], IPlayer, Players, NewPlayers),
     countryIndex(Country,ICountry),
     replace(NewPlayers, ICountry, PlayersPositionsOut, NewPlayersPositions).
 
-% Chute !!!
-movePlayer([Px, Py], IPlayer, CountryName, NbSecondes, PlayersPositions, PlayersPositionsOut) :-
-    move([Px,Py], NbSecondes, _,[Fx, Fy], PlayersPositions, NewPlayersPositions),
-    chemin(Fx, Fy, ChuteX, ChuteY), % Récupère le joueur qui était sur la case où la chute s'est produite
-    getCountryDataFromPlayerPos([ChuteX, ChuteY], NewPlayersPositions, ICountryFallen, IPlayerChute), % Récupère l'index et le pays du joueur qui est tombé
-    countryIndex(CountryFallenName, ICountryFallen), % Récupère le nom du pays du coueur qui était déjà sur la case et qui est tombé
-    findCountry(CountryFallenName, CountryFallenPlayers, NewPlayersPositions), % Récupère les joueurs du pays concerné
-    replace([ChuteX, 0], IPlayerChute, CountryFallenPlayers, NewCountryFallenPositions), % Remplace la position du joueur tombé par [ChuteX, 0]
-    replace(NewCountryFallenPositions, ICountryFallen, NewPlayersPositions, PlayersPositionsWithFirstFallen), % Remplace l'équipe avec la position modifiée dans la liste des équipes
+% % Chute !!!
+% movePlayer([Px, Py], IPlayer, CountryName, NbSecondes, PlayersPositions, PlayersPositionsOut) :-
+%     move([Px,Py], NbSecondes, NbSecondesRestantes,[Fx, Fy], PlayersPositions, NewPlayersPositions),
+%     (caseFin(Fx) -> PlayersPositionsOut = NewPlayersPositions,!; true),
+%     chemin(Fx, Fy, ChuteX, ChuteY), % Récupère le joueur qui était sur la case où la chute s'est produite
+%     getCountryDataFromPlayerPos([ChuteX, ChuteY], NewPlayersPositions, ICountryFallen, IPlayerChute), % Récupère l'index et le pays du joueur qui est tombé
+%     countryIndex(CountryFallenName, ICountryFallen), % Récupère le nom du pays du coueur qui était déjà sur la case et qui est tombé
+%     findCountry(CountryFallenName, CountryFallenPlayers, NewPlayersPositions), % Récupère les joueurs du pays concerné
+%     replace([ChuteX, 0], IPlayerChute, CountryFallenPlayers, NewCountryFallenPositions), % Remplace la position du joueur tombé par [ChuteX, 0]
+%     replace(NewCountryFallenPositions, ICountryFallen, NewPlayersPositions, PlayersPositionsWithFirstFallen), % Remplace l'équipe avec la position modifiée dans la liste des équipes
 
-    % Joueur qui a provoqué la chute
-    countryIndex(CountryName, ICurrentCountry), % Récupère le nom du pays du coueur qui était déjà sur la case et qui est tombé
-    findCountry(CountryName, CountryPlayers, PlayersPositionsWithFirstFallen), % Récupère les joueurs du pays du joueur qui vient de provoquer la chute
-    replace([ChuteX, 0], IPlayer, CountryPlayers, NewCountryAllFallenPositions), % Remplace la position du joueur tombé par [ChuteX, 0]
-    replace(NewCountryAllFallenPositions, ICurrentCountry, PlayersPositionsWithFirstFallen, PlayersPositionsOut). % Remplace l'équipe avec la position modifiée dans la liste des équipes
+%     % Joueur qui a provoqué la chute
+%     countryIndex(CountryName, ICurrentCountry), % Récupère le nom du pays du coueur qui était déjà sur la case et qui est tombé
+%     findCountry(CountryName, CountryPlayers, PlayersPositionsWithFirstFallen), % Récupère les joueurs du pays du joueur qui vient de provoquer la chute
+%     replace([ChuteX, 0], IPlayer, CountryPlayers, NewCountryAllFallenPositions), % Remplace la position du joueur tombé par [ChuteX, 0]
+%     replace(NewCountryAllFallenPositions, ICurrentCountry, PlayersPositionsWithFirstFallen, PlayersPositionsOut). % Remplace l'équipe avec la position modifiée dans la liste des équipes
 
 
 % Vérifie si le phénomène d'aspiration peut être activé (la position est une case libre derrière un joueur)
@@ -389,10 +396,17 @@ removeDuplicates(List, Result) :-
     sort(List, Result).
 
 pickBestCard(State, BestCard) :-
-    minMax(State,State, 8, _,_, BestCard, _).
+    alphabeta(State,State, 8, -100000, 100000, BestCard, _).
+    % minMax(State,State, 8, _,_, BestCard, _).
+
+
+minMax(StateInit, State, 0, _, _, _, Scores) :-
+    findall(Score, (
+        countryIndex(Country, _),
+        heuristics(StateInit, State, Country, Score)
+     ), Scores), !.
 
 minMax(StateInit, [CurrentCountry, PlayersPositions, CountriesCards, Cards,_], Depth, Alpha, Beta, BestMove, BestScores ) :-
-    Depth > 0,
     findCountry(CurrentCountry, Players, PlayersPositions),
     findCountry(CurrentCountry, CountryCards, CountriesCards),
     removeDuplicates(CountryCards, CountryCardsOut),
@@ -407,18 +421,87 @@ minMax(StateInit, [CurrentCountry, PlayersPositions, CountriesCards, Cards,_], D
         ),Moves)
         ;  nextCountry(CurrentCountry, Country), minMax(StateInit, [Country, PlayersPositions, CountriesCards, Cards,_], Depth1, _,_,_, Scores), Moves = [[0, Scores]]
     ),
-    % trace,
-%    write(Depth), weerite(" Moves "), write(Moves), nl,
     bestMove(Moves, CurrentCountry, Depth, Alpha, Beta, BestMove, BestScores), !.
 
-minMax(StateInit, State, Depth, _, _, _, Scores) :-
+alphabeta(StateInit, State, 0, Alpha, Beta, _, Scores) :-
     findall(Score, (
         countryIndex(Country, _),
         heuristics(StateInit, State, Country, Score)
-        % write("heuristics "), write(Score), nl
-     ), Scores)
-    %  , write("Scores "), write(Scores), nl
-     .
+     ), Scores), !.
+
+alphabeta(StateInit, State, Depth, Alpha, Beta, BestMove, BestScores) :-
+    minNode(Depth),
+    V is 100000,
+    [Country, _PlayersPositions, CountriesCards, _, _] = State,
+    findCountry(Country, CountryCards, CountriesCards),
+    removeDuplicates(CountryCards, CountryCardsOut),
+    Depth1 is Depth-1,
+    search(StateInit, State, CountryCardsOut, Depth1, V, Alpha, Beta, BestMove, BestScores).
+    % foreach(member(SelectedCard, CountryCardsOut),
+    % (
+    %     replace(SelectedCard, 5, State, StateWithCard),
+    %     play(StateWithCard,StateOut),
+    %     alphabeta(StateInit, StateOut, Depth1, Alpha, Beta, _, Scores),
+    %     minValue(V, Scores,Country, V1),
+    %     (Alpha >= V1 -> (BestMove = SelectedCard, BestScores = Scores, !) ; Beta is minValue(Beta, V1))
+    % )).
+
+alphabeta(StateInit, State, Depth, Alpha, Beta, BestMove, BestScores) :-
+    maxNode(Depth),
+    V is -100000,
+    [Country, _PlayersPositions, CountriesCards, _, _] = State,
+    findCountry(Country, CountryCards, CountriesCards),
+    removeDuplicates(CountryCards, CountryCardsOut),
+    Depth1 is Depth-1,
+    search(StateInit, State, CountryCardsOut, Depth1,V, Alpha, Beta, BestMove, BestScores).
+    % foreach(member(SelectedCard, CountryCardsOut),
+    % (
+    %     replace(SelectedCard, 5, State, StateWithCard),
+    %     play(StateWithCard,StateOut),
+    %     alphabeta(StateInit, StateOut, Depth1, Alpha, Beta, _, Scores),
+    %     maxValue(V, Scores, Country, V1),
+    %     (Beta =< V1 -> (BestMove = SelectedCard, BestScores = Scores, !) ; Alpha is maxValue(Alpha, V1))
+    % )).
+
+search(StateInit, State, [SelectedCard | SelectedCards], Depth,Value, Alpha, Beta, BestMove, BestScores) :-
+    maxNode(Depth),
+    replace(SelectedCard, 5, State, StateWithCard),
+    play(StateWithCard,StateOut),
+    [Country, _, _, _, _] = StateInit,
+    alphabeta(StateInit, StateOut, Depth, Alpha, Beta, _, Scores),
+    maxValue(Value, Scores, Country, V1),
+    (Beta =< V1 -> (BestMove = SelectedCard, BestScores = Scores, !) ; AlphaOut is max(Alpha, V1), search(StateInit, State, SelectedCards, Depth, V1, AlphaOut, Beta, BestMove, BestScores)).
+
+search(StateInit, State, [], Depth, Value, Alpha, Beta, BestMove, Value).
+
+search(StateInit, State, [SelectedCard | SelectedCards], Depth, Value, Alpha, Beta, BestMove, BestScores) :-
+    minNode(Depth),
+    replace(SelectedCard, 5, State, StateWithCard),
+    play(StateWithCard,StateOut),
+    [Country, _, _, _, _] = StateInit,
+    alphabeta(StateInit, StateOut, Depth, Alpha, Beta, _, Scores),
+    minValue(Value, Scores, Country, V1),
+    (Alpha >= V1 -> (BestMove = SelectedCard, BestScores = Scores, !) ; BetaOut is min(Beta, V1), search(StateInit, State, SelectedCards, Depth,V1, Alpha, BetaOut, BestMove, BestScores)).
+
+maxNode(Depth) :-
+    0 is Depth mod 2, !.
+minNode(Depth) :-
+    1 is Depth mod 2, !.
+
+maxValue(Value, Scores,Country, Score) :-
+    findCountry(Country, Score, Scores),
+    Score > Value, !.
+maxValue(Value, _Scores, _Country, Value) :- !.
+
+minValue(Value, Scores,Country, Score) :-
+    findCountry(Country, Score, Scores),
+    Score < Value, !.
+minValue(Value, _Scores, _Country, Value) :- !.
+
+
+isMax(Depth) :-
+    0 is Depth mod 2, !.
+
 
 bestMove([[Move, Scores]], _, _, _, _, Move, Scores) :- !.
 
@@ -430,6 +513,7 @@ betterOf(_,Scores1, Move2, Scores2, Country, Depth, Alpha, Beta, Move2, Scores2)
     findCountry(Country, Score1, Scores1),
     findCountry(Country, Score2, Scores2),
     Score1 < Score2, !.
+
 
 % betterOf(Move1,Scores1, Move2, Scores2, Country, Depth, Alpha, Beta, Move1, Scores1) :- !.
 betterOf(Move1,Scores1, Move2, Scores2, Country, Depth, Alpha, Beta, Move1, Scores1) :- !.
