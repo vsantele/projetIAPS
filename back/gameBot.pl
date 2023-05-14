@@ -538,7 +538,7 @@ startalphabeta(State, BestMove) :-
     [Country, _PlayersPositions, CountriesCards, _, _] = State,
     findCountry(Country, CountryCards, CountriesCards),
     removeDuplicates(CountryCards, CountryCardsOut),
-    search(State, State, CountryCardsOut, 12, (_, V), -10000, 10000, BestMove, _).
+    search(State, State, CountryCardsOut, 8, (_, V), -10000, 10000, BestMove, _).
 
 
 alphabeta(StateInit, State, 0, (Move, Value), Alpha, Beta, _, Scores) :-
@@ -548,7 +548,9 @@ alphabeta(StateInit, State, 0, (Move, Value), Alpha, Beta, _, Scores) :-
      ), Scores), !.
 
 alphabeta(StateInit, State, Depth, (Move, Value), Alpha, Beta, BestMove, BestScores) :-
-    minNode(Depth),
+    [CountryInit, _, _, _, _] = StateInit,
+    [Country, _, _, _, _] = State,
+    minNode(Depth, Country, CountryInit),
     V is 10000,
     [Country, _PlayersPositions, CountriesCards, _, _] = State,
     findCountry(Country, CountryCards, CountriesCards),
@@ -556,7 +558,9 @@ alphabeta(StateInit, State, Depth, (Move, Value), Alpha, Beta, BestMove, BestSco
     search(StateInit, State, CountryCardsOut, Depth, (Move, V), Alpha, Beta, BestMove, BestScores).
 
 alphabeta(StateInit, State, Depth, (Move, Value), Alpha, Beta, BestMove, BestScores) :-
-    maxNode(Depth),
+    [CountryInit, _, _, _, _] = StateInit,
+    [Country, _, _, _, _] = State,
+    maxNode(Depth, Country, CountryInit),
     V is -10000,
     [Country, _PlayersPositions, CountriesCards, _, _] = State,
     findCountry(Country, CountryCards, CountriesCards),
@@ -564,14 +568,15 @@ alphabeta(StateInit, State, Depth, (Move, Value), Alpha, Beta, BestMove, BestSco
     search(StateInit, State, CountryCardsOut, Depth,(Move, V), Alpha, Beta, BestMove, BestScores).
 
 search(StateInit, State, [SelectedCard | SelectedCards], Depth, (Move, Value), Alpha, Beta, BestMove, BestScores) :-
-    maxNode(Depth),
+    [CountryInit, _, _, _, _] = StateInit,
+    [Country, _, _, _, _] = State,
+    maxNode(Depth, Country, CountryInit),
     Depth1 is Depth-1,
     replace(SelectedCard, 5, State, StateWithCard),
     (play(StateWithCard,StateOut)
         ->(true)
         ; (StateOut = StateWithCard)
     ),
-    [Country, _, _, _, _] = State,
     (var(Move) -> (Move = SelectedCard) ; true),
     alphabeta(StateInit, StateOut, Depth1,(Move, Value), Alpha, Beta, _, Scores),
     maxValue(Value, Scores, Country, V1),
@@ -587,14 +592,15 @@ search(StateInit, State, [SelectedCard | SelectedCards], Depth, (Move, Value), A
         ) ).
 
 search(StateInit, State, [SelectedCard | SelectedCards], Depth, (Move, Value), Alpha, Beta, BestMove, BestScores) :-
-    minNode(Depth),
+    [CountryInit, _, _, _, _] = StateInit,
+    [Country, _, _, _, _] = State,
+    minNode(Depth, Country, CountryInit),
     Depth1 is Depth-1,
     replace(SelectedCard, 5, State, StateWithCard),
     (play(StateWithCard,StateOut)
         ->(true)
         ; (StateOut = StateWithCard)
     ),
-    [Country, _, _, _, _] = State,
     (var(Move) -> (Move = SelectedCard) ; true),
     alphabeta(StateInit, StateOut, Depth1,(Move, Value), Alpha, Beta, _, Scores),
     minValue(Value, Scores, Country, V1),
@@ -610,10 +616,12 @@ search(StateInit, State, [SelectedCard | SelectedCards], Depth, (Move, Value), A
             BestMove = Move
         ) ).
 
-maxNode(Depth) :-
-    0 is Depth mod 2, !.
-minNode(Depth) :-
-    1 is Depth mod 2, !.
+maxNode(Depth, Country, CountryInit) :-
+    Country = CountryInit, !.
+    % 0 is Depth mod 2, !.
+minNode(Depth, Country, CountryInit) :-
+    Country \= CountryInit, !.
+    % 1 is Depth mod 2, !.
 
 maxValue(Value, Scores,Country, Score) :-
     findCountry(Country, Score, Scores),
