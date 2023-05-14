@@ -175,9 +175,9 @@ movePlayer([Px, Py], IPlayer, CountryName, NbSecondes, PlayersPositions, Players
         -> (
             countryIndex(CountryName, ICountry),
             findCountry(CountryName, Country, TempPlayersPositions), % Récupère les joueurs du pays concerné
-            replace([Tx, Ty], IPlayer, Country, NewCountryPositions),
-            replace(NewCountryPositions, ICountry, TempPlayersPositions, TempPlayersPositions1),
-
+            (caseChance([Tx, Ty]) -> (valeurCarteChance(Val), move([Tx, Ty], Val, _, [Fx, Fy], TempPlayersPositions, PlayersPositionsOut1); Fx = Tx, Fy = Ty, PlayersPositionsOut1 = TempPlayersPositions)),
+            replace([Fx, Fy], IPlayer, Country, NewCountryPositions),
+            replace(NewCountryPositions, ICountry, PlayersPositionsOut1, TempPlayersPositions1),
             aspiration(TempPlayersPositions1, ICountry, IPlayer, PlayersPositionsOut, _)
         )
         ;(
