@@ -204,8 +204,8 @@ movePlayer([Px, Py], IPlayer, CountryName, NbSecondes, PlayersPositions, Players
     ).
 
 % Fix la position du coté de la route en cas de chute. En prenant en compte les cas particuliers lors des virages (voir système de coordonnées)
-chutePos([Px, Py], [Px, 0]) :- 0 is Px mod 10, !. % simplement mettre en latéral 0
-chutePos([Px, Py], [Tx, 0]) :- Tx is truncate(Px /10) * 10 + 1. % mettre en latéral 0 mais à coté de la case A (forcément au bord de la route)
+chutePos([Px, _], [Px, 0]) :- 0 is Px mod 10, !. % simplement mettre en latéral 0
+chutePos([Px, _], [Tx, 0]) :- Tx is truncate(Px /10) * 10 + 1. % mettre en latéral 0 mais à coté de la case A (forcément au bord de la route)
 
 % Vérifie si le phénomène d'aspiration peut être activé (la position est une case libre derrière un joueur)
 aspirationAtPosition([X, Y], PlayersPositions, [TargetPlayerX, Y]) :-
@@ -504,28 +504,6 @@ pickBestCard(State, BestCard) :-
     % minMax(State,State, 8, _,_, BestCard, _).
 
 
-minMax(StateInit, State, 0, _, _, _, Scores) :-
-    findall(Score, (
-        countryIndex(Country, _),
-        heuristics(StateInit, State, Country, Score)
-     ), Scores), !.
-
-minMax(StateInit, [CurrentCountry, PlayersPositions, CountriesCards, Cards,_], Depth, Alpha, Beta, BestMove, BestScores ) :-
-    findCountry(CurrentCountry, Players, PlayersPositions),
-    findCountry(CurrentCountry, CountryCards, CountriesCards),
-    removeDuplicates(CountryCards, CountryCardsOut),
-    Depth1 is Depth-1,
-    (
-        findLatestPlayer(Players, LatestPlayerI, PlayersPositions) ->
-        findall([Move, Scores], (
-            member(SelectedCard, CountryCardsOut),
-            play([CurrentCountry, PlayersPositions, CountriesCards, Cards, SelectedCard], StateOut),
-            [_,_,_,_,Move] = StateOut,
-            minMax(StateInit, StateOut, Depth1, _,_,_, Scores)
-        ),Moves)
-        ;  nextCountry(CurrentCountry, Country), minMax(StateInit, [Country, PlayersPositions, CountriesCards, Cards,_], Depth1, _,_,_, Scores), Moves = [[0, Scores]]
-    ),
-    bestMove(Moves, CurrentCountry, Depth, Alpha, Beta, BestMove, BestScores), !.
 
 startalphabeta(State, BestMove) :-
     V is -10000,
@@ -628,9 +606,29 @@ minValue(Value, Scores,Country, Score) :-
 minValue(Value, _Scores, _Country, Value) :- !.
 
 
-isMax(Depth) :-
-    0 is Depth mod 2, !.
 
+minMax(StateInit, State, 0, _, _, _, Scores) :-
+    findall(Score, (
+        countryIndex(Country, _),
+        heuristics(StateInit, State, Country, Score)
+     ), Scores), !.
+
+minMax(StateInit, [CurrentCountry, PlayersPositions, CountriesCards, Cards,_], Depth, Alpha, Beta, BestMove, BestScores ) :-
+    findCountry(CurrentCountry, Players, PlayersPositions),
+    findCountry(CurrentCountry, CountryCards, CountriesCards),
+    removeDuplicates(CountryCards, CountryCardsOut),
+    Depth1 is Depth-1,
+    (
+        findLatestPlayer(Players, LatestPlayerI, PlayersPositions) ->
+        findall([Move, Scores], (
+            member(SelectedCard, CountryCardsOut),
+            play([CurrentCountry, PlayersPositions, CountriesCards, Cards, SelectedCard], StateOut),
+            [_,_,_,_,Move] = StateOut,
+            minMax(StateInit, StateOut, Depth1, _,_,_, Scores)
+        ),Moves)
+        ;  nextCountry(CurrentCountry, Country), minMax(StateInit, [Country, PlayersPositions, CountriesCards, Cards,_], Depth1, _,_,_, Scores), Moves = [[0, Scores]]
+    ),
+    bestMove(Moves, CurrentCountry, Depth, Alpha, Beta, BestMove, BestScores), !.
 
 bestMove([[Move, Scores]], _, _, _, _, Move, Scores) :- !.
 
@@ -646,83 +644,3 @@ betterOf(_,Scores1, Move2, Scores2, Country, Depth, Alpha, Beta, Move2, Scores2)
 
 % betterOf(Move1,Scores1, Move2, Scores2, Country, Depth, Alpha, Beta, Move1, Scores1) :- !.
 betterOf(Move1,Scores1, Move2, Scores2, Country, Depth, Alpha, Beta, Move1, Scores1) :- !.
-
-
-% minMax(State, IPlayer, Depth, Alpha, Beta, BestMove, BestScore)
-% minMax(State, IPlayer,Country, Depth, Alpha, Beta, BestMove, BestScore) :-
-%     Depth > 0,
-%     findall([Move, Score], (move(State, IPlayer,Country, Move, NewState), minMax(NewState, IPlayer,Country, Depth-1, Alpha, Beta, _, Score)), Moves),
-%     bestMove(Moves, IPlayer, Depth, Alpha, Beta, BestMove, BestScore), !.
-
-% minMax(State, IPlayer, Country,_, _, _, _, Score) :-
-%     heuristics(State, State, IPlayer, Country, Score).
-
-% bestMove([[Move, Score]], _, _, _, _, Move, Score) :- !.
-
-% bestMove([[Move, Score]|Moves], IPlayer, Depth, Alpha, Beta, BestMove, BestScore) :-
-%     bestMove(Moves, IPlayer, Depth, Alpha, Beta, Move1, Score1),
-%     betterOf(Move, Score, Move1, Score1, IPlayer, Depth, Alpha, Beta, BestMove, BestScore).
-
-% betterOf(Move0, Score0, _, Score1, IPlayer, Depth, _, _, Move0, Score0) :-
-%     minToMove(IPlayer, Depth),
-%     Score0 > Score1, !.
-
-% betterOf(Move0, Score0, _, Score1, IPlayer, Depth, _, _, Move0, Score0) :-
-%     maxToMove(IPlayer, Depth),
-%     Score0 < Score1, !.
-
-% betterOf(_, _, Move1, Score1, IPlayer, Depth, Alpha, Beta, Move1, Score1) :-
-%     minToMove(IPlayer, Depth),
-%     Score1 > Alpha,
-%     Score1 < Beta, !.
-
-% betterOf(_, _, Move1, Score1, IPlayer, Depth, Alpha, Beta, Move1, Score1) :-
-%     maxToMove(IPlayer, Depth),
-%     Score1 < Beta,
-%     Score1 > Alpha, !.
-
-% betterOf(Move0, Score0, _, Score1, IPlayer, Depth, Alpha, Beta, Move0, Score0) :-
-%     minToMove(IPlayer, Depth),
-%     Score0 > Alpha,
-%     Score0 > Beta, !.
-
-% betterOf(Move0, Score0, _, Score1, IPlayer, Depth, Alpha, Beta, Move0, Score0) :-
-%     maxToMove(IPlayer, Depth),
-%     Score0 < Beta,
-%     Score0 < Alpha, !.
-
-% betterOf(_, _, Move1, Score1, IPlayer, Depth, Alpha, Beta, Move1, Score1) :-
-%     minToMove(IPlayer, Depth),
-%     Score1 > Alpha,
-%     Score1 > Beta, !.
-
-% betterOf(_, _, Move1, Score1, IPlayer, Depth, Alpha, Beta, Move1, Score1) :-
-%     maxToMove(IPlayer, Depth),
-%     Score1 < Beta,
-%     Score1 < Alpha, !.
-
-% betterOf(Move0, Score0, _, Score1, IPlayer, Depth, Alpha, Beta, Move0, Score0) :-
-%     minToMove(IPlayer, Depth),
-%     Score0 > Alpha,
-%     Score0 < Beta, !.
-
-% betterOf(Move0, Score0, _, Score1, IPlayer, Depth, Alpha, Beta, Move0, Score0) :-
-%     maxToMove(IPlayer, Depth),
-%     Score0 < Beta,
-%     Score0 > Alpha, !.
-
-% minToMove(IPlayer, Depth) :-
-%     Depth mod 2 =:= 0,
-%     IPlayer = 1, !.
-
-% maxToMove(IPlayer, Depth) :-
-%     Depth mod 2 =:= 0,
-%     IPlayer = 2, !.
-
-% minToMove(IPlayer, Depth) :-
-%     Depth mod 2 =:= 1,
-%     IPlayer = 2, !.
-
-% maxToMove(IPlayer, Depth) :-
-%     Depth mod 2 =:= 1,
-%     IPlayer = 1, !.
