@@ -217,6 +217,7 @@ aspirationAtPosition([X, Y], PlayersPositions, [TargetPlayerX, Y]) :-
 % Vérifie si le phénomène d'aspiration peut être activé (la position suivante est à coté d'un joueur)
 aspirationAtPosition([X, Y], PlayersPositions, [TargetPlayerX, TargetPlayerY]) :-
     chemin(X, Y, TargetPlayerX, TargetPlayerY), % Nouvelle position du joueur après l'aspi
+    hasPlayer([TargetPlayerX, Y], PlayersPositions), % required un joueur en face pour avoir l'aspi et se place à coté
     not(hasPlayer([TargetPlayerX, TargetPlayerY], PlayersPositions)),
     voisinBi(TargetPlayerX, TargetPlayerY, NX, NY), % On récupére son/ses voisins
     hasPlayer([NX, NY], PlayersPositions).
