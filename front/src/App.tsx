@@ -1,4 +1,18 @@
-import { Box, Container, Grid, Snackbar, SnackbarCloseReason, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid,
+  Snackbar,
+  SnackbarCloseReason,
+  Stack,
+  TextField,
+} from '@mui/material'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
 import './App.css'
 import mapImage from './assets/map.webp'
@@ -186,6 +200,7 @@ function App() {
   const [gameState, setGameState] = useState(defaultState)
   const [gameIsStarted, setGameIsStarted] = useState<boolean>(false)
   const [isThinking, setIsThinking] = useState<boolean>(false)
+  const [openModal, setOpenModal] = React.useState(false)
 
   const [notificationMessage, setNotificationMessage] = useState<string | undefined>(undefined)
 
@@ -291,6 +306,7 @@ function App() {
       }
 
       setGameState(currentState)
+      setOpenModal(false)
     }
   }
 
@@ -314,20 +330,14 @@ function App() {
     }
   }
 
-  const onClickNextStepButton = (event: MouseEvent<HTMLButtonElement>) => {
-    play(gameState, 1)
-  }
-
   const play = async (gameState: JsState, selectedCard: number) => {
     try {
       setIsThinking(true)
       let data = await sendMove({ ...gameState, playedCard: selectedCard })
-      // if (teamIsBot[gameState.currentCountry]) {
       addMessageInGameChat(
         MessageAuthor.BOT,
         `${gameState.currentCountry} a joué ${data.selectedCard}`
       )
-      // }
       setGameState(() => prologStateToJsState(data))
       if (teamIsBot[data.country]) {
         const country = data.country
@@ -414,101 +424,129 @@ function App() {
     }
   }
 
-  return (
-    <Container maxWidth="lg">
-      <Box sx={{ textAlign: 'center', mb: '0.5rem' }}>
-        <img src={Favicon} style={{ display: 'inline', width: '8rem', paddingRight: '0.5rem' }} />
-        <small>
-          {readyState ? (
-            <p>Connexion avec le bot : {connectionStatus}</p>
-          ) : (
-            <p>Serveur du bot introuvable</p>
-          )}
-        </small>
-        <button onClick={onClickStartGameButton}>Démarrer la partie</button>
-        <button onClick={onClickNextStepButton} disabled={!gameIsStarted}>
-          Prochaine étape
-        </button>
-        <form onSubmit={updatePos}>
-          <input name="pos" />
-          <button>Envoyer</button>
-        </form>
-      </Box>
-      <Grid container justifyContent="center" alignContent="center" spacing={1}>
-        <Grid item xs={12} textAlign="center">
-          <div id="map-area" style={{ width: '60rem', maxWidth: '90vw', margin: 'auto' }}>
-            <img
-              src={mapImage}
-              style={{ width: '100%' }}
-              id="map-image"
-              alt="Plateau de jeu tour de france"
-            />
-            {gameState.teams.map((team, iTeam) =>
-              team.playersPositions.map((player, iPlayer) => {
-                const position = positions.find(
-                  p => p.playerForward === player[0] && p.playerLateral === player[1]
-                )
-                if (position) {
-                  return (
-                    <div
-                      key={team.id + '-' + iPlayer}
-                      className="player"
-                      style={{
-                        left: position.mapXRatio + '%',
-                        top: position.mapYRatio + '%',
-                        background: teamColors[team.id],
-                      }}>
-                      {iPlayer + 1}
-                    </div>
-                  )
-                }
-              })
-            )}
-          </div>
-        </Grid>
-        <Grid item xs={12} md={8}>
-          <Box sx={{ height: '20rem' }}>
-            <InfoTable
-              infos={gameState.teams}
-              currentTeam={gameState.currentCountry}
-              isGameStarted={gameIsStarted}
-              onPlayCard={card => play(gameState, card)}
-              isThinking={isThinking}
-            />
-          </Box>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Chat
-            height="40vh"
-            onSendMessage={onSendGameBotMessage}
-            title="Bot de jeu"
-            placeholder="Entrer une instruction de jeu"
-            label="Instruction de jeu"
-            messages={instructions}
-            submitDisabled={!gameIsStarted}
-            onClickHint={onClickGameHint}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Chat
-            height="40vh"
-            onSendMessage={handleSendChatBotMessage}
-            title="Discussion avec le bot du tour"
-            submitDisabled={readyState !== ReadyState.OPEN}
-            messages={botMessages}
-            label="Message"
-            placeholder="Qui commence le jeu?"
-          />
-        </Grid>
-      </Grid>
+  const handleOpenModal = () => {
+    setOpenModal(true)
+  }
+  const handleCloseModal = () => {
+    setOpenModal(false)
+  }
 
-      <Snackbar
-        open={notificationMessage !== undefined}
-        autoHideDuration={6000}
-        onClose={(_, reason) => handleCloseSnackbar(reason)}
-        message={notificationMessage}
-      />
-    </Container>
+  return (
+    <>
+      <Container maxWidth="lg">
+        <Stack direction="row" sx={{ m: '0.5rem' }} justifyContent="space-between">
+          <div>
+            <img src={Favicon} style={{ display: 'inline', width: '8rem' }} />
+            <small>
+              {readyState ? (
+                <p>Connexion avec le bot : {connectionStatus}</p>
+              ) : (
+                <p>Serveur du bot introuvable</p>
+              )}
+            </small>
+          </div>
+          <div>
+            <Button onClick={onClickStartGameButton} variant="contained">
+              Démarrer la partie
+            </Button>
+            <Button
+              onClick={handleOpenModal}
+              variant="outlined"
+              color="secondary"
+              sx={{ ml: '0.5rem' }}>
+              Debug
+            </Button>
+          </div>
+        </Stack>
+        <Grid container justifyContent="center" alignContent="center" spacing={1}>
+          <Grid item xs={12} textAlign="center">
+            <div id="map-area" style={{ width: '60rem', maxWidth: '90vw', margin: 'auto' }}>
+              <img
+                src={mapImage}
+                style={{ width: '100%' }}
+                id="map-image"
+                alt="Plateau de jeu tour de france"
+              />
+              {gameState.teams.map((team, iTeam) =>
+                team.playersPositions.map((player, iPlayer) => {
+                  const position = positions.find(
+                    p => p.playerForward === player[0] && p.playerLateral === player[1]
+                  )
+                  if (position) {
+                    return (
+                      <div
+                        key={team.id + '-' + iPlayer}
+                        className="player"
+                        style={{
+                          left: position.mapXRatio + '%',
+                          top: position.mapYRatio + '%',
+                          background: teamColors[team.id],
+                        }}>
+                        {iPlayer + 1}
+                      </div>
+                    )
+                  }
+                })
+              )}
+            </div>
+          </Grid>
+          <Grid item xs={12} md={8}>
+            <Box sx={{ height: '20rem' }}>
+              <InfoTable
+                infos={gameState.teams}
+                currentTeam={gameState.currentCountry}
+                isGameStarted={gameIsStarted}
+                onPlayCard={card => play(gameState, card)}
+                isThinking={isThinking}
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Chat
+              height="40vh"
+              onSendMessage={onSendGameBotMessage}
+              title="Bot de jeu"
+              placeholder="Entrer une instruction de jeu"
+              label="Instruction de jeu"
+              messages={instructions}
+              submitDisabled={!gameIsStarted}
+              onClickHint={onClickGameHint}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Chat
+              height="40vh"
+              onSendMessage={handleSendChatBotMessage}
+              title="Discussion avec le bot du tour"
+              submitDisabled={readyState !== ReadyState.OPEN}
+              messages={botMessages}
+              label="Message"
+              placeholder="Qui commence le jeu?"
+            />
+          </Grid>
+        </Grid>
+
+        <Snackbar
+          open={notificationMessage !== undefined}
+          autoHideDuration={6000}
+          onClose={(_, reason) => handleCloseSnackbar(reason)}
+          message={notificationMessage}
+        />
+      </Container>
+      <Dialog open={openModal} onClose={handleCloseModal}>
+        <DialogTitle>Debug: Tester la position des joueurs </DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ mt: '0.3rem' }}>
+            <form onSubmit={updatePos}>
+              <TextField name="pos" label="PlayersPositions" />
+            </form>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModal}>Close</Button>
+        </DialogActions>
+      </Dialog>
+    </>
   )
 }
 
