@@ -181,19 +181,24 @@ movePlayer([Px, Py], IPlayer, CountryName, NbSecondes, PlayersPositions, Players
         ;(
             % Chute !!!
             chemin(Fx, Fy, ChuteX, ChuteY), % Récupère le joueur qui était sur la case où la chute s'est produite
+            chutePos([ChuteX, ChuteY], [SideChureX, SideChuteY]), % Récupère la position où mettre les joueurs
             getCountryDataFromPlayerPos([ChuteX, ChuteY], NewPlayersPositions, ICountryFallen, IPlayerChute), % Récupère l'index et le pays du joueur qui est tombé
             countryIndex(CountryFallenName, ICountryFallen), % Récupère le nom du pays du coueur qui était déjà sur la case et qui est tombé
             findCountry(CountryFallenName, CountryFallenPlayers, NewPlayersPositions), % Récupère les joueurs du pays concerné
-            replace([ChuteX, 0], IPlayerChute, CountryFallenPlayers, NewCountryFallenPositions), % Remplace la position du joueur tombé par [ChuteX, 0]
+            replace([SideChureX, SideChuteY], IPlayerChute, CountryFallenPlayers, NewCountryFallenPositions), % Remplace la position du joueur tombé par [ChuteX, 0]
             replace(NewCountryFallenPositions, ICountryFallen, NewPlayersPositions, PlayersPositionsWithFirstFallen), % Remplace l'équipe avec la position modifiée dans la liste des équipes
 
             % Joueur qui a provoqué la chute
             countryIndex(CountryName, ICurrentCountry), % Récupère le nom du pays du coueur qui était déjà sur la case et qui est tombé
             findCountry(CountryName, CountryPlayers, PlayersPositionsWithFirstFallen), % Récupère les joueurs du pays du joueur qui vient de provoquer la chute
-            replace([ChuteX, 0], IPlayer, CountryPlayers, NewCountryAllFallenPositions), % Remplace la position du joueur tombé par [ChuteX, 0]
+            replace([SideChureX, SideChuteY], IPlayer, CountryPlayers, NewCountryAllFallenPositions), % Remplace la position du joueur tombé par [ChuteX, 0]
             replace(NewCountryAllFallenPositions, ICurrentCountry, PlayersPositionsWithFirstFallen, PlayersPositionsOut) % Remplace l'équipe avec la position modifiée dans la liste des équipes
         )
     ).
+
+% Fix la position du coté de la route en cas de chute. En prenant en compte les cas particuliers lors des virages (voir système de coordonnées)
+chutePos([Px, Py], [Px, 0]) :- 0 is Px mod 10, !. % simplement mettre en latéral 0
+chutePos([Px, Py], [Tx, 0]) :- Tx is truncate(Px /10) * 10 + 1. % mettre en latéral 0 mais à coté de la case A (forcément au bord de la route)
 
 % Vérifie si le phénomène d'aspiration peut être activé (la position est une case libre derrière un joueur)
 aspirationAtPosition([X, Y], PlayersPositions, [TargetPlayerX, Y]) :-
