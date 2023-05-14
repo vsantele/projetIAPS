@@ -8,7 +8,7 @@ import { MouseEvent, useEffect, useState } from 'react'
 import { MessageAuthor } from './models/MessageAuthor'
 import Chat from './components/Chat'
 import MapPosition from './models/MapPosition'
-import Board from './board.json'
+import Board from './temp_board.json'
 
 enum Team {
   ITALY,
@@ -36,7 +36,7 @@ function getAsciiValues(text: string) {
 
 function AppCoordsGen() {
   const { sendMessage, lastMessage, readyState } = useWebSocket(
-    (import.meta.env.VITE_API_HOST ?? '') + '/bot',
+    (import.meta.env.VITE_WEBSOCKET_HOST ?? '') + '/bot',
     {
       retryOnError: false,
       reconnectInterval: 1000,
@@ -175,6 +175,9 @@ function AppCoordsGen() {
     setClickCount(clickCount + 1)
   }
 
+
+  console.log(positions);
+
   return (
     <Container maxWidth="xl">
       <Grid container justifyContent="center" alignContent="center" spacing={1}>
@@ -192,12 +195,15 @@ function AppCoordsGen() {
           <div id="map-area" onClick={onClickImage}>
             <img src={mapImage} id="map-image" alt="Plateau de jeu tour de france" />
 
-            {positions.map(position => (
+            {
+              positions.map((position, iPos) => (
               <div
-                key={position.playerForward + '-' + position.playerLateral}
+                key={iPos}
                 className="player"
-                style={{ left: position.mapXRatio + '%', top: position.mapYRatio + '%' }}
-              />
+                style={{ left: position.mapXRatio + '%', top: position.mapYRatio + '%', background:"yellow", fontSize:"10px" }}
+              >
+                {position.playerForward + ", " + position.playerLateral}
+              </div>
             ))}
           </div>
         </Grid>
