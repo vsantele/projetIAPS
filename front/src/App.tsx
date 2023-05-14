@@ -316,6 +316,7 @@ function App() {
     try {
       setBotMessages(defaultChatMessages)
       setInstructions(defaultInstructions)
+      setIsThinking(false)
       const response = await fetch((import.meta.env.VITE_API_HOST ?? '') + '/init')
       const data = await response.json()
 
@@ -449,7 +450,7 @@ function App() {
           </div>
           <div>
             <Button onClick={onClickStartGameButton} variant="contained">
-              Démarrer la partie
+              {gameIsStarted ? 'Réinitialiser la partie' : 'Démarrer la partie'}
             </Button>
             <Button
               onClick={handleOpenModal}
