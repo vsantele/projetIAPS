@@ -128,13 +128,6 @@ getCountryDataFromPlayerPos([Px, Py], PlayerPositions, ICountry, IPlayer) :-
     nth1(ICountry, PlayerPositions, Country),
     nth1(IPlayer, Country, [Px, Py]).
 
-getNeighbors([Px, Py], PlayersPositions, []) :- not(hasPlayer([Px, Py], PlayersPositions)), writeln("Not palayer getNeighbors 1 "), !.
-    getNeighbors([Px, Py], PlayersPositions, Neighbors) :-
-    findall([NeighborX, NeighborY],(voisinAll(Px, Py, NeighborX, NeighborY), hasPlayer([NeighborX, NeighborY], PlayersPositions)), Neighbors),
-    write("CurrentNeighbors : "), writeln(Neighbors).
-
-
-
 canMoveBackward([Px, Py],[Tx,Ty], PlayersPositions) :-
     chemin(Tx, Ty, Px, Py),
     not(hasPlayer([Tx, Ty], PlayersPositions)), !.
@@ -166,40 +159,40 @@ move([Px,Py], NbSecondes, SecondesRestantes,[Fx, Fy], PlayersPositions, PlayersP
     canMoveBackward([Px, Py], [Tx, Ty], PlayersPositions),
     NbSecondes1 is NbSecondes + 1,
     move([Tx,Ty], NbSecondes1, SecondesRestantes,[Fx, Fy], PlayersPositions, PlayersPositions).
-move([Px,Py], NbSecondes, NbSecondes,[Px,Py], PlayersPositions, PlayersPositions) :- NbSecondes > 0, not(canMove([Px,Py], _,PlayersPositions, _)). % Veut avancer
-move([Px,Py], NbSecondes, NbSecondes,[Px,Py], PlayersPositions, PlayersPositions).% :- not(canMoveBackward([Px,Py], _, PlayersPositions)).
+% move([Px,Py], NbSecondes, NbSecondes,[Px,Py], PlayersPositions, PlayersPositions) :- NbSecondes > 0, not(canMove([Px,Py], _,PlayersPositions, _)). % Veut avancer
+move([Px,Py], NbSecondes, NbSecondes,[Px,Py], PlayersPositions, PlayersPositions) :- not(canMoveBackward([Px,Py], _, PlayersPositions)).
 
 % On sort d'une case de chute et on joue
-% movePlayer([Px, 0], IPlayer,Country, NbSecondes, PlayersPositions, NewPlayersPositionsOut) :-
-%     move([Px,0], 1, 0, [Fx, 1], PlayersPositions, PlayersPositionsOut),
-%     movePlayer([Fx, 1], IPlayer,Country, NbSecondes, PlayersPositionsOut, NewPlayersPositionsOut).
+movePlayer([Px, 0], IPlayer,Country, NbSecondes, PlayersPositions, NewPlayersPositionsOut) :-
+    move([Px,0], 1, 0, [Fx, 1], PlayersPositions, PlayersPositionsOut),
+    movePlayer([Fx, 1], IPlayer,Country, NbSecondes, PlayersPositionsOut, NewPlayersPositionsOut).
 
-movePlayer([Px, Py], IPlayer,Country, NbSecondes, PlayersPositions, NewPlayersPositions) :-
-    move([Px,Py], NbSecondes, _,[Fx, Fy], PlayersPositions, NewPlayersPositionsOut),
-    (caseChance([Fx,Fy]) -> valeurCarteChance(Val), move([Fx,Fy], Val, _, [Tx, Ty], NewPlayersPositionsOut, PlayersPositionsOut)
-    ; move([Fx,Fy], 0, 0, [Tx, Ty], NewPlayersPositionsOut,PlayersPositionsOut)),
-    findCountry(Country, Players, PlayersPositionsOut),
-    replace([Tx, Ty], IPlayer, Players, NewPlayers),
-    countryIndex(Country,ICountry),
-    replace(NewPlayers, ICountry, PlayersPositionsOut, NewPlayersPositions).
+movePlayer([Px, Py], IPlayer, CountryName, NbSecondes, PlayersPositions, PlayersPositionsOut) :-
+    move([Px,Py], NbSecondes, NbSecondesRestantes,[Fx, Fy], PlayersPositions, NewPlayersPositions),
+    ((caseFin(Fx)) -> PlayersPositionsOut = NewPlayersPositions,!; true),
+    (NbSecondesRestantes = 0
+        -> (
+            findCountry(Country, Players, NewPlayersPositions),
+            replace([Fx, Fy], IPlayer, Players, NewPlayers),
+            countryIndex(Country,ICountry),
+            replace(NewPlayers, ICountry, NewPlayersPositions, PlayersPositionsOut)
+        )
+        ;(
+            % Chute !!!
+            chemin(Fx, Fy, ChuteX, ChuteY), % Récupère le joueur qui était sur la case où la chute s'est produite
+            getCountryDataFromPlayerPos([ChuteX, ChuteY], NewPlayersPositions, ICountryFallen, IPlayerChute), % Récupère l'index et le pays du joueur qui est tombé
+            countryIndex(CountryFallenName, ICountryFallen), % Récupère le nom du pays du coueur qui était déjà sur la case et qui est tombé
+            findCountry(CountryFallenName, CountryFallenPlayers, NewPlayersPositions), % Récupère les joueurs du pays concerné
+            replace([ChuteX, 0], IPlayerChute, CountryFallenPlayers, NewCountryFallenPositions), % Remplace la position du joueur tombé par [ChuteX, 0]
+            replace(NewCountryFallenPositions, ICountryFallen, NewPlayersPositions, PlayersPositionsWithFirstFallen), % Remplace l'équipe avec la position modifiée dans la liste des équipes
 
-% % Chute !!!
-% movePlayer([Px, Py], IPlayer, CountryName, NbSecondes, PlayersPositions, PlayersPositionsOut) :-
-%     move([Px,Py], NbSecondes, NbSecondesRestantes,[Fx, Fy], PlayersPositions, NewPlayersPositions),
-%     (caseFin(Fx) -> PlayersPositionsOut = NewPlayersPositions,!; true),
-%     chemin(Fx, Fy, ChuteX, ChuteY), % Récupère le joueur qui était sur la case où la chute s'est produite
-%     getCountryDataFromPlayerPos([ChuteX, ChuteY], NewPlayersPositions, ICountryFallen, IPlayerChute), % Récupère l'index et le pays du joueur qui est tombé
-%     countryIndex(CountryFallenName, ICountryFallen), % Récupère le nom du pays du coueur qui était déjà sur la case et qui est tombé
-%     findCountry(CountryFallenName, CountryFallenPlayers, NewPlayersPositions), % Récupère les joueurs du pays concerné
-%     replace([ChuteX, 0], IPlayerChute, CountryFallenPlayers, NewCountryFallenPositions), % Remplace la position du joueur tombé par [ChuteX, 0]
-%     replace(NewCountryFallenPositions, ICountryFallen, NewPlayersPositions, PlayersPositionsWithFirstFallen), % Remplace l'équipe avec la position modifiée dans la liste des équipes
-
-%     % Joueur qui a provoqué la chute
-%     countryIndex(CountryName, ICurrentCountry), % Récupère le nom du pays du coueur qui était déjà sur la case et qui est tombé
-%     findCountry(CountryName, CountryPlayers, PlayersPositionsWithFirstFallen), % Récupère les joueurs du pays du joueur qui vient de provoquer la chute
-%     replace([ChuteX, 0], IPlayer, CountryPlayers, NewCountryAllFallenPositions), % Remplace la position du joueur tombé par [ChuteX, 0]
-%     replace(NewCountryAllFallenPositions, ICurrentCountry, PlayersPositionsWithFirstFallen, PlayersPositionsOut). % Remplace l'équipe avec la position modifiée dans la liste des équipes
-
+            % Joueur qui a provoqué la chute
+            countryIndex(CountryName, ICurrentCountry), % Récupère le nom du pays du coueur qui était déjà sur la case et qui est tombé
+            findCountry(CountryName, CountryPlayers, PlayersPositionsWithFirstFallen), % Récupère les joueurs du pays du joueur qui vient de provoquer la chute
+            replace([ChuteX, 0], IPlayer, CountryPlayers, NewCountryAllFallenPositions), % Remplace la position du joueur tombé par [ChuteX, 0]
+            replace(NewCountryAllFallenPositions, ICurrentCountry, PlayersPositionsWithFirstFallen, PlayersPositionsOut) % Remplace l'équipe avec la position modifiée dans la liste des équipes
+        )
+    ).
 
 % Vérifie si le phénomène d'aspiration peut être activé (la position est une case libre derrière un joueur)
 aspirationAtPosition([X, Y], PlayersPositions, [TargetPlayerX, Y]) :-
@@ -396,8 +389,8 @@ removeDuplicates(List, Result) :-
     sort(List, Result).
 
 pickBestCard(State, BestCard) :-
-    alphabeta(State,State, 8, -100000, 100000, BestCard, _).
-    % minMax(State,State, 8, _,_, BestCard, _).
+    % alphabeta(State,State, 8, -100000, 100000, BestCard, _).
+    minMax(State,State, 8, _,_, BestCard, _).
 
 
 minMax(StateInit, State, 0, _, _, _, Scores) :-
