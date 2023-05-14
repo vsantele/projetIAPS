@@ -365,8 +365,10 @@ function App() {
         'Content-Type': 'application/json',
       },
     })
-    const data: PrologState = await response.json()
-    return data
+    if (response.ok) {
+      return (await response.json()) as PrologState
+    }
+    throw new Error("Erreur lors de l'envoie du coup au serveur.")
   }
 
   const addCurrentTeamMessageInGameBotChat = (teamName: string) => {
