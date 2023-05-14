@@ -169,8 +169,22 @@ movePlayer([Px, 0], IPlayer,Country, NbSecondes, PlayersPositions, NewPlayersPos
     movePlayer([Fx, 1], IPlayer,Country, NbSecondes, PlayersPositionsOut, NewPlayersPositionsOut).
 
 movePlayer([Px, Py], IPlayer, CountryName, NbSecondes, PlayersPositions, PlayersPositionsOut) :-
-    move([Px,Py], NbSecondes, NbSecondesRestantes,[Fx, Fy], PlayersPositions, NewPlayersPositions),
-    ((caseFin(Fx)) -> PlayersPositionsOut = NewPlayersPositions,!; true),
+    move([Px,Py], NbSecondes, NbSecondesRestantes,[Tx, Ty], PlayersPositions, TempPlayersPositions),
+
+    (caseFin(Tx) ->
+        PlayersPositionsOut = TempPlayersPositions,
+        [Fx, Fy] = [Tx, Ty],! % Ne stop pas l'exec, empeche juste le backtrack
+        ;
+        (
+            countryIndex(CountryName, IContry),
+            findCountry(CountryName, Country, TempPlayersPositions), % Récupère les joueurs du pays concerné
+            replace([Tx, Ty], IPlayer, Country, NewCountryPositions),
+            replace(NewCountryPositions, ICountry, TempPlayersPositions, TempPlayersPositions1),
+
+            aspiration(TempPlayersPositions1, IContry, IPlayer, NewPlayersPositions, PosAfterAspi),
+            [Fx, Fy] = PosAfterAspi
+        )
+    ),
     (NbSecondesRestantes = 0
         -> (
             findCountry(CountryName, Players, NewPlayersPositions),
@@ -215,14 +229,17 @@ aspirationAtPosition([X, Y], PlayersPositions, [TargetPlayerX, TargetPlayerY]) :
     hasPlayer([NX, NY], PlayersPositions).
 
 % Déplace la position d'un joueur en fonction de l'aspiration
-aspiration(PlayersPositions, ICountry, IPlayer, PlayersPositionsOut) :-
+aspiration(PlayersPositions, ICountry, IPlayer, PlayersPositionsOut, PlayerPosAfterAspi) :-
     nth1(ICountry, PlayersPositions, Country),
     nth1(IPlayer, Country, PlayerPos),
     aspirationAtPosition(PlayerPos, PlayersPositions, PlayerPosAfterAspi),
     replace(PlayerPosAfterAspi, IPlayer, Country, NewCountryPositions),
     replace(NewCountryPositions, ICountry, PlayersPositions, PlayersPositionsOut), !.
 
-aspiration(PlayersPositions, _, _, PlayersPositions). % Phénomène d'aspiration n'est pas possible, on renvoi PlayersPositions comme on l'a reçu
+% Phénomène d'aspiration n'est pas possible, on renvoi PlayersPositions comme on l'a reçu,
+aspiration(PlayersPositions, ICountry, IPlayer, PlayersPositions, PlayerPos) :-
+    nth1(ICountry, PlayersPositions, Country),
+    nth1(IPlayer, Country, PlayerPos).
 
 
 % Remplace le IElem dans List par Elem et le renvoit dans NewList
