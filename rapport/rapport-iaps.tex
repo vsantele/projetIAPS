@@ -56,6 +56,51 @@ Nous avons choisi d'utiliser React comme base pour construire le site web et le 
 \newpage
 
 \section{Mécaniques de jeu}
+Plusieurs mécaniques de jeu sont présentes afin de réprésenter au mieux les véritables conditions de jeu du Tour De France. Toutefois, du à des contraintes de temps et d'organisation, certaines
+règles ont été adaptées et ou simplifiée. On peut notamment citer la notion de peloton qui n'existe pas.
+
+\subsection{Initialisation de la partie}
+L'initialisation de la partie permet de récupérer un état initial du jeu :
+\begin{itemize}
+	\item La position de tous les joueurs se situe en [0, 0].
+	\item Un "tas" de carte est créé, il contient 8 paquets de cartes allant de 1 à 12.
+	\item Le pays qui doit joueur au premier tour du jeu. Il est déterminé par la sélection de carte secondes la plus grande.
+	\item Les cartes disponibles pour chaque pays. Cette "pile" est remplie en début de partie. Pour le remplissage au cours du jeu, une vérification est effectuée après chaque coup joué afin de vérifier si l'équipe possède assez de carte pour le prochaine tour. Dans le cas contraire, 5 cartes sont tirées au sort dans le tas de cartes disponibles (la pioche).
+\end{itemize}
+
+\subsection{Jeu}
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=.6]{assets/game-state-table}
+	\caption{Tableau représentant l'état de jeu actuel}
+\end{figure}
+Chaque joueur joue à tour de role, pour ce faire, il sélectionne la carte dans le tableau qu'il souhaite joueur.
+A partir de ce clic, toute la page se met à jour afin d'afficher la nouvelle position du joueur sur le plateau de jeu et dans le tableau.
+La partie \texbf{Bot de jeu} permet d'avoir quelques petites informations sur les actions effectuées par d'autres joueurs.
+
+Toujours dans cette partie, le petit bouton avec l'ampoule permet d'aider un joueur lorsqu'il est perdu et ne sait pas quelle carte jouer.
+Une notification sera affichée en donnant la meilleure carte à jouer pour le joueur.
+\bigskip
+
+Deux pays ont étés définis comme étant des bots
+\begin{itemize}
+	\item Pays-Bas
+	\item Allemagne
+\end{itemize}
+
+\subsection{Phénomènes mis en place}
+Plusieurs phénomènes de jeu ont étés mis en place :
+\begin{itemize}
+	\item Les chutes : lorsque des joueurs tentent d'en dépasser d'autres alors qu'il n'y a plus d'espace de disponible, une chute se produit et les 2 joueurs concernés par cette chute sont "déplacés" sur le bas coté.
+	\item L'aspiration : lorsqu'un joueur se déplace et arrive à sa nouvelle position, un phénomène d'aspiration peut se produire. Le premier cas est qu'il se trouve deux cases derrières un joueur et la case entre eux est libre. Le second cas est qu'il se trouve "en diagonale" d'un autre joueur et que la position à coté de ce dernier est libre. Dans ces deux cas, le joueur qui vient de se déplacer, avancera d'une case de plus.
+	\item Les cartes chances : lorqsqu'un joueur tombe sur une case chance, une carte entre -3 et 3 est tirée au hasard.
+	\item Les dépassements : lorsqu'un joueur veut avancer et rencontre un joueur, il le pousse, ainsi que tous ses voisins, vers la droite. S'il peut passer, il passera. Sinon une chute se produire
+\end{itemize}
+
+\subsection{Fin de la partie}
+la fin de la partie est déclenchée dès qu'un joueur passe la ligne d'arrivée. La liste des points et un classement global est effectué.
+\bigskip
+Le classement se calcule à partir des règles définies dans la section \textbf{calcul des points}. Seuls les points concernant les points d'équipes sont gérés dans le classement général.
 
 \newpage
 
