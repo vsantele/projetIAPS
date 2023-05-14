@@ -523,17 +523,20 @@ chemin(940, 3, 950, 2).
 chemin(940, 3, 950, 3).
 voisinDroite(950, 1, 950, 2).
 voisinDroite(950, 2, 950, 3).
+
 voisinBi(X1,Y1,X2,Y2) :- voisinDroite(X2,Y2,X1,Y1).
 voisinBi(X1,Y1,X2,Y2) :- voisinDroite(X1,Y1,X2,Y2).
+
+voisinAll(X1,Y1,X2,Y2) :- chemin(X2,Y2, X1,Y1).
 voisinAll(X1,Y1,X2,Y2) :- chemin(X1,Y1,X2,Y2).
 voisinAll(X1,Y1,X2,Y2) :- voisinBi(X1,Y1,X2,Y2).
 
 chemin(0,0,10,1).
 chemin(0,0,10,2).
 chemin(0,0,10,3).
-chemin(950,1, Fin,0) :- caseFin(Fin).
-chemin(950,2, Fin,0) :- caseFin(Fin).
-chemin(950,3, Fin,0) :- caseFin(Fin).
+chemin(950,1, Fin,Fin) :- caseFin(Fin).
+chemin(950,2, Fin,Fin) :- caseFin(Fin).
+chemin(950,3, Fin,Fin) :- caseFin(Fin).
 
 caseFin(1000).
 
