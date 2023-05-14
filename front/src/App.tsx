@@ -64,7 +64,7 @@ const defaultState: JsState = {
     },
     {
       id: 'allemagne',
-      name: 'Allemange',
+      name: 'Allemagne',
       cards: [],
       playersPositions: [
         [0, 0],
