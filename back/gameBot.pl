@@ -324,6 +324,87 @@ play([CurrentCountry, PlayersPositions, CountriesCards, Cards, SelectedCard], [N
 play([CurrentCountry, PlayersPositions, CountriesCards, Cards, Card], [NextCountry, PlayersPositions, CountriesCards, Cards, Card]) :-
     nextCountry(CurrentCountry, NextCountry).
 
+% Classement global
+globalRanking(PlayersPositions, RankingPoints, GlobalRanking) :-
+    playersPositionsToBoardPositions(PlayersPositions, PlayerBoardPositions),
+
+    maplist(sum_list, PlayerBoardPositions, TeamsTime), % TeamsTime = liste de la somme des temps de chaque équipe
+    % AJoute 40 points à l'équipe qui a fait le meilleur temps total
+    addScoreToTeam(TeamsTime, PlayerBoardPositions, 40, ListWhithoutFirstBestTeamsTime, RankingPerPoints1, 1),
+
+    % Ajoute 40 points à l'équipe qui est 2e
+    addScoreToTeam(ListWhithoutFirstBestTeamsTime, RankingPerPoints1, 15, ListWhithoutFirstAndSecondBestTeamsTime, RankingPerPoints2, 2),
+
+    % AJoute 40 points à l'équipe qui a fait le meilleur temps total
+    addScoreToTeam(ListWhithoutFirstAndSecondBestTeamsTime, RankingPerPoints2, 5, _, RankingPoints, 3),
+
+    ranked_tableau(RankingPoints, GlobalRanking),
+
+    !.
+
+%addScoreToPlayerRank()
+
+% Ajoute score à chaque joueur dans l'équipe à la TeamOffset offset position
+% addScoreToTeam(Teams, RankingPerPoints, 10, TeamsWithoutBest, NewRankingPerPoints, 3) -> ajoute 10 au score de chaque joueur de l'équipe 3
+addScoreToTeam(Teams, RankingPerPoints, Score, TeamsWithoutBest, NewRankingPerPoints, TeamOffset) :-
+    maxListIndex1(Teams, _, IMax, TeamsWithoutBest),
+    IMaxTeamTime is IMax + (TeamOffset- 1),
+
+    nth1(IMaxTeamTime, RankingPerPoints, TeamBestTeamTime),
+    addTeamScore(TeamBestTeamTime, Score, NewTeamBestTeamTime),
+    replace(NewTeamBestTeamTime, IMaxTeamTime, RankingPerPoints, NewRankingPerPoints).
+
+addTeamScore(Team, Score, NewTeam) :-
+    maplist(plus(Score), Team, NewTeam).
+
+% Renvoit le nombre max et son indice (1 based)
+maxListIndex1(List, Max, Index, NewList) :-
+    max_list(List, Max),
+    nth1(Index, List, Max),
+
+    % Supprime l'élement à Index et renvoi la nouvelle liste dans NewList
+    Index0 is Index - 1,
+    nth0(Index0, List, Element),
+    delete(List, Element, NewList).
+
+
+% Prends un tableau de position sur la board et retourne ne nombre de points par équipe
+teamPoints([], 0).
+teamPoints(Players, Points) :-
+    teamPoints(Players, 0, Points).
+
+teamPoints([], CurrentPoints, CurrentPoints).
+teamPoints([Rank|Ranks], CurrentPoints, Points) :-
+    rankingComputePoints(Rank, Point),
+    NewPoints is CurrentPoints + Point,
+    teamPoints(Ranks, NewPoints, Points).
+
+% Pour le classement par points, retourne les points à partir d'une position
+rankingComputePoints(Rank, Points) :- Points is 11 - Rank, Points >= 0.
+rankingComputePoints(_, 0). % Si points négatif, score = 0
+
+
+% Prend un tableau [[10, 15, 20], [1, 5, 8], [11, 13, 19]] et renvoi la position du joueur dans le classement [[6, 3, 1], [9, 8, 7], [5, 4, 2]]
+% ATTENTION ne marche pas en cas de doublons !!
+% ([[1, 5, 6], [3, 3, 3], [10, 11, 12], [14, 15, 20]]) donne ([[12, 8, 7], [9, 9, 9], [6, 5, 4], [3, 2, 1]])
+% et pas [[10, 8, 7], [9, 9, 9], [6, 5, 4], [3, 2, 1]]
+ranked_tableau(Tableau, RankedTableau) :-
+    flatten(Tableau, FlatTableau),
+    sort(0, >=, FlatTableau, SortedFlatTableau),
+    maplist(maplist(rank_element(SortedFlatTableau)), Tableau, RankedTableau), !.
+
+rank_element(SortedFlatTableau, Element, Rank) :-
+    nth0(Index, SortedFlatTableau, Element),
+    Rank is Index + 1.
+
+
+% Convertis les positions [[[10, 1], [50, 2], [60, 3]], [[30, 1], [30, 2], [30, 3]], [[100, 1], [110, 2], [120, 3]], [[140, 1], [150, 2], [200, 3]]]
+% en [[10,50,60], [30,30,30], [100, 110, 120], [140, 150, 200]]
+playersPositionsToBoardPositions(TableauTuples, Tableau) :-
+    maplist(maplist(mapPositionToBoardPosition), TableauTuples, Tableau).
+
+% Prends [100, 1] et renvoi entier[100 / 10]
+mapPositionToBoardPosition([PX, PY], RealPos) :- RealPos is truncate(PX / 10).
 
 
 gameLoop(S, SOut) :-
