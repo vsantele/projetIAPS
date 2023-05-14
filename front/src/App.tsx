@@ -451,7 +451,7 @@ function App() {
                 if (position) {
                   return (
                     <div
-                      key={player.join(',')}
+                      key={team.id + '-' + iPlayer}
                       className="player"
                       style={{
                         left: position.mapXRatio + '%',
