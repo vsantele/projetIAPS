@@ -1,7 +1,7 @@
 import { Box, Container, Grid, Snackbar, SnackbarCloseReason, Typography } from '@mui/material'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
 import './App.css'
-import mapImage from './assets/map.png'
+import mapImage from './assets/map.webp'
 import BotResponse from './models/BotResponse'
 import ChatMessage from './models/ChatMessage'
 import React, { MouseEvent, useEffect, useState } from 'react'
