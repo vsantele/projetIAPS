@@ -27,6 +27,8 @@ import JsState from './models/JsState'
 import { delay, teamIsBot, teamColors } from './utils'
 import InfoTable from './InfoTable'
 import Favicon from './assets/icon.png'
+import WinnerResult, { Winner } from './models/WinnerResult'
+import WinnerTable from './WinnerTable'
 
 const defaultState: JsState = {
   currentCountry: 'italie',
@@ -185,6 +187,25 @@ function jsStateToPrologState(jsState: JsState): PrologState {
   }
 }
 
+function teamIToName(index: number) {
+  return defaultState.teams[index].name
+}
+
+function winner(winnerState: WinnerResult) {
+  const winnerTeamI = winnerState.globalRanking.findIndex((team: number[]) =>
+    team.some(r => r === 1)
+  )
+  const winnerPlayer = winnerState.globalRanking[winnerTeamI].findIndex(
+    (player: number) => player === 1
+  )
+
+  return {
+    winnerTeam: teamIToName(winnerTeamI),
+    winnerPlayer: winnerPlayer + 1,
+    ranking: winnerState.rankingPoints,
+  }
+}
+
 function App() {
   const { sendMessage, lastMessage, readyState } = useWebSocket(
     (import.meta.env.VITE_WEBSOCKET_HOST ?? '') + '/bot',
@@ -201,10 +222,33 @@ function App() {
   const [gameIsStarted, setGameIsStarted] = useState<boolean>(false)
   const [isThinking, setIsThinking] = useState<boolean>(false)
   const [openModal, setOpenModal] = React.useState(false)
+  const [openModalWinner, setOpenModalWinner] = React.useState(false)
+  const [winnerResult, setWinnerResult] = React.useState<Winner | undefined>(undefined)
 
   const [notificationMessage, setNotificationMessage] = useState<string | undefined>(undefined)
 
   const playersPositionsProlog = JSON.stringify(gameState.teams.map(team => team.playersPositions))
+  const hasWinner = gameState.teams.some(team =>
+    team.playersPositions.some(pp => pp[0] === 1000 && pp[1] === 1000)
+  )
+
+  useEffect(() => {
+    if (hasWinner) {
+      fetch((import.meta.env.VITE_API_HOST ?? '') + '/results', {
+        method: 'POST',
+        body: JSON.stringify(jsStateToPrologState(gameState)),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(res => res.json())
+        .then(data => {
+          setGameIsStarted(false)
+          setWinnerResult(winner(data))
+          handleOpenModalWinner()
+        })
+    }
+  }, [hasWinner])
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'en cours de connexion ...',
@@ -435,6 +479,12 @@ function App() {
   const handleCloseModal = () => {
     setOpenModal(false)
   }
+  const handleOpenModalWinner = () => {
+    setOpenModalWinner(true)
+  }
+  const handleCloseModalWinner = () => {
+    setOpenModalWinner(false)
+  }
 
   return (
     <>
@@ -550,6 +600,27 @@ function App() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModal}>Close</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={openModalWinner} onClose={handleCloseModalWinner}>
+        <DialogTitle>Le vainqueur est </DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ mt: '0.3rem' }}>
+            {winnerResult ? (
+              <div>
+                <p>
+                  Le joueur {winnerResult.winnerPlayer} de l'équipe {winnerResult.winnerTeam} a
+                  gagné.
+                </p>
+                <WinnerTable winner={winnerResult} state={gameState} />
+              </div>
+            ) : (
+              'Pas de vainqueur'
+            )}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModalWinner}>Close</Button>
         </DialogActions>
       </Dialog>
     </>
