@@ -415,7 +415,7 @@ function App() {
   }
 
   return (
-    <Container maxWidth={false}>
+    <Container maxWidth="lg">
       <Box sx={{ textAlign: 'center', mb: '0.5rem' }}>
         <img src={Favicon} style={{ display: 'inline', width: '8rem', paddingRight: '0.5rem' }} />
         <small>
