@@ -187,9 +187,9 @@ movePlayer([Px, Py], IPlayer, CountryName, NbSecondes, PlayersPositions, Players
                 (true)
             ),
             % Chute !!!
-            chemin(Tx, Ty, ChuteX, ChuteY), % Récupère le joueur qui était sur la case où la chute s'est produite
-            chutePos([ChuteX, ChuteY], [SideChureX, SideChuteY]), % Récupère la position où mettre les joueurs
-            getCountryDataFromPlayerPos([ChuteX, ChuteY], TempPlayersPositions, ICountryFallen, IPlayerChute), % Récupère l'index et le pays du joueur qui est tombé
+            chemin(Tx, Ty, ChuteX, Ty), % Récupère le joueur qui était sur la case où la chute s'est produite
+            chutePos([ChuteX, Ty], [SideChureX, SideChuteY]), % Récupère la position où mettre les joueurs
+            getCountryDataFromPlayerPos([ChuteX, Ty], TempPlayersPositions, ICountryFallen, IPlayerChute), % Récupère l'index et le pays du joueur qui est tombé
             countryIndex(CountryFallenName, ICountryFallen), % Récupère le nom du pays du coueur qui était déjà sur la case et qui est tombé
             findCountry(CountryFallenName, CountryFallenPlayers, TempPlayersPositions), % Récupère les joueurs du pays concerné
             replace([SideChureX, SideChuteY], IPlayerChute, CountryFallenPlayers, NewCountryFallenPositions), % Remplace la position du joueur tombé par [ChuteX, 0]
