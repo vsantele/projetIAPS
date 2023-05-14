@@ -14,22 +14,22 @@
 
 \section{Introduction}
 
-Dans le cadre du cours INFOB317 : Intelligence artificielle et programmation symbolique, nous avons été amenés à informatiser le jeu du Tour de France en une interface web grâce à React et à y ajouter des fonctionnalités intelligente comme un chatbot auquel on peut poser des questions ou encore une intelligence artificielle jouant le rôle d'adversaire.\newline
+Dans le cadre du cours INFOB317 : Intelligence artificielle et programmation symbolique, nous avons été amenés à informatiser le jeu du Tour de France en une interface web grâce à React et à y ajouter des fonctionnalités intelligente comme un ChatBot auquel on peut poser des questions ou encore une intelligence artificielle jouant le rôle d'adversaire.\newline
 
 Ce projet a été divisé en trois grandes parties :
 \begin{itemize}
     \item La conception du jeu et de ses mécaniques
-    \item La conception du chatbot
+    \item La conception du ChatBot
     \item La conception de l'intelligence artificielle adverse\newline
 \end{itemize}
 
-Il est évident de préciser que le projet se base principalement sur la conception du jeu et de ses mécaniques. Dessus, nous avons implémenté le chatbot et l'intelligence artificielle adversaire. Ce rapport a pour but de décrire la construction du projet et les techniques mises en place. Celui-ci se déroulera en plusieurs parties : 
+Il est évident de préciser que le projet se base principalement sur la conception du jeu et de ses mécaniques. Dessus, nous avons implémenté le ChatBot et l'intelligence artificielle adversaire. Ce rapport a pour but de décrire la construction du projet et les techniques mises en place. Celui-ci se déroulera en plusieurs parties : 
 
 \begin{enumerate}
 	\item \textbf{Démarche générale} : décrit la démarche générale du groupe sur la réalisation du projet et les décisions qui ont été prisent concernant l'implémentation du jeu.
 	\item \textbf{Outils} : présente les outils que nous avons utilisés pour mener à bien le projet et donne les raisons de nos choix.
 	\item \textbf{Mécaniques de jeu} : décortique comment nous avons construit la structure du jeu et comment nous avons représenté et implémenté le jeu et ses règles en informatique.
-	\item \textbf{Chatbot explicateur} : décrit la construction du chatbot et apporte des informations concernant certaines de ses particularités.
+	\item \textbf{ChatBot explicateur} : décrit la construction du ChatBot et apporte des informations concernant certaines de ses particularités.
 	\item \textbf{Interface} : décrit la construction de l'interface web du jeu et son organisation.
 	\item \textbf{Intelligence artificielle adversaire} : décrit la construction de l'intelligence artificielle que le joueur va combattre et son fonctionnement.\newline
 \end{enumerate}
@@ -40,9 +40,17 @@ Enfin, comme pour tout rapport, nous terminerons par une conclusion dans laquell
 
 \section{Démarche générale}
 
-\newpage
+Cette partie est consacrée à la démarche que nous avons suivie lors de la réalisation du jeu.\newline
+
+Dès le départ, nous avons choisi de diviser le travail par fonctionnalités. Il fallait établir comment nous allions structurer le projet et comment représenter le jeu en code informatique. Il y a donc une des personnes du groupe qui s'est concentrée sur la création du jeu et de ses mécaniques après avoir définit la structure du programme. Rapidement, une autre personne du groupe l'a aidé et ils ont travaillé en binôme. Cependant, afin de voir le rendu de ces implémentations, ils ont du travaillé sur l'interface en même temps. Pendant ce temps, une troisième personne s'est chargée d'alimenter le ChatBot afin qu'il puisse répondre aux questions des joueurs. Enfin, les deux personnes chargées des mécaniques de jeu ont travaillé en parallèle sur l'intelligence artificielle adversaire.\newline
+
+Concernant le choix des outils, il a principalement été fait par la première personne en charge des mécaniques de jeu. Cette même personne a choisit la réelle architecture du projet et son binôme l'a aidé à peaufiner les détails l'architecture.
 
 \section{Outils}
+
+Nous avons choisi d'utiliser React comme base pour construire le site web et le projet. Il s'agit donc ici d'une single-page application. Cependant, toute l'intelligence du projet est écrit en Prolog. La partie React et donc TypeScript sert juste d'interface entre les states envoyés et reçus.\newline
+
+Évidemment, le jeu fonctionne grâce à des requêtes HTTP et la communication pour le chat se fait via WebSocket. Enfin, nous avons décidé de déployé le projet sur Azure Container App et Azure Static Web App. 
 
 \newpage
 
@@ -50,7 +58,7 @@ Enfin, comme pour tout rapport, nous terminerons par une conclusion dans laquell
 
 \newpage
 
-\section{Chatbot explicateur}
+\section{ChatBot explicateur}
 
 \newpage
 
