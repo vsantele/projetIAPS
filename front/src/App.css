@@ -2,18 +2,19 @@
   max-width: 100%;
 }
 
-#map-area{
+#map-area {
   padding: 0;
   margin: 0;
 }
 
-#map-area{
+#map-area {
   position: relative;
 }
 
-.player{
+.player {
   position: absolute;
   z-index: 999;
   width: 20px;
   height: 20px;
+  border-radius: 50%;
 }

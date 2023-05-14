@@ -458,7 +458,7 @@ function App() {
                         top: position.mapYRatio + '%',
                         background: teamColors[team.id],
                       }}>
-                      {iTeam + 1},{iPlayer + 1}
+                      {iPlayer + 1}
                     </div>
                   )
                 }
